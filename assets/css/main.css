@@ -1,12 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900");
 @import url("fontawesome-all.min.css");
 
-/*
-	Aerial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
@@ -229,6 +223,7 @@ input, select, textarea {
 		background: #0f0f0f url("images/bg.jpg") center;
 		background-repeat: repeat;
 		height: 100%;
+		opacity: 0;
 		left: 0;
 		opacity: 1;
 		position: fixed;
@@ -551,6 +546,7 @@ input, select, textarea {
 		top: -1em;
 		vertical-align: middle;
 		width: 90%;
+		color: white;
 	}
 
 		#header h1 {
