@@ -7,7 +7,7 @@
 
 <p align="left"> <a href="https://twitter.com/shivrajsinh26" target="blank"><img src="https://img.shields.io/twitter/follow/shivrajsinh26?logo=twitter&style=for-the-badge" alt="shivrajsinh26" /></a> </p>
 
-- 🔭 I’m currently working on **GardiChat App(College Project)**
+- 🔭 I’m currently working on **My College Projects**
 
 - 🌱 I’m currently learning **ReactJS, MongoDB, ExpressJS, NodeJS**
 
