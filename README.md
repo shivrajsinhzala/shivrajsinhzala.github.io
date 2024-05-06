@@ -1,3 +1,9 @@
+<style>
+a{
+  text-decoration:none;
+}
+</style>
+
 <h1 align="center">Hi 👋, I'm Shivrajsinh Zala</h1>
 <h3 align="center">A passionate frontend developer from India</h3>
 
