@@ -52,7 +52,7 @@
 
 <p><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs?username=shivrajsinhzala&show_icons=true&locale=en&layout=compact" alt="shivrajsinhzala" /></p>
 
-<p align="right">&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=shivrajsinhzala&show_icons=true&locale=en" alt="shivrajsinhzala" /></p>
+<p align="right">&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=shivrajsinhzala&show_icons=true&locale=en" alt="shivrajsinhzala"/></p>
 
 
 
