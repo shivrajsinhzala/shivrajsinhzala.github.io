@@ -663,7 +663,7 @@
             <div class="font-mono font-bold text-lg md:text-xl tracking-tighter magnetic-btn" data-magnetic>
                 SZ://DEV
             </div>
-            <div class="hidden md:flex gap-3">
+            <div class="!hidden md:!flex gap-3">
                 <a href="#about"
                     class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-pink hover:text-white magnetic-btn"
                     data-magnetic>ABOUT</a>
@@ -686,7 +686,7 @@
                     class="brutal-border bg-brutal-black text-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow hover:text-black magnetic-btn nav-terminal-btn"
                     data-magnetic>_TERMINAL</button>
             </div>
-            <button id="menu-btn" class="md:hidden brutal-border bg-white p-2 brutal-shadow-sm magnetic-btn"
+            <button id="menu-btn" class="md:!hidden brutal-border bg-white p-2 brutal-shadow-sm magnetic-btn"
                 data-magnetic aria-label="Open navigation menu" aria-expanded="false">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                     stroke-linecap="square">
@@ -1660,6 +1660,12 @@
             progress.style.width = count + '%';
         }, 35);
 
+        // Prevent browser scroll restoration from breaking GSAP ScrollTrigger
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
         // ===== MARQUEE CLONE =====
         const mc = document.querySelector('.marquee-content');
         if (mc) {
@@ -1959,13 +1965,16 @@
         }, { threshold: 0 });
         glitchObserver.observe(glitchTitle);
 
-        // Refresh ScrollTrigger on resize
+        // Refresh ScrollTrigger on resize and full load
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
                 ScrollTrigger.refresh();
             }, 250);
+        });
+        window.addEventListener('load', () => {
+            ScrollTrigger.refresh();
         });
 
         // ===== IMAGE LIGHTBOX =====
