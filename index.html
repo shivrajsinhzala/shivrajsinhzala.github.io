@@ -102,7 +102,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
@@ -111,33 +111,6 @@
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap"
         rel="stylesheet">
     <link rel="preload" as="image" href="assets/images/profile.jpg">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        brutal: {
-                            black: '#0a0a0a',
-                            white: '#ffffff',
-                            yellow: '#FFE900',
-                            pink: '#FF006E',
-                            cyan: '#00F5FF',
-                            orange: '#FF5E00',
-                            purple: '#9D00FF',
-                            gray: '#F0F0F0',
-                            dark: '#111111',
-                            paper: '#f8f7f4',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 
     <style>
 
@@ -1073,16 +1046,16 @@
         <div class="max-w-4xl mx-auto text-center relative z-10">
             <div
                 class="inline-block bg-brutal-pink text-white px-4 py-2 brutal-border font-mono text-xs mb-6 rotate-3 reveal-badge opacity-0">
-                FULL TRANSPARENCY
+                HOW I WORK
             </div>
             <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tighter reveal-heading" id="ai-heading">
-                I BUILT THIS<br>WITH <span class="text-brutal-cyan">AI</span>
+                AI MAKES ME<br><span class="text-brutal-cyan">2X FASTER</span>
             </h2>
             <p class="text-base md:text-xl font-mono mb-8 max-w-2xl mx-auto reveal-text opacity-0">
-                And I'm not sorry. I know how to code. AI just helps me code <span
-                    class="bg-white text-black px-1 brutal-border border-2">faster</span> and <span
-                    class="bg-brutal-yellow text-black px-1 brutal-border border-2">better</span>.
-                It's called working smart.
+                I write the code. AI handles the <span
+                    class="bg-white text-black px-1 brutal-border border-2">repetitive stuff</span>. Result? You get <span
+                    class="bg-brutal-yellow text-black px-1 brutal-border border-2">better work, faster</span>.
+                That's the edge.
             </p>
             <div class="flex flex-wrap justify-center gap-3 font-mono text-xs md:text-sm reveal-tags opacity-0">
                 <span
@@ -1095,13 +1068,16 @@
                     class="border-2 border-white px-4 py-2 hover:bg-white hover:text-black transition-colors magnetic-btn"
                     data-magnetic>Copilot</span>
                 <span
+                    class="border-2 border-white px-4 py-2 hover:bg-white hover:text-black transition-colors magnetic-btn"
+                    data-magnetic>Gemini</span>
+                <span
                     class="border-2 border-brutal-pink text-brutal-pink px-4 py-2 hover:bg-brutal-pink hover:text-white transition-colors magnetic-btn"
-                    data-magnetic>HUMAN OVERSIGHT</span>
+                    data-magnetic>HUMAN BRAIN FIRST</span>
             </div>
         </div>
         <div class="absolute top-0 left-0 w-full h-full opacity-5 text-[20vw] font-bold leading-none select-none pointer-events-none flex items-center justify-center font-mono"
             id="ai-bg-text">
-            0101
+            2X
         </div>
     </section>
 
