@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /terminal.html
+
+Sitemap: https://shivrajsinhzala.github.io/sitemap.xml

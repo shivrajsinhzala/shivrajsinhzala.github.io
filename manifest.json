@@ -1,0 +1,16 @@
+{
+  "name": "Shivrajsinh Zala — Frontend Developer",
+  "short_name": "SZ://DEV",
+  "description": "Portfolio of Shivrajsinh Zala, a Frontend Developer specializing in React, WordPress, Shopify, GSAP animations, and brutalist web design.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f7f4",
+  "theme_color": "#FFE900",
+  "icons": [
+    {
+      "src": "/assets/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
