@@ -52,4 +52,38 @@
       <image:caption>Shopify e-commerce store, Amazon product listing, and digital marketing for Solar Quartz premium decorative wall clocks brand.</image:caption>
     </image:image>
   </url>
+  
+  <url>
+    <loc>https://shivrajsinhzala.github.io/blog/custom-wordpress-development-2026.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://shivrajsinhzala.github.io/assets/images/blog_wp_cover.png</image:loc>
+      <image:title>Why Custom WordPress Development Beats Templates in 2026</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://shivrajsinhzala.github.io/blog/shopify-vs-webflow-ecommerce.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://shivrajsinhzala.github.io/assets/images/blog_ecom_cover.png</image:loc>
+      <image:title>Shopify vs Webflow: The E-commerce Developer's Verdict</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://shivrajsinhzala.github.io/blog/brutalist-web-design-frontend.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://shivrajsinhzala.github.io/assets/images/blog_brutalist_cover.png</image:loc>
+      <image:title>Brutalist Web Design: Why Ugly is the New Beautiful</image:title>
+    </image:image>
+  </url>
+
 </urlset>
