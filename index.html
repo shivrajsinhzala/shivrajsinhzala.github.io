@@ -1337,7 +1337,7 @@
                 LET'S MAKE<br>SOMETHING
             </h2>
             <div
-                class="bg-white brutal-border brutal-shadow p-6 md:p-10 inline-block max-w-xl w-full reveal-card opacity-0 translate-y-8">
+                class="bg-white brutal-border brutal-shadow p-6 md:p-10 w-full reveal-card opacity-0 translate-y-8">
                 <p class="text-lg md:text-xl font-mono mb-6 md:mb-8">
                     Have a WordPress site that needs saving?
                     <br><span class="bg-brutal-pink text-white px-1">I'm your guy.</span>
@@ -1347,9 +1347,9 @@
 
                     <!-- Email -->
                     <a href="mailto:Shivrajsinhzala@hotmail.com"
-                        class="contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden magnetic-btn"
-                        data-magnetic style="--accent: #FF006E;">
-                        <div class="contact-item-fill absolute inset-0 bg-brutal-pink translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-in-out z-0"></div>
+                        class="dir-reveal-card contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden"
+                        >
+                        <div class="contact-item-fill absolute inset-0 bg-brutal-pink z-0"></div>
                         <div class="relative z-10 flex items-center gap-4">
                             <div class="w-10 h-10 flex items-center justify-center bg-brutal-pink text-white brutal-border flex-shrink-0 group-hover:bg-white group-hover:text-brutal-pink transition-colors duration-300">
                                 <i data-lucide="mail" style="width:1.1em;height:1.1em;" stroke-width="2.5"></i>
@@ -1364,9 +1364,9 @@
 
                     <!-- Telegram -->
                     <a href="https://t.me/ShivrajsinhZala" target="_blank" rel="noopener noreferrer"
-                        class="contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden magnetic-btn"
-                        data-magnetic>
-                        <div class="contact-item-fill absolute inset-0 bg-brutal-cyan translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-in-out z-0"></div>
+                        class="dir-reveal-card contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden"
+                        >
+                        <div class="contact-item-fill absolute inset-0 bg-brutal-cyan z-0"></div>
                         <div class="relative z-10 flex items-center gap-4">
                             <div class="w-10 h-10 flex items-center justify-center bg-brutal-cyan brutal-border flex-shrink-0 group-hover:bg-white transition-colors duration-300">
                                 <i data-lucide="send" style="width:1.1em;height:1.1em;" stroke-width="2.5"></i>
@@ -1381,9 +1381,9 @@
 
                     <!-- GitHub -->
                     <a href="https://github.com/shivrajsinhzala" target="_blank" rel="noopener noreferrer"
-                        class="contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden magnetic-btn"
-                        data-magnetic>
-                        <div class="contact-item-fill absolute inset-0 bg-[#00FF88] translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-in-out z-0"></div>
+                        class="dir-reveal-card contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden"
+                        >
+                        <div class="contact-item-fill absolute inset-0 bg-[#00FF88] z-0"></div>
                         <div class="relative z-10 flex items-center gap-4">
                             <div class="w-10 h-10 flex items-center justify-center bg-brutal-black text-white brutal-border flex-shrink-0 group-hover:bg-white group-hover:text-black transition-colors duration-300">
                                 <i data-lucide="github" style="width:1.1em;height:1.1em;" stroke-width="2"></i>
@@ -2038,6 +2038,45 @@
         });
         window.addEventListener('load', () => {
             ScrollTrigger.refresh();
+        });
+
+        // ===== DIRECTION-AWARE CONTACT CARD HOVER =====
+        // Hide all fills off-screen initially
+        gsap.set('.contact-item-fill', { x: '-101%', y: '0%' });
+
+        document.querySelectorAll('.dir-reveal-card').forEach(card => {
+            const fill = card.querySelector('.contact-item-fill');
+            if (!fill) return;
+
+            function getDir(e) {
+                const r = card.getBoundingClientRect();
+                const x = e.clientX - r.left - r.width / 2;
+                const y = e.clientY - r.top - r.height / 2;
+                if (Math.abs(x) >= Math.abs(y)) {
+                    return x > 0 ? { x: '101%', y: '0%' } : { x: '-101%', y: '0%' };
+                } else {
+                    return y > 0 ? { x: '0%', y: '101%' } : { x: '0%', y: '-101%' };
+                }
+            }
+
+            card.addEventListener('mouseenter', e => {
+                const dir = getDir(e);
+                gsap.set(fill, { x: dir.x, y: dir.y });
+                gsap.to(fill, { x: '0%', y: '0%', duration: 0.45, ease: 'power3.out' });
+            });
+
+            card.addEventListener('mouseleave', e => {
+                const dir = getDir(e);
+                gsap.to(fill, { x: dir.x, y: dir.y, duration: 0.4, ease: 'power3.in' });
+            });
+
+            // Lift card on hover
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, { y: -4, x: -4, boxShadow: '8px 8px 0px 0px #000', duration: 0.25, ease: 'power2.out' });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { y: 0, x: 0, boxShadow: 'none', duration: 0.3, ease: 'power2.inOut' });
+            });
         });
 
         // ===== IMAGE LIGHTBOX =====
