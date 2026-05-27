@@ -86,4 +86,27 @@
     </image:image>
   </url>
 
+  <!-- Name SEO Blogs -->
+  <url>
+    <loc>https://shivrajsinhzala.github.io/blog/about-shivrajsinh-zala-frontend-developer.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://shivrajsinhzala.github.io/assets/images/shivrajsinh-zala-frontend-developer-rajkot.jpg</image:loc>
+      <image:title>About Shivrajsinh Zala - Frontend Developer</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://shivrajsinhzala.github.io/blog/interview-shivrajsinh-zala-rajkot-web-design.html</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://shivrajsinhzala.github.io/assets/images/shivrajsinh-zala-frontend-developer-rajkot.jpg</image:loc>
+      <image:title>Interview with Shivrajsinh Zala</image:title>
+    </image:image>
+  </url>
+
 </urlset>
