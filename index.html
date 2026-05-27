@@ -119,6 +119,13 @@
       }
     }
     </script>
+    <!-- CRITICAL: Kill browser scroll restoration BEFORE it fires.
+         Must be inline (not defer) so it runs synchronously during HTML parse,
+         before the browser has a chance to jump to the saved scroll position. -->
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -1617,6 +1624,9 @@
         });
 
         gsap.registerPlugin(ScrollTrigger);
+        // Clear any cached scroll position from previous page visit
+        ScrollTrigger.clearScrollMemory('manual');
+        window.history.scrollRestoration = 'manual';
 
         gsap.ticker.add((time) => {
             lenis.raf(time * 1000);
