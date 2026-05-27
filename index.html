@@ -656,6 +656,72 @@
                 border-top: 2px solid #000;
             }
         }
+        /* ===== DARK MODE ===== */
+        html.dark body {
+            background-color: #0f0f0f;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 199px, rgba(255,255,255,0.05) 199px, rgba(255,255,255,0.05) 200px),
+                repeating-linear-gradient(90deg, transparent, transparent 199px, rgba(255,255,255,0.05) 199px, rgba(255,255,255,0.05) 200px),
+                repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px),
+                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px);
+            color: #f0ede8;
+        }
+        html.dark #navbar { background-color: #0f0f0f !important; border-color: #f0ede8 !important; }
+        html.dark #navbar .font-mono { color: #f0ede8; }
+        html.dark #navbar a, html.dark #navbar button:not(#theme-toggle):not(#header-terminal-btn):not(#menu-btn) {
+            background-color: #1a1a1a !important;
+            color: #f0ede8 !important;
+            border-color: #f0ede8 !important;
+        }
+        html.dark #menu-btn { background-color: #1a1a1a !important; color: #f0ede8 !important; border-color: #f0ede8 !important; }
+        html.dark #theme-toggle { background-color: #1a1a1a !important; color: #f0ede8 !important; border-color: #f0ede8 !important; }
+        html.dark #mobile-menu { background-color: #0f0f0f !important; }
+        html.dark #mobile-menu a, html.dark #mobile-menu button { color: #f0ede8 !important; }
+        html.dark #mobile-menu #close-menu { background-color: #1a1a1a !important; color: #f0ede8 !important; border-color: #f0ede8 !important; }
+
+        /* White / light backgrounds → dark surfaces */
+        html.dark .bg-white { background-color: #1a1a1a !important; }
+        html.dark .bg-brutal-gray { background-color: #212121 !important; }
+        html.dark .bg-brutal-yellow { background-color: #111111 !important; }
+        html.dark .bg-\[\#f8f7f4\] { background-color: #111111 !important; }
+
+        /* Text on white cards */
+        html.dark .text-brutal-black,
+        html.dark .text-black { color: #f0ede8 !important; }
+        html.dark p, html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark li { color: inherit; }
+
+        /* Borders */
+        html.dark .brutal-border { border-color: #f0ede8 !important; }
+        html.dark .border-black { border-color: #f0ede8 !important; }
+        html.dark .border-t-2 { border-color: #333 !important; }
+
+        /* Brutal shadow stays dark (actually looks fine) */
+        /* Contact section dark */
+        html.dark .dir-reveal-card { background-color: #1a1a1a !important; }
+
+        /* Contact cards icon boxes stay coloured — they look great in dark */
+        /* Location card (already black) stays as-is */
+
+        /* Sections that are already dark — leave alone */
+        /* .bg-brutal-black sections are already dark-friendly */
+
+        /* Skill bars */
+        html.dark .bg-brutal-gray.brutal-border { background-color: #222 !important; }
+
+        /* Hero section text */
+        html.dark .text-brutal-black { color: #f0ede8 !important; }
+
+        /* Preloader stays as-is (it's visible before JS runs) */
+        html.dark .preloader { background-color: #0f0f0f !important; }
+        html.dark .preloader-counter { color: #f0ede8 !important; }
+
+        /* Paper texture in dark — reduce opacity */
+        html.dark .paper-texture { opacity: 0.15; }
+
+        /* Toggle button icon swap */
+        html.dark #icon-sun { display: none; }
+        html.dark #icon-moon { display: block; }
+        #icon-moon { display: none; }
     </style>
 </head>
 
@@ -713,16 +779,30 @@
                 <button id="header-terminal-btn"
                     class="brutal-border bg-brutal-black text-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow hover:text-black magnetic-btn nav-terminal-btn"
                     data-magnetic>_TERMINAL</button>
+                <!-- Dark mode toggle -->
+                <button id="theme-toggle" class="brutal-border bg-white p-2 brutal-shadow-sm magnetic-btn" data-magnetic aria-label="Toggle dark mode">
+                    <!-- Sun (shown in dark mode to switch to light) -->
+                    <svg id="icon-moon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <!-- Moon (shown in light mode to switch to dark) -->
+                    <svg id="icon-sun" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
             </div>
-            <button id="menu-btn" class="md:!hidden brutal-border bg-white p-2 brutal-shadow-sm magnetic-btn"
-                data-magnetic aria-label="Open navigation menu" aria-expanded="false">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                    stroke-linecap="square">
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
+            <div class="flex items-center gap-2">
+                <!-- Dark mode toggle (mobile) -->
+                <button id="theme-toggle-mobile" class="brutal-border bg-white p-2 brutal-shadow-sm" aria-label="Toggle dark mode">
+                    <svg id="icon-moon-mobile" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg id="icon-sun-mobile" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+                <button id="menu-btn" class="md:!hidden brutal-border bg-white p-2 brutal-shadow-sm magnetic-btn"
+                    data-magnetic aria-label="Open navigation menu" aria-expanded="false">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="square">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -1477,6 +1557,13 @@
                     <span class="border border-brutal-pink text-brutal-pink px-2 md:px-3 py-1">AVAILABLE</span>
                 </div>
             </div>
+            <!-- Visitor Counter -->
+            <div class="flex justify-center mt-4">
+                <div class="font-mono text-[10px] text-gray-500 flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 bg-brutal-pink rounded-full animate-pulse"></span>
+                    <span id="visitor-count">VISITOR #—</span>
+                </div>
+            </div>
             <div class="flex justify-center mt-8 md:mt-10">
                 <button id="terminal-btn"
                     class="group brutal-border bg-brutal-black text-white px-6 py-3 md:px-8 md:py-4 font-mono text-sm md:text-base font-bold tracking-wider hover:bg-[#00FF88] hover:text-black transition-all duration-300 magnetic-btn flex items-center gap-3"
@@ -2049,6 +2136,46 @@
         window.addEventListener('load', () => {
             ScrollTrigger.refresh();
         });
+
+        // ===== DARK MODE TOGGLE =====
+        function applyTheme(dark) {
+            document.documentElement.classList.toggle('dark', dark);
+            // Sync both desktop and mobile icons
+            const sunD = document.getElementById('icon-sun');
+            const moonD = document.getElementById('icon-moon');
+            const sunM = document.getElementById('icon-sun-mobile');
+            const moonM = document.getElementById('icon-moon-mobile');
+            // In dark mode show sun (to switch back to light), hide moon
+            if (sunD) sunD.style.display = dark ? 'block' : 'none';
+            if (moonD) moonD.style.display = dark ? 'none' : 'block';
+            if (sunM) sunM.style.display = dark ? 'block' : 'none';
+            if (moonM) moonM.style.display = dark ? 'none' : 'block';
+        }
+
+        // Load preference: saved → OS preference → default light
+        const savedTheme = localStorage.getItem('sz-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(savedTheme === 'dark' || (!savedTheme && prefersDark));
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('sz-theme', isDark ? 'light' : 'dark');
+            applyTheme(!isDark);
+        }
+
+        document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+        document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
+
+        // ===== VISITOR COUNTER =====
+        fetch('https://api.counterapi.dev/v1/shivrajsinhzala-portfolio/visits/up')
+            .then(r => r.json())
+            .then(data => {
+                const el = document.getElementById('visitor-count');
+                if (el && data.count) {
+                    el.textContent = 'VISITOR #' + data.count.toLocaleString();
+                }
+            })
+            .catch(() => { /* Silently fail — not critical */ });
 
         // ===== DIRECTION-AWARE CONTACT CARD HOVER =====
         // Hide all fills off-screen initially
