@@ -1,5 +1,14 @@
-@import "tailwindcss";    
+@import "tailwindcss";
 
+@theme {
+  --color-brutal-black: #0a0a0a;
+  --color-brutal-cyan: #00f5ff;
+  --color-brutal-pink: #ff006e;
+  --color-brutal-gray: #f0f0f0;
+  --color-brutal-orange: #ff5e00;
+  --color-brutal-purple: #9d00ff;
+  --color-brutal-yellow: #ffe900;
+}
         html.lenis,
         html.lenis body {
             height: auto;
