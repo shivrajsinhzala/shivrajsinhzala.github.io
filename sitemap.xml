@@ -2,246 +2,246 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://shivrajsinhzala.github.io/</loc>
+    <loc>https://shivrajsinh.in/</loc>
     <lastmod>2026-05-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/profile.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/profile.jpg</image:loc>
       <image:title>Shivrajsinh Zala - Frontend Developer from Rajkot, Gujarat</image:title>
       <image:caption>Portfolio photo of Shivrajsinh Zala, a Frontend Developer specializing in React, WordPress, and GSAP animations.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-website-builder.png</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-website-builder.png</image:loc>
       <image:title>Website Builder Platform - React Vite Tailwind Project</image:title>
       <image:caption>A full-stack website builder platform built with React, Vite, Tailwind CSS and Node.js.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-gardi-chat.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-gardi-chat.jpg</image:loc>
       <image:title>Gardi Chat App - College Communication Platform</image:title>
       <image:caption>Real-time chat application built for Gardi Vidyapith college with React, Tailwind and Firebase.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-todesktop.png</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-todesktop.png</image:loc>
       <image:title>ToDesktop Clone - React Tailwind Website</image:title>
       <image:caption>A pixel-perfect clone of the ToDesktop website built with React and Tailwind CSS.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-quotegen.png</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-quotegen.png</image:loc>
       <image:title>ADInfocom Quote Generator - Business Tool</image:title>
       <image:caption>A quote generator application built for ADInfocom with React and Tailwind CSS.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-price-compare.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-price-compare.jpg</image:loc>
       <image:title>AI Price Comparator - Chrome Extension with Gemini AI</image:title>
       <image:caption>A Chrome extension that scrapes e-commerce websites and uses Gemini AI to compare prices and find best deals.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-somnath.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-somnath.jpg</image:loc>
       <image:title>Somnath Khata - Dairy Management System</image:title>
       <image:caption>A full-stack dairy management system for tracking customers, dues, transactions and generating reports.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-venus-pumps.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-venus-pumps.jpg</image:loc>
       <image:title>Venus Pumps and Motors - WordPress Client Website</image:title>
       <image:caption>Industrial pumps and motors manufacturer website built with WordPress for Venus Pumps &amp; Motors, featuring product catalog, about section, and contact forms.</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/project-solar-quartz.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/project-solar-quartz.jpg</image:loc>
       <image:title>Solar Quartz - Premium Decorative Wall Clocks Shopify Store</image:title>
       <image:caption>Shopify e-commerce store, Amazon product listing, and digital marketing for Solar Quartz premium decorative wall clocks brand.</image:caption>
     </image:image>
   </url>
   
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/custom-wordpress-development-2026.html</loc>
+    <loc>https://shivrajsinh.in/blog/custom-wordpress-development-2026.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/blog_wp_cover.png</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/blog_wp_cover.png</image:loc>
       <image:title>Why Custom WordPress Development Beats Templates in 2026</image:title>
     </image:image>
   </url>
 
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/shopify-vs-webflow-ecommerce.html</loc>
+    <loc>https://shivrajsinh.in/blog/shopify-vs-webflow-ecommerce.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/blog_ecom_cover.png</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/blog_ecom_cover.png</image:loc>
       <image:title>Shopify vs Webflow: The E-commerce Developer's Verdict</image:title>
     </image:image>
   </url>
 
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/brutalist-web-design-frontend.html</loc>
+    <loc>https://shivrajsinh.in/blog/brutalist-web-design-frontend.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/blog_brutalist_cover.png</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/blog_brutalist_cover.png</image:loc>
       <image:title>Brutalist Web Design: Why Ugly is the New Beautiful</image:title>
     </image:image>
   </url>
 
   <!-- Name SEO Blogs -->
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/about-shivrajsinh-zala-frontend-developer.html</loc>
+    <loc>https://shivrajsinh.in/blog/about-shivrajsinh-zala-frontend-developer.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/shivrajsinh-zala-frontend-developer-rajkot.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.jpg</image:loc>
       <image:title>About Shivrajsinh Zala - Frontend Developer</image:title>
     </image:image>
   </url>
 
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/interview-shivrajsinh-zala-rajkot-web-design.html</loc>
+    <loc>https://shivrajsinh.in/blog/interview-shivrajsinh-zala-rajkot-web-design.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/shivrajsinh-zala-frontend-developer-rajkot.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.jpg</image:loc>
       <image:title>Interview with Shivrajsinh Zala</image:title>
     </image:image>
   </url>
 
   <url>
-    <loc>https://shivrajsinhzala.github.io/gallery.html</loc>
+    <loc>https://shivrajsinh.in/gallery.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-frontend-developer-1.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-frontend-developer-1.jpg</image:loc>
       <image:title>Shivrajsinh Zala Frontend Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-rajkot-web-designer-2.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-rajkot-web-designer-2.jpg</image:loc>
       <image:title>Shivrajsinh Zala Rajkot Web Designer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-react-developer-gujarat-3.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-react-developer-gujarat-3.jpg</image:loc>
       <image:title>Shivrajsinh Zala React Developer Gujarat</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-wordpress-expert-4.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-wordpress-expert-4.jpg</image:loc>
       <image:title>Shivrajsinh Zala Wordpress Expert</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-software-engineer-rajkot-5.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-software-engineer-rajkot-5.jpg</image:loc>
       <image:title>Shivrajsinh Zala Software Engineer Rajkot</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-brutalist-web-design-6.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-brutalist-web-design-6.jpg</image:loc>
       <image:title>Shivrajsinh Zala Brutalist Web Design</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-shopify-ecommerce-developer-7.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-shopify-ecommerce-developer-7.jpg</image:loc>
       <image:title>Shivrajsinh Zala Shopify Ecommerce Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-digital-marketing-expert-8.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-digital-marketing-expert-8.jpg</image:loc>
       <image:title>Shivrajsinh Zala Digital Marketing Expert</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-gsap-animation-developer-9.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-gsap-animation-developer-9.jpg</image:loc>
       <image:title>Shivrajsinh Zala Gsap Animation Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-webflow-designer-10.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-webflow-designer-10.jpg</image:loc>
       <image:title>Shivrajsinh Zala Webflow Designer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-frontend-developer-11.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-frontend-developer-11.jpg</image:loc>
       <image:title>Shivrajsinh Zala Frontend Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-rajkot-web-designer-12.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-rajkot-web-designer-12.jpg</image:loc>
       <image:title>Shivrajsinh Zala Rajkot Web Designer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-react-developer-gujarat-13.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-react-developer-gujarat-13.jpg</image:loc>
       <image:title>Shivrajsinh Zala React Developer Gujarat</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-wordpress-expert-14.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-wordpress-expert-14.jpg</image:loc>
       <image:title>Shivrajsinh Zala Wordpress Expert</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-software-engineer-rajkot-15.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-software-engineer-rajkot-15.jpg</image:loc>
       <image:title>Shivrajsinh Zala Software Engineer Rajkot</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-brutalist-web-design-16.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-brutalist-web-design-16.jpg</image:loc>
       <image:title>Shivrajsinh Zala Brutalist Web Design</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-shopify-ecommerce-developer-17.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-shopify-ecommerce-developer-17.jpg</image:loc>
       <image:title>Shivrajsinh Zala Shopify Ecommerce Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-digital-marketing-expert-18.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-digital-marketing-expert-18.jpg</image:loc>
       <image:title>Shivrajsinh Zala Digital Marketing Expert</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-gsap-animation-developer-19.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-gsap-animation-developer-19.jpg</image:loc>
       <image:title>Shivrajsinh Zala Gsap Animation Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-webflow-designer-20.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-webflow-designer-20.jpg</image:loc>
       <image:title>Shivrajsinh Zala Webflow Designer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-frontend-developer-21.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-frontend-developer-21.jpg</image:loc>
       <image:title>Shivrajsinh Zala Frontend Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-rajkot-web-designer-22.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-rajkot-web-designer-22.jpg</image:loc>
       <image:title>Shivrajsinh Zala Rajkot Web Designer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-react-developer-gujarat-23.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-react-developer-gujarat-23.jpg</image:loc>
       <image:title>Shivrajsinh Zala React Developer Gujarat</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://shivrajsinhzala.github.io/assets/images/gallery/shivrajsinh-zala-wordpress-expert-24.jpg</image:loc>
+      <image:loc>https://shivrajsinh.in/assets/images/gallery/shivrajsinh-zala-wordpress-expert-24.jpg</image:loc>
       <image:title>Shivrajsinh Zala Wordpress Expert</image:title>
     </image:image>
   </url>
 
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/hire-shivrajsinh-zala-frontend-developer-rajkot.html</loc>
+    <loc>https://shivrajsinh.in/blog/hire-shivrajsinh-zala-frontend-developer-rajkot.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/shivrajsinh-zala-tech-stack-react-gsap-tailwind.html</loc>
+    <loc>https://shivrajsinh.in/blog/shivrajsinh-zala-tech-stack-react-gsap-tailwind.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/shivrajsinh-zala-developer-journey-rajkot-gujarat.html</loc>
+    <loc>https://shivrajsinh.in/blog/shivrajsinh-zala-developer-journey-rajkot-gujarat.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/shivrajsinh-zala-ecommerce-developer-shopify-webflow.html</loc>
+    <loc>https://shivrajsinh.in/blog/shivrajsinh-zala-ecommerce-developer-shopify-webflow.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://shivrajsinhzala.github.io/blog/shivrajsinh-zala-wordpress-developer-custom-themes.html</loc>
+    <loc>https://shivrajsinh.in/blog/shivrajsinh-zala-wordpress-developer-custom-themes.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
