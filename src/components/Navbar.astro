@@ -1,0 +1,52 @@
+---
+---
+<!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full bg-brutal-yellow brutal-border z-50 px-4 py-3 md:px-8 translate-y-[-100%]"
+        id="navbar">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="font-mono font-bold text-lg md:text-xl tracking-tighter magnetic-btn" data-magnetic>
+                SZ://DEV
+            </div>
+            <div class="!hidden md:!flex gap-3">
+                <a href="#about"
+                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-pink hover:text-white magnetic-btn"
+                    data-magnetic>ABOUT</a>
+                <a href="#experience"
+                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-cyan magnetic-btn"
+                    data-magnetic>WORK</a>
+                <a href="#skills"
+                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow magnetic-btn"
+                    data-magnetic>SKILLS</a>
+                <a href="#projects"
+                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-orange hover:text-white magnetic-btn"
+                    data-magnetic>PROJECTS</a>
+                <a href="#contact"
+                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-black hover:text-white magnetic-btn"
+                    data-magnetic>CONTACT</a>
+                <button id="header-terminal-btn"
+                    class="brutal-border bg-brutal-black text-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow hover:text-black magnetic-btn nav-terminal-btn"
+                    data-magnetic>_TERMINAL</button>
+            </div>
+            <button id="menu-btn" class="md:!hidden brutal-border bg-white p-2 brutal-shadow-sm magnetic-btn"
+                data-magnetic aria-label="Open navigation menu" aria-expanded="false">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="square">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-brutal-yellow z-[60] hidden flex-col justify-center items-center gap-6">
+        <a href="#about" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">ABOUT</a>
+        <a href="#experience" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">WORK</a>
+        <a href="#skills" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">SKILLS</a>
+        <a href="#projects" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">PROJECTS</a>
+        <a href="#contact" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">CONTACT</a>
+        <button id="mobile-terminal-btn" class="text-4xl font-bold font-mono hover:text-white transition-colors nav-terminal-btn mobile-link">_TERMINAL</button>
+        <button id="close-menu"
+            class="absolute top-6 right-6 text-2xl font-mono brutal-border bg-white px-4 py-2">CLOSE</button>
+    </div>

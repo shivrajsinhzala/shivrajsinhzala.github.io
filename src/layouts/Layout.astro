@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Portfolio of Shivrajsinh Zala" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<slot name="head" />
+        <script is:inline>
+          if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+          window.scrollTo(0, 0);
+        </script>
+	</head>
+	<body class="font-sans">
+        <div class="paper-texture"></div>
+        
+        <!-- Custom Cursor -->
+        <div class="custom-cursor">
+            <svg class="cursor-icon" width="30" height="34" viewBox="0 0 30 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3L12 30L16 19L27 15L3 3Z" fill="#FF006E" stroke="black" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+            <div class="cursor-text">VIEW</div>
+        </div>
+
+		<Navbar />
+		<slot />
+		<Footer />
+
+        <!-- Global Scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+        <script src="https://unpkg.com/lucide@0.460.0" defer></script>
+	</body>
+</html>

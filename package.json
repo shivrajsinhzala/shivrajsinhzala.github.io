@@ -1,24 +1,24 @@
 {
-  "name": "untitled-folder",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "astro_temp",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shivrajsinhzala/shivrajsinhzala.github.io.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/shivrajsinhzala/shivrajsinhzala.github.io/issues"
-  },
-  "homepage": "https://github.com/shivrajsinhzala/shivrajsinhzala.github.io#readme",
-  "devDependencies": {
-    "tailwindcss": "^3.4.19"
+  "dependencies": {
+    "@astrojs/react": "^5.0.6",
+    "@tailwindcss/vite": "^4.3.0",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^6.4.2",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "tailwindcss": "^4.3.0"
   }
 }
