@@ -84,5 +84,199 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // ===== AUDIO DESIGN (WEB AUDIO API) =====
+    let audioEnabled = false;
+    let audioCtx = null;
+
+    const initAudio = () => {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        audioEnabled = true;
+        document.querySelectorAll('#sound-toggle-btn, #mobile-sound-toggle-btn').forEach(btn => {
+            btn.innerText = 'SOUND: ON';
+            btn.classList.add('bg-brutal-yellow', 'text-black');
+            btn.classList.remove('bg-brutal-pink', 'text-white');
+        });
+    };
+
+    const disableAudio = () => {
+        audioEnabled = false;
+        document.querySelectorAll('#sound-toggle-btn, #mobile-sound-toggle-btn').forEach(btn => {
+            btn.innerText = 'SOUND: OFF';
+            btn.classList.remove('bg-brutal-yellow', 'text-black');
+            btn.classList.add('bg-brutal-pink', 'text-white');
+        });
+    };
+
+    document.querySelectorAll('#sound-toggle-btn, #mobile-sound-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (audioEnabled) {
+                disableAudio();
+            } else {
+                initAudio();
+                playTick();
+            }
+        });
+    });
+
+    const playTick = () => {
+        if (!audioEnabled || !audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.05);
+        
+        gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+    };
+
+    const playThud = () => {
+        if (!audioEnabled || !audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+    };
+
+    document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => playTick());
+        el.addEventListener('mousedown', () => playThud());
+    });
+
+    // ===== BREAK THE WEBSITE (MATTER.JS PHYSICS) =====
+    const breakBtn = document.getElementById('break-btn');
+    let websiteBroken = false;
+
+    if (breakBtn) {
+        breakBtn.addEventListener('click', () => {
+            if (websiteBroken) return;
+            websiteBroken = true;
+            playThud();
+            breakBtn.style.display = 'none';
+            document.body.style.cursor = 'grab';
+
+            // Load Matter.js dynamically
+            const script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js";
+            script.onload = initPhysics;
+            document.body.appendChild(script);
+        });
+    }
+
+    function initPhysics() {
+        const Engine = Matter.Engine,
+              Runner = Matter.Runner,
+              Bodies = Matter.Bodies,
+              Composite = Matter.Composite,
+              Mouse = Matter.Mouse,
+              MouseConstraint = Matter.MouseConstraint;
+
+        const engine = Engine.create();
+        
+        // Stop Lenis scroll
+        if (window.lenis) {
+            window.lenis.stop();
+        }
+        document.body.style.overflow = 'hidden';
+
+        // Select major elements. We avoid selecting deeply nested children independently.
+        const elementsToBreakRaw = Array.from(document.querySelectorAll('img, p, h1, h2, h3, h4, li, a.brutal-border, button, .tilt-card, .magnetic-btn, .prose > div, article > div'));
+        const elementsData = [];
+        
+        elementsToBreakRaw.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.width < 10 || rect.height < 10 || el.offsetParent === null) return;
+            // Prevent nested physics bodies
+            if (el.closest('.physics-enabled')) return;
+            // Don't break the custom cursor
+            if (el.closest('.custom-cursor')) return;
+            
+            el.classList.add('physics-enabled');
+            elementsData.push({ el, rect });
+        });
+
+        const physicsBodies = [];
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const wallOptions = { isStatic: true, render: { visible: false } };
+        
+        // Boundaries: ground, left, right
+        Composite.add(engine.world, [
+            Bodies.rectangle(vw / 2, vh + 50, vw * 2, 100, wallOptions),
+            Bodies.rectangle(-50, vh / 2, 100, vh * 2, wallOptions),
+            Bodies.rectangle(vw + 50, vh / 2, 100, vh * 2, wallOptions)
+        ]);
+
+        elementsData.forEach(({ el, rect }) => {
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            const body = Bodies.rectangle(x, y, rect.width, rect.height, {
+                restitution: 0.6,
+                friction: 0.1,
+                frictionAir: 0.02,
+                density: 0.001
+            });
+            
+            physicsBodies.push({ body, el, initialX: x, initialY: y });
+            Composite.add(engine.world, body);
+        });
+
+        // Apply fixed positioning in a separate loop to avoid layout thrashing
+        elementsData.forEach(({ el, rect }) => {
+            el.style.position = 'fixed';
+            el.style.left = rect.left + 'px';
+            el.style.top = rect.top + 'px';
+            el.style.width = rect.width + 'px';
+            el.style.height = rect.height + 'px';
+            el.style.margin = '0';
+            el.style.zIndex = '9000';
+            // Disable native transitions so they don't fight physics
+            el.style.transition = 'none';
+        });
+
+        // Mouse constraint for interaction
+        const mouse = Mouse.create(document.body);
+        const mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: { visible: false }
+            }
+        });
+        Composite.add(engine.world, mouseConstraint);
+
+        Matter.Events.on(engine, 'afterUpdate', () => {
+            physicsBodies.forEach(item => {
+                const { body, el, initialX, initialY } = item;
+                const tx = body.position.x - initialX;
+                const ty = body.position.y - initialY;
+                el.style.transform = \`translate(\${tx}px, \${ty}px) rotate(\${body.angle}rad)\`;
+            });
+        });
+
+        Runner.run(Runner.create(), engine);
+    }
 });
 </script>
