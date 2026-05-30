@@ -1,0 +1,88 @@
+---
+---
+
+<script is:inline>
+window.addEventListener('DOMContentLoaded', () => {
+    // ===== LENIS SMOOTH SCROLL =====
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothTouch: false,
+        touchMultiplier: 2,
+    });
+    
+    // Attach to window so index.astro can use it for scroll triggers
+    window.lenis = lenis;
+
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Clear any cached scroll position from previous page visit
+    ScrollTrigger.clearScrollMemory('manual');
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // ===== CUSTOM CURSOR =====
+    const customCursor = document.querySelector('.custom-cursor');
+    let cursorX = 0, cursorY = 0;
+    let isTouchDevice = navigator.maxTouchPoints > 0;
+
+    if (!isTouchDevice && customCursor) {
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            // Use requestAnimationFrame for smoother cursor
+            requestAnimationFrame(() => {
+                customCursor.style.left = cursorX + 'px';
+                customCursor.style.top = cursorY + 'px';
+            });
+        });
+
+        const interactiveElements = document.querySelectorAll('a, button, [data-magnetic], .tilt-card, .brutal-shadow, .brutal-shadow-sm');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.classList.add('hover');
+                customCursor.classList.remove('view');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('hover');
+                customCursor.classList.remove('view');
+            });
+        });
+
+        // View cursor for projects
+        document.querySelectorAll('[data-cursor="view"]').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.classList.remove('hover');
+                customCursor.classList.add('view');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('view');
+            });
+        });
+    } else if (customCursor) {
+        customCursor.style.display = 'none';
+    }
+
+    // ===== MAGNETIC BUTTONS =====
+    const isTouch = () => navigator.maxTouchPoints > 0;
+    if (!isTouch()) {
+        document.querySelectorAll('[data-magnetic]').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+    }
+});
+</script>
