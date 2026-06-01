@@ -3,6 +3,8 @@ import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import GlobalScripts from '../components/GlobalScripts.astro';
+import GitHubPagesRedirect from '../components/GitHubPagesRedirect.astro';
+import { pageUrl } from '../utils/seo';
 
 interface Props {
 	title: string;
@@ -10,12 +12,13 @@ interface Props {
 }
 
 const { title, description = "Portfolio of Shivrajsinh Zala" } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://shivrajsinh.in');
+const canonicalURL = pageUrl(Astro.url.pathname);
 ---
 
 <!doctype html>
 <html lang="en" class="scroll-smooth">
 	<head>
+		<GitHubPagesRedirect />
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />

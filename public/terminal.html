@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+    <script>
+    (function () {
+        var host = location.hostname;
+        if (host !== 'github.io' && !host.endsWith('.github.io')) return;
+        var path = location.pathname.replace(/\/index\.html$/i, '/');
+        if (path.endsWith('.html')) path = path.slice(0, -5);
+        location.replace('https://shivrajsinh.in' + (path === '/' ? '/' : path) + location.search + location.hash);
+    })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SZ://TERMINAL — Shivrajsinh Zala</title>
@@ -9,14 +18,14 @@
     <meta name="keywords" content="Terminal Portfolio, CLI Portfolio, Shivrajsinh Zala, Frontend Developer, Developer Console">
     <meta name="author" content="Shivrajsinh Zala">
     <meta name="robots" content="noindex, nofollow">
-    <link rel="canonical" href="https://shivrajsinh.in/terminal.html">
+    <link rel="canonical" href="https://shivrajsinh.in/terminal">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0a0a0a">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://shivrajsinh.in/terminal.html">
+    <meta property="og:url" content="https://shivrajsinh.in/terminal">
     <meta property="og:title" content="SZ://TERMINAL — Shivrajsinh Zala">
     <meta property="og:description" content="Interactive terminal interface for Shivrajsinh Zala's portfolio. Discover projects, skills, and experience via CLI.">
     <meta property="og:image" content="https://shivrajsinh.in/assets/images/og-image.png">
@@ -25,7 +34,7 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://shivrajsinh.in/terminal.html">
+    <meta name="twitter:url" content="https://shivrajsinh.in/terminal">
     <meta name="twitter:title" content="SZ://TERMINAL — Shivrajsinh Zala">
     <meta name="twitter:description" content="Interactive terminal interface for Shivrajsinh Zala's portfolio. Discover projects, skills, and experience via CLI.">
     <meta name="twitter:image" content="https://shivrajsinh.in/assets/images/og-image.png">

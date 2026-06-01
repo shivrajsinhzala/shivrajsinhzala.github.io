@@ -5,6 +5,15 @@ import '../styles/global.css';
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script is:inline>
+    (function () {
+        var host = location.hostname;
+        if (host !== 'github.io' && !host.endsWith('.github.io')) return;
+        var path = location.pathname.replace(/\/index\.html$/i, '/');
+        if (path.endsWith('.html')) path = path.slice(0, -5);
+        location.replace('https://shivrajsinh.in' + (path === '/' ? '/' : path) + location.search + location.hash);
+    })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 — Page Not Found | Shivrajsinh Zala</title>

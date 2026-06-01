@@ -1,0 +1,13 @@
+---
+/** Sends github.io visitors to shivrajsinh.in (GitHub Pages serves both hostnames). */
+---
+<script is:inline define:vars={{ siteUrl: 'https://shivrajsinh.in' }}>
+(function () {
+	var host = location.hostname;
+	if (host !== 'github.io' && !host.endsWith('.github.io')) return;
+	var path = location.pathname.replace(/\/index\.html$/i, '/');
+	if (path.endsWith('.html')) path = path.slice(0, -5);
+	var target = siteUrl + (path === '/' ? '/' : path) + location.search + location.hash;
+	location.replace(target);
+})();
+</script>

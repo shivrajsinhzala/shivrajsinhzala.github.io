@@ -1,4 +1,5 @@
 ---
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
 ---
 <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-white focus:text-black focus:p-4 focus:z-[999] focus:brutal-border focus:brutal-shadow font-mono text-sm">Skip to content</a>
 
@@ -6,10 +7,12 @@
     <nav class="fixed top-0 left-0 w-full bg-brutal-yellow brutal-border z-50 px-4 py-3 md:px-8 translate-y-[-100%]"
         id="navbar" aria-label="Primary Navigation">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="font-mono font-bold text-lg md:text-xl tracking-tighter magnetic-btn" data-magnetic>
+            <a href="/" class="font-mono font-bold text-lg md:text-xl tracking-tighter magnetic-btn" data-magnetic aria-label="Home">
                 SZ://DEV
-            </div>
-            <div class="!hidden md:!flex gap-3">
+            </a>
+            <div class="!hidden md:!flex gap-2 lg:gap-3 flex-wrap justify-end">
+                <a href={isHome ? '#writing' : '/blog'} class="brutal-border bg-white px-3 py-2 brutal-shadow-sm font-mono text-xs lg:text-sm hover:bg-brutal-pink hover:text-white magnetic-btn" data-magnetic>BLOG</a>
+                <a href="/gallery" class="brutal-border bg-white px-3 py-2 brutal-shadow-sm font-mono text-xs lg:text-sm hover:bg-brutal-cyan magnetic-btn" data-magnetic>GALLERY</a>
                 <a href="#about"
                     class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-pink hover:text-white magnetic-btn"
                     data-magnetic>ABOUT</a>
@@ -48,6 +51,8 @@
         <a href="#skills" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">SKILLS</a>
         <a href="#projects" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">PROJECTS</a>
         <a href="#contact" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">CONTACT</a>
+        <a href={isHome ? '#writing' : '/blog'} class="text-3xl font-bold font-mono mobile-link hover:text-white transition-colors">BLOG</a>
+        <a href="/gallery" class="text-3xl font-bold font-mono mobile-link hover:text-white transition-colors">GALLERY</a>
         <button id="mobile-terminal-btn" class="text-4xl font-bold font-mono hover:text-white transition-colors nav-terminal-btn mobile-link">_TERMINAL</button>
         <button id="close-menu"
             class="absolute top-6 right-6 text-2xl font-mono brutal-border bg-white px-4 py-2" aria-label="Close navigation menu">CLOSE</button>

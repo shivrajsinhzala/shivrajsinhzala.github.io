@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { blogPosts } from '../data/blog-posts';
+
+const featuredPosts = blogPosts.slice(0, 3);
 ---
 
 <Layout title="Shivrajsinh Zala — Frontend Developer" description="Portfolio of Shivrajsinh Zala — Frontend Developer specializing in WordPress, Squarespace, Webflow, Shopify, and Digital Marketing. Based in Rajkot, Gujarat.">
@@ -36,19 +39,37 @@ import Layout from '../layouts/Layout.astro';
           "@id": "https://shivrajsinh.in/#person",
           "name": "Shivrajsinh Zala",
           "jobTitle": "Frontend Developer",
-          "url": "https://shivrajsinh.in",
+          "url": "https://shivrajsinh.in/",
           "image": "https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp",
+          "email": "shivrajsinhzala@hotmail.com",
+          "description": "Frontend Developer specializing in WordPress, Squarespace, Webflow, Shopify, and Digital Marketing. 30+ websites built and maintained. Based in Rajkot, Gujarat, India.",
           "sameAs": [
             "https://github.com/shivrajsinhzala",
             "https://www.linkedin.com/in/shivrajsinh-zala/",
-            "https://www.instagram.com/shivrajsinh.sh"
+            "https://www.instagram.com/shivrajsinh.sh",
+            "https://t.me/ShivrajsinhZala"
           ],
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Just Digital Gurus"
+          },
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Rajkot",
             "addressRegion": "Gujarat",
-            "addressCountry": "India"
+            "addressCountry": "IN"
           },
+          "alumniOf": [
+            {
+              "@type": "CollegeOrUniversity",
+              "name": "B H Gardi College of Engineering & Technology",
+              "sameAs": "https://www.gardi.org"
+            },
+            {
+              "@type": "CollegeOrUniversity",
+              "name": "OMVVIM College, Morbi"
+            }
+          ],
           "knowsAbout": [
             "Frontend Development",
             "React",
@@ -58,18 +79,18 @@ import Layout from '../layouts/Layout.astro';
             "GSAP Animations",
             "Tailwind CSS",
             "Digital Marketing",
-            "Brutalist Web Design"
-          ],
-          "description": "Shivrajsinh Zala is a highly skilled Frontend Developer based in Rajkot, Gujarat, India, specializing in building custom web applications and e-commerce platforms with premium brutalist aesthetics."
+            "Brutalist Web Design",
+            "E-commerce",
+            "SEO"
+          ]
         },
         {
           "@type": "WebSite",
           "@id": "https://shivrajsinh.in/#website",
           "url": "https://shivrajsinh.in/",
-          "name": "Shivrajsinh Zala - Frontend Developer Portfolio",
-          "publisher": {
-            "@id": "https://shivrajsinh.in/#person"
-          }
+          "name": "Shivrajsinh Zala | Frontend Developer Portfolio",
+          "description": "Portfolio of Shivrajsinh Zala, a Frontend Developer from Rajkot, Gujarat.",
+          "publisher": { "@id": "https://shivrajsinh.in/#person" }
         },
         {
           "@type": "FAQPage",
@@ -83,59 +104,6 @@ import Layout from '../layouts/Layout.astro';
           }]
         }
       ]
-    }
-    </script>
-<script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Shivrajsinh Zala",
-      "url": "https://shivrajsinh.in",
-      "image": "https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp",
-      "description": "Frontend Developer specializing in WordPress, Squarespace, Webflow, Shopify, and Digital Marketing. 30+ websites built and maintained.",
-      "email": "shivrajsinhzala@hotmail.com",
-      "sameAs": [
-        "https://github.com/shivrajsinhzala",
-        "https://linkedin.com/in/ShivrajsinhZala",
-        "https://www.instagram.com/shivrajsinh.sh",
-        "https://t.me/ShivrajsinhZala"
-      ],
-      "jobTitle": "Frontend Developer",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Just Digital Gurus"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Rajkot",
-        "addressRegion": "Gujarat",
-        "addressCountry": "IN"
-      },
-      "alumniOf": [
-        {
-          "@type": "CollegeOrUniversity",
-          "name": "B H Gardi College of Engineering & Technology",
-          "sameAs": "https://www.gardi.org"
-        },
-        {
-          "@type": "CollegeOrUniversity",
-          "name": "OMVVIM College, Morbi"
-        }
-      ],
-      "knowsAbout": ["WordPress", "Squarespace", "Webflow", "Shopify", "Digital Marketing", "Amazon Product Listing", "JavaScript", "Tailwind CSS", "React", "AI Tools", "WooCommerce", "SEO", "E-commerce"]
-    }
-    </script>
-<script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Shivrajsinh Zala | Portfolio",
-      "url": "https://shivrajsinh.in",
-      "description": "Portfolio of Shivrajsinh Zala, a Frontend Developer from Rajkot, Gujarat.",
-      "author": {
-        "@type": "Person",
-        "name": "Shivrajsinh Zala"
-      }
     }
     </script>
 <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-170NQJN07E"></script>
@@ -767,6 +735,26 @@ import Layout from '../layouts/Layout.astro';
         </div>
     </section>
 
+    <!-- Blog highlights (internal linking for SEO) -->
+    <section id="writing" class="section-padding px-4 relative z-10 bg-brutal-gray brutal-border border-x-0">
+        <div class="max-w-6xl mx-auto">
+            <div class="font-mono text-xs bg-brutal-black text-white inline-block px-3 py-1 mb-3">FROM THE BLOG</div>
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                <h2 class="text-3xl md:text-5xl font-bold tracking-tighter">WRITING &amp; GUIDES</h2>
+                <a href="/blog" class="font-mono text-sm font-bold brutal-border bg-white px-4 py-2 brutal-shadow-sm hover:bg-brutal-yellow transition-colors w-fit">VIEW ALL →</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {featuredPosts.map((post) => (
+                    <a href={`/blog/${post.slug}`} class="brutal-border bg-white p-5 brutal-shadow hover:shadow-[8px_8px_0_0_#FF006E] hover:-translate-y-1 transition-all block h-full">
+                        <span class="font-mono text-[10px] text-gray-500">{post.date}</span>
+                        <h3 class="text-lg font-bold mt-2 leading-tight">{post.title}</h3>
+                        <p class="font-mono text-xs text-gray-600 mt-2 line-clamp-2">{post.description}</p>
+                    </a>
+                ))}
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact"
         class="section-padding px-4 bg-brutal-yellow brutal-border border-x-0 relative overflow-hidden skew-scroll">
@@ -854,7 +842,7 @@ import Layout from '../layouts/Layout.astro';
                 <div class="mt-6 md:mt-8 pt-6 md:pt-8 border-t-2 border-black">
                     <p class="font-mono text-xs md:text-sm mb-3 md:mb-4">Stalk me professionally:</p>
                     <div class="flex justify-center gap-3 md:gap-4">
-                        <a href="https://www.linkedin.com/in/ShivrajsinhZala" target="_blank" rel="noopener noreferrer"
+                        <a href="https://www.linkedin.com/in/shivrajsinh-zala/" target="_blank" rel="noopener noreferrer"
                             class="brutal-border bg-white p-2 md:p-3 brutal-shadow-sm hover:bg-brutal-black hover:text-white transition-colors magnetic-btn"
                             data-magnetic aria-label="LinkedIn profile">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
