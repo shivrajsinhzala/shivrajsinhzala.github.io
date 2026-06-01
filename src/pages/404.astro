@@ -15,6 +15,13 @@ import '../styles/global.css';
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="font-mono min-h-screen flex items-center justify-center text-brutal-black relative" style="background-color: #f8f7f4;">
+    <div class="custom-cursor">
+        <svg class="cursor-icon" width="30" height="34" viewBox="0 0 30 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3L12 30L16 19L27 15L3 3Z" fill="#FF006E" stroke="black" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <div class="cursor-text">VIEW</div>
+    </div>
+
     <!-- Graph paper background -->
     <div class="fixed inset-0 pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,0,0,0.04) 39px, rgba(0,0,0,0.04) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,0,0,0.04) 39px, rgba(0,0,0,0.04) 40px);"></div>
     
@@ -26,5 +33,25 @@ import '../styles/global.css';
         </a>
         <p class="mt-8 text-xs text-gray-500">SZ://DEV — shivrajsinh.in</p>
     </div>
+
+    <script is:inline>
+    window.addEventListener('DOMContentLoaded', () => {
+        const customCursor = document.querySelector('.custom-cursor');
+        if (!customCursor || navigator.maxTouchPoints > 0) {
+            if (customCursor) customCursor.style.display = 'none';
+            return;
+        }
+        document.addEventListener('mousemove', (e) => {
+            requestAnimationFrame(() => {
+                customCursor.style.left = e.clientX + 'px';
+                customCursor.style.top = e.clientY + 'px';
+            });
+        });
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hover'));
+        });
+    });
+    </script>
 </body>
 </html>
