@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /terminal.html
 
-Sitemap: https://shivrajsinh.in/sitemap.xml
+Sitemap: https://shivrajsinh.in/sitemap-index.xml
