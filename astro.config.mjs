@@ -11,6 +11,7 @@ export default defineConfig({
   },
 
   integrations: [react()],
+  site: 'https://shivrajsinhzala.github.io',
   build: {
     format: 'file'
   }

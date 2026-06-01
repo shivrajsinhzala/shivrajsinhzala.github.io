@@ -10,6 +10,7 @@ interface Props {
 }
 
 const { title, description = "Portfolio of Shivrajsinh Zala" } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://shivrajsinhzala.github.io');
 ---
 
 <!doctype html>
@@ -21,6 +22,7 @@ const { title, description = "Portfolio of Shivrajsinh Zala" } = Astro.props;
 		<link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="canonical" href={canonicalURL} />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
