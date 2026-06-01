@@ -1,8 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { blogPosts } from '../data/blog-posts';
-
-const featuredPosts = blogPosts.slice(0, 3);
 ---
 
 <Layout title="Shivrajsinh Zala — Frontend Developer" description="Portfolio of Shivrajsinh Zala — Frontend Developer specializing in WordPress, Squarespace, Webflow, Shopify, and Digital Marketing. Based in Rajkot, Gujarat.">
@@ -731,26 +728,6 @@ const featuredPosts = blogPosts.slice(0, 3);
                         2020 — 2023
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog highlights (internal linking for SEO) -->
-    <section id="writing" class="section-padding px-4 relative z-10 bg-brutal-gray brutal-border border-x-0">
-        <div class="max-w-6xl mx-auto">
-            <div class="font-mono text-xs bg-brutal-black text-white inline-block px-3 py-1 mb-3">FROM THE BLOG</div>
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-                <h2 class="text-3xl md:text-5xl font-bold tracking-tighter">WRITING &amp; GUIDES</h2>
-                <a href="/blog" class="font-mono text-sm font-bold brutal-border bg-white px-4 py-2 brutal-shadow-sm hover:bg-brutal-yellow transition-colors w-fit">VIEW ALL →</a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {featuredPosts.map((post) => (
-                    <a href={`/blog/${post.slug}`} class="brutal-border bg-white p-5 brutal-shadow hover:shadow-[8px_8px_0_0_#FF006E] hover:-translate-y-1 transition-all block h-full">
-                        <span class="font-mono text-[10px] text-gray-500">{post.date}</span>
-                        <h3 class="text-lg font-bold mt-2 leading-tight">{post.title}</h3>
-                        <p class="font-mono text-xs text-gray-600 mt-2 line-clamp-2">{post.description}</p>
-                    </a>
-                ))}
             </div>
         </div>
     </section>

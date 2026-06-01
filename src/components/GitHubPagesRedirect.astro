@@ -1,10 +1,15 @@
 ---
-/** Sends github.io visitors to shivrajsinh.in (GitHub Pages serves both hostnames). */
+/** Send alternate deploy hostnames (github.io, pages.dev) to the primary domain. */
 ---
 <script is:inline define:vars={{ siteUrl: 'https://shivrajsinh.in' }}>
 (function () {
 	var host = location.hostname;
-	if (host !== 'github.io' && !host.endsWith('.github.io')) return;
+	if (host === 'shivrajsinh.in' || host === 'www.shivrajsinh.in') return;
+	var isAltHost =
+		host === 'github.io' ||
+		host.endsWith('.github.io') ||
+		host.endsWith('.pages.dev');
+	if (!isAltHost) return;
 	var path = location.pathname.replace(/\/index\.html$/i, '/');
 	if (path.endsWith('.html')) path = path.slice(0, -5);
 	var target = siteUrl + (path === '/' ? '/' : path) + location.search + location.hash;
