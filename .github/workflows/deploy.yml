@@ -1,8 +1,10 @@
-name: Deploy to GitHub Pages
+# Deploys ONLY a redirect page to GitHub Pages (shivrajsinhzala.github.io → shivrajsinh.in).
+# The full site is built and hosted on Cloudflare Pages — not here.
+name: GitHub.io redirect
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,24 +12,25 @@ permissions:
   pages: write
   id-token: write
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
-        with:
-          node-version: 22
+concurrency:
+  group: github-pages-redirect
+  cancel-in-progress: false
 
+jobs:
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload redirect artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: github-pages-redirect
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
