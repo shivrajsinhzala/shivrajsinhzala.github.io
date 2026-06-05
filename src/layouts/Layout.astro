@@ -33,21 +33,32 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<link rel="canonical" href={canonicalURL} />
-		<!-- Global Analytics: Google Analytics -->
-		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-170NQJN07E"></script>
+
+		<!-- Critical Web Fonts Preload -->
+		<link rel="preload" href="/assets/fonts/space-grotesk-700.ttf" as="font" type="font/ttf" crossorigin />
+		<link rel="preload" href="/assets/fonts/jetbrains-mono-700.ttf" as="font" type="font/ttf" crossorigin />
+
+		<!-- Global Analytics (Deferred to window load to unblock main thread & initial rendering metrics) -->
 		<script is:inline>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'G-170NQJN07E');
-		</script>
-		<!-- Global Analytics: Microsoft Clarity -->
-		<script is:inline type="text/javascript">
-			(function(c,l,a,r,i,t,y){
-				c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-				t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-			})(window, document, "clarity", "script", "wwamkblght");
+			window.addEventListener('load', () => {
+				// Google Analytics (gtag.js)
+				const gaScript = document.createElement('script');
+				gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-170NQJN07E';
+				gaScript.async = true;
+				document.head.appendChild(gaScript);
+
+				window.dataLayer = window.dataLayer || [];
+				window.gtag = function(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('config', 'G-170NQJN07E');
+
+				// Microsoft Clarity
+				(function(c,l,a,r,i,t,y){
+					c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+					t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+					y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+				})(window, document, "clarity", "script", "wwamkblght");
+			});
 		</script>
 		<slot name="head" />
         <script is:inline>
