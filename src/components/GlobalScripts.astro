@@ -84,5 +84,18 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // ===== SUBPAGE NAVBAR ENTRANCE =====
+    const isHomepage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/');
+    if (!isHomepage) {
+        const navbar = document.getElementById('navbar');
+        if (navbar) {
+            if (typeof gsap !== 'undefined') {
+                gsap.to(navbar, { y: 0, duration: 0.8, ease: 'power4.out', delay: 0.15 });
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+        }
+    }
 });
 </script>
