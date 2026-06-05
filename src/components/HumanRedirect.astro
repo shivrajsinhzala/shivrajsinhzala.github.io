@@ -172,6 +172,10 @@
         setTimeout(showPopup, 2500);
     }
 
+    function preventDefaultScroll(e) {
+        e.preventDefault();
+    }
+
     // ── 4. PHASE 2: HIDE TOAST, SHOW POPUP ────────────────────────────────
     function showPopup() {
         // Fade toast out
@@ -182,6 +186,14 @@
         }
 
         if (!overlay) return;
+
+        // Lock scroll (both standard scroll and Lenis scroll)
+        if (window.lenis) {
+            window.lenis.stop();
+        }
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('touchmove', preventDefaultScroll, { passive: false });
 
         // Show overlay + animate card up
         overlay.style.display = 'flex';

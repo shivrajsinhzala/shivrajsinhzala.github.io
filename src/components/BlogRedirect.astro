@@ -96,6 +96,14 @@
         overlay.style.pointerEvents = 'auto';
         overlay.setAttribute('aria-hidden', 'false');
         
+        // Lock scroll (both standard scroll and Lenis scroll)
+        if (window.lenis) {
+            window.lenis.stop();
+        }
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+
         // Start progress bar immediately
         progress.style.width = '20%';
 
