@@ -901,6 +901,23 @@ import Layout from '../layouts/Layout.astro';
 
                 <div class="space-y-3 font-mono">
 
+                    <!-- Direct Form Link -->
+                    <a href="/contact"
+                        class="dir-reveal-card contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden"
+                        >
+                        <div class="contact-item-fill absolute inset-0 bg-brutal-yellow z-0"></div>
+                        <div class="relative z-10 flex items-center gap-4">
+                            <div class="w-10 h-10 flex items-center justify-center bg-brutal-yellow text-black brutal-border flex-shrink-0 group-hover:bg-white group-hover:text-brutal-yellow transition-colors duration-300">
+                                <i data-lucide="message-square" style="width:1.1em;height:1.1em;" stroke-width="2.5"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest opacity-50 group-hover:opacity-70 group-hover:text-black transition-colors leading-none mb-1">Direct message</p>
+                                <p class="text-sm md:text-base font-bold group-hover:text-black transition-colors">Send an Inquiry Form</p>
+                            </div>
+                        </div>
+                        <span class="relative z-10 text-[10px] md:text-xs brutal-border px-3 py-1.5 flex-shrink-0 bg-brutal-black text-white group-hover:bg-white group-hover:text-black transition-colors duration-300 font-bold tracking-wider">WRITE FORM →</span>
+                    </a>
+
                     <!-- Email -->
                     <a href="mailto:hello@shivrajsinh.in"
                         class="dir-reveal-card contact-item group relative flex items-center justify-between brutal-border bg-white p-4 md:p-5 overflow-hidden"

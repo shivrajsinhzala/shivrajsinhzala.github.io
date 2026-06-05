@@ -1,0 +1,464 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contact | Shivrajsinh Zala | Frontend Developer" description="Send a direct inquiry to Shivrajsinh Zala for custom WordPress theme development, responsive React apps, and GSAP scrolling animations.">
+    <Fragment slot="head">
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://shivrajsinh.in/contact" />
+        <meta property="og:title" content="Contact Shivrajsinh Zala | Frontend Developer" />
+        <meta property="og:description" content="Send a direct inquiry to Shivrajsinh Zala for custom WordPress theme development, responsive React apps, and GSAP scrolling animations." />
+        <meta property="og:image" content="https://shivrajsinh.in/assets/images/og-image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Shivrajsinh Zala | Frontend Developer" />
+        <meta name="twitter:description" content="Send a direct inquiry to Shivrajsinh Zala for custom WordPress theme development, responsive React apps, and GSAP scrolling animations." />
+        <meta name="twitter:image" content="https://shivrajsinh.in/assets/images/og-image.png" />
+        <script type="application/ld+json" is:inline>
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://shivrajsinh.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Contact",
+              "item": "https://shivrajsinh.in/contact"
+            }
+          ]
+        }
+        </script>
+    </Fragment>
+
+    <main class="relative z-10 pt-28 pb-24 px-4 max-w-4xl mx-auto">
+        <!-- Section Header -->
+        <header class="mb-10 text-center">
+            <div class="inline-block bg-brutal-yellow brutal-border px-4 py-1.5 font-mono font-bold text-xs md:text-sm mb-4 shadow-[4px_4px_0_0_#000] -rotate-1">
+                SZ://PORTAL_V2
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 text-black hover-word-container relative">
+                GET IN TOUCH
+                <span class="absolute -bottom-1 left-1/4 w-1/2 h-2 bg-[#FF006E] -z-10 opacity-60 skew-x-12"></span>
+            </h1>
+            <p class="font-mono text-sm md:text-base max-w-lg mx-auto text-gray-700 mt-2">
+                Have a WordPress project, React app, or design idea?
+                Fill out the form below and I'll get back to you within 24 hours.
+            </p>
+        </header>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mt-8">
+            <!-- Sidebar Info -->
+            <div class="space-y-6 md:col-span-1">
+                <!-- Status Box -->
+                <div class="bg-white brutal-border p-5 shadow-[6px_6px_0_0_#000] font-mono">
+                    <h3 class="text-xs uppercase tracking-widest text-gray-500 mb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 bg-[#00FF88] rounded-full animate-ping"></span>
+                        CURRENT STATUS
+                    </h3>
+                    <p class="text-sm font-bold text-black uppercase">Available for freelance & contract work</p>
+                    <p class="text-[11px] text-gray-500 mt-2 leading-relaxed">Based in Rajkot, Gujarat, India. Working globally with clients in US, UK, and Europe.</p>
+                </div>
+
+                <!-- Direct Details Box -->
+                <div class="bg-brutal-black text-white brutal-border p-5 shadow-[6px_6px_0_0_#ffe900] font-mono space-y-4">
+                    <h3 class="text-xs uppercase tracking-widest text-brutal-cyan font-bold">OTHER CHANNELS</h3>
+                    
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Direct Email</p>
+                        <a href="mailto:hello@shivrajsinh.in" class="text-sm font-bold hover:text-brutal-pink transition-colors">hello@shivrajsinh.in</a>
+                    </div>
+                    
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Telegram</p>
+                        <a href="https://t.me/ShivrajsinhZala" target="_blank" rel="noopener noreferrer" class="text-sm font-bold hover:text-brutal-cyan transition-colors">@ShivrajsinhZala</a>
+                    </div>
+                    
+                    <div class="pt-2 border-t border-gray-800 flex justify-between items-center text-xs">
+                        <span class="opacity-60">Avg. Response Time</span>
+                        <span class="bg-brutal-pink text-white px-2 py-0.5 text-[10px] font-bold brutal-border">&lt; 12 Hours</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="md:col-span-2 bg-white brutal-border p-6 md:p-8 shadow-[12px_12px_0_0_#000] relative overflow-hidden">
+                <form id="contact-form" class="space-y-6 font-mono text-sm">
+                    <!-- Web3Forms Config -->
+                    <!-- Replace the value below with your actual Web3Forms access key -->
+                    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+                    <input type="hidden" name="subject" value="New Portfolio Inquiry" />
+                    <input type="hidden" name="from_name" value="SZ://Portfolio Form" />
+                    <!-- Honeypot spam protection -->
+                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;" />
+
+                    <!-- Name Field -->
+                    <div class="flex flex-col gap-2">
+                        <label for="name" class="font-bold flex justify-between items-center text-black">
+                            <span>01 // YOUR NAME *</span>
+                            <span class="text-xs text-gray-400 font-normal">Required</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            placeholder="John Doe" 
+                            class="brutal-input w-full p-3 brutal-border bg-white text-black font-bold focus:bg-brutal-yellow/15 focus:outline-none transition-all" 
+                            required 
+                        />
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="flex flex-col gap-2">
+                        <label for="email" class="font-bold flex justify-between items-center text-black">
+                            <span>02 // YOUR EMAIL *</span>
+                            <span class="text-xs text-gray-400 font-normal">Required</span>
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="john@example.com" 
+                            class="brutal-input w-full p-3 brutal-border bg-white text-black font-bold focus:bg-brutal-cyan/15 focus:outline-none transition-all" 
+                            required 
+                        />
+                    </div>
+
+                    <!-- Services / Subject Dropdown -->
+                    <div class="flex flex-col gap-2">
+                        <label for="service" class="font-bold text-black">03 // INQUIRY TYPE</label>
+                        <div class="relative">
+                            <select 
+                                id="service" 
+                                name="service" 
+                                class="w-full p-3 brutal-border bg-white text-black font-bold focus:bg-brutal-pink/15 focus:outline-none appearance-none cursor-pointer"
+                            >
+                                <option value="WordPress Development">WordPress Custom Theme Dev</option>
+                                <option value="Frontend Development">React & GSAP Frontend Dev</option>
+                                <option value="Shopify & Webflow">Shopify / Webflow Store</option>
+                                <option value="Consulting / Audit">Website Performance / SEO Audit</option>
+                                <option value="Other">Other Collaboration / Inquiry</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-black">
+                                <i data-lucide="chevron-down" style="width:1.2em;height:1.2em;" stroke-width="3"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message Field -->
+                    <div class="flex flex-col gap-2">
+                        <label for="message" class="font-bold flex justify-between items-center text-black">
+                            <span>04 // PROJECT DETAILS *</span>
+                            <span class="text-xs text-gray-400 font-normal">Required</span>
+                        </label>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            rows="5" 
+                            placeholder="Tell me about your project, timeline, budget or questions..." 
+                            class="brutal-input w-full p-3 brutal-border bg-white text-black font-bold focus:bg-brutal-orange/15 focus:outline-none transition-all resize-y" 
+                            required
+                        ></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button 
+                            type="submit" 
+                            id="submit-btn"
+                            class="w-full brutal-border bg-brutal-black text-white hover:bg-brutal-yellow hover:text-black font-bold py-4 px-6 text-base md:text-lg transition-colors cursor-pointer shadow-[6px_6px_0_0_#00FF88] hover:shadow-[10px_10px_0_0_#ff006e] hover:-translate-y-1 hover:-translate-x-1 active:translate-y-0 active:translate-x-0 transition-all duration-300 font-mono tracking-wider flex justify-center items-center gap-3"
+                        >
+                            <span>SEND INQUIRY</span>
+                            <i data-lucide="arrow-right" style="width:1.2em;height:1.2em;" stroke-width="3"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- LOADING DIALOG OVERLAY -->
+    <div id="loading-overlay" class="fixed inset-0 z-[1000] bg-brutal-black/70 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+        <div class="bg-white brutal-border p-8 max-w-sm w-full mx-4 shadow-[16px_16px_0_0_#ffe900] text-center font-mono relative">
+            <div class="w-12 h-12 brutal-border bg-brutal-pink text-white flex items-center justify-center mx-auto mb-4 animate-spin">
+                <i data-lucide="refresh-cw" style="width:1.5em;height:1.5em;" stroke-width="2.5"></i>
+            </div>
+            <h3 class="text-lg font-black uppercase text-black tracking-widest animate-pulse">SZ://TRANSMITTING</h3>
+            <p class="text-xs text-gray-500 mt-2">Sending your inquiry safely via encrypted network tunnel...</p>
+            <div class="w-full bg-gray-200 h-4 border-2 border-black mt-4 overflow-hidden relative">
+                <div class="bg-brutal-cyan h-full w-2/3 absolute left-0 top-0 animate-[loading-bar_1.5s_infinite_linear]" style="width: 50%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS DIALOG OVERLAY -->
+    <div id="success-overlay" class="fixed inset-0 z-[1001] bg-brutal-black/80 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+        <div id="success-modal" class="bg-white brutal-border p-8 max-w-md w-full mx-4 shadow-[16px_16px_0_0_#00FF88] text-center font-mono relative scale-75 opacity-0">
+            <div class="w-16 h-16 brutal-border bg-[#00FF88] text-black flex items-center justify-center mx-auto mb-6 shadow-[4px_4px_0_0_#000]">
+                <i data-lucide="check" style="width:2.5em;height:2.5em;" stroke-width="3.5"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-black uppercase text-black tracking-tighter mb-2">INQUIRY RECEIVED</h2>
+            <p class="text-sm text-gray-700 leading-relaxed mb-6">
+                Your message has been processed successfully! A copy of your submission has been queued, and I'll review it and get back to you shortly.
+            </p>
+            <div class="flex flex-col gap-3">
+                <button 
+                    id="close-success-btn"
+                    class="w-full brutal-border bg-brutal-black text-white hover:bg-brutal-yellow hover:text-black py-3 px-6 font-bold transition-all shadow-[4px_4px_0_0_#ffe900] hover:-translate-y-0.5 active:translate-y-0"
+                >
+                    CLOSE WINDOW
+                </button>
+                <a 
+                    href="/" 
+                    class="w-full brutal-border bg-white text-black hover:bg-brutal-cyan py-3 px-6 font-bold transition-all shadow-[4px_4px_0_0_#000] block text-center"
+                >
+                    BACK TO HOME
+                </a>
+            </div>
+            <div class="absolute -top-3 -right-3 w-8 h-8 brutal-border bg-brutal-yellow text-black flex items-center justify-center font-bold text-xs select-none">
+                SZ
+            </div>
+        </div>
+    </div>
+
+    <!-- ERROR DIALOG OVERLAY -->
+    <div id="error-overlay" class="fixed inset-0 z-[1001] bg-brutal-black/80 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+        <div id="error-modal" class="bg-white brutal-border p-8 max-w-md w-full mx-4 shadow-[16px_16px_0_0_#ff006e] text-center font-mono relative scale-75 opacity-0">
+            <div class="w-16 h-16 brutal-border bg-brutal-pink text-white flex items-center justify-center mx-auto mb-6 shadow-[4px_4px_0_0_#000]">
+                <i data-lucide="alert-triangle" style="width:2.5em;height:2.5em;" stroke-width="3"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-black uppercase text-black tracking-tighter mb-2">TRANSMISSION FAILED</h2>
+            <p class="text-sm text-gray-700 leading-relaxed mb-6">
+                Something went wrong while routing your inquiry. Please copy your text and email me directly at:
+                <br />
+                <a href="mailto:hello@shivrajsinh.in" class="bg-brutal-yellow text-black px-1.5 py-0.5 font-bold hover:bg-brutal-cyan transition-colors">hello@shivrajsinh.in</a>
+            </p>
+            <button 
+                id="close-error-btn"
+                class="w-full brutal-border bg-brutal-black text-white hover:bg-brutal-pink py-3 px-6 font-bold transition-all shadow-[4px_4px_0_0_#ffe900]"
+            >
+                TRY AGAIN
+            </button>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    /* Custom input/textarea animations */
+    .brutal-input {
+        border-width: 3px;
+        border-color: #0a0a0a;
+        transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+    }
+    .brutal-input:focus {
+        transform: translate(-3px, -3px);
+        box-shadow: 6px 6px 0px 0px #0a0a0a;
+    }
+    
+    /* Loading bar infinite slide keyframe */
+    @keyframes loading-bar {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+    }
+</style>
+
+<script is:inline>
+window.addEventListener('DOMContentLoaded', () => {
+    // Re-initialize Lucide Icons for dynamic content
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+
+    const form = document.getElementById('contact-form');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const successOverlay = document.getElementById('success-overlay');
+    const successModal = document.getElementById('success-modal');
+    const errorOverlay = document.getElementById('error-overlay');
+    const errorModal = document.getElementById('error-modal');
+    const closeSuccessBtn = document.getElementById('close-success-btn');
+    const closeErrorBtn = document.getElementById('close-error-btn');
+
+    // Form inputs for styling validation wiggles
+    const inputs = form.querySelectorAll('input[required], textarea[required]');
+
+    // Validate email pattern helper
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
+    // Form submission interceptor
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        let isValid = true;
+        
+        // Custom Brutalist shake/wiggle validation animation
+        inputs.forEach(input => {
+            let fieldValid = true;
+            if (input.type === 'email') {
+                fieldValid = validateEmail(input.value);
+            } else {
+                fieldValid = input.value.trim() !== '';
+            }
+
+            if (!fieldValid) {
+                isValid = false;
+                // Highlight input border in pink and trigger shake
+                input.style.borderColor = '#ff006e';
+                input.style.backgroundColor = '#ff006e10';
+                
+                if (typeof gsap !== 'undefined') {
+                    gsap.fromTo(input, 
+                        { x: -6 }, 
+                        { x: 6, duration: 0.1, repeat: 5, yoyo: true, ease: 'sine.inOut', onComplete: () => {
+                            input.style.x = 0;
+                        }}
+                    );
+                }
+            } else {
+                // Reset styling
+                input.style.borderColor = '#0a0a0a';
+                input.style.backgroundColor = 'white';
+            }
+        });
+
+        if (!isValid) return;
+
+        // Start transmitting: show loading modal
+        loadingOverlay.style.pointerEvents = 'all';
+        if (typeof gsap !== 'undefined') {
+            gsap.to(loadingOverlay, { opacity: 1, duration: 0.3 });
+        } else {
+            loadingOverlay.style.opacity = '1';
+        }
+
+        // Get form data
+        const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+
+        // Submit asynchronously to Web3Forms API
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        })
+        .then(async (response) => {
+            let res = await response.json();
+            
+            // Hide loading overlay
+            if (typeof gsap !== 'undefined') {
+                gsap.to(loadingOverlay, { opacity: 0, duration: 0.2, onComplete: () => {
+                    loadingOverlay.style.pointerEvents = 'none';
+                }});
+            } else {
+                loadingOverlay.style.opacity = '0';
+                loadingOverlay.style.pointerEvents = 'none';
+            }
+
+            if (response.status == 200) {
+                // Success! Trigger Success modal animation
+                successOverlay.style.pointerEvents = 'all';
+                form.reset(); // clear the fields
+                
+                if (typeof gsap !== 'undefined') {
+                    gsap.set(successModal, { scale: 0.7, opacity: 0 });
+                    gsap.to(successOverlay, { opacity: 1, duration: 0.3 });
+                    gsap.to(successModal, { 
+                        scale: 1, 
+                        opacity: 1, 
+                        duration: 0.5, 
+                        ease: 'back.out(1.7)',
+                        delay: 0.1
+                    });
+                } else {
+                    successOverlay.style.opacity = '1';
+                    successModal.style.opacity = '1';
+                    successModal.style.transform = 'scale(1)';
+                }
+            } else {
+                // Server returned error (like invalid key)
+                console.error("Web3Forms error:", res);
+                showErrorModal();
+            }
+        })
+        .catch((error) => {
+            console.error("Submission failed:", error);
+            // Hide loading overlay
+            if (typeof gsap !== 'undefined') {
+                gsap.to(loadingOverlay, { opacity: 0, duration: 0.2, onComplete: () => {
+                    loadingOverlay.style.pointerEvents = 'none';
+                }});
+            } else {
+                loadingOverlay.style.opacity = '0';
+                loadingOverlay.style.pointerEvents = 'none';
+            }
+            showErrorModal();
+        });
+    });
+
+    const showErrorModal = () => {
+        errorOverlay.style.pointerEvents = 'all';
+        if (typeof gsap !== 'undefined') {
+            gsap.set(errorModal, { scale: 0.7, opacity: 0 });
+            gsap.to(errorOverlay, { opacity: 1, duration: 0.3 });
+            gsap.to(errorModal, { 
+                scale: 1, 
+                opacity: 1, 
+                duration: 0.5, 
+                ease: 'back.out(1.7)',
+                delay: 0.1
+            });
+        } else {
+            errorOverlay.style.opacity = '1';
+            errorModal.style.opacity = '1';
+            errorModal.style.transform = 'scale(1)';
+        }
+    };
+
+    // Close Modals
+    closeSuccessBtn.addEventListener('click', () => {
+        if (typeof gsap !== 'undefined') {
+            gsap.to(successModal, { scale: 0.7, opacity: 0, duration: 0.3, ease: 'power2.in' });
+            gsap.to(successOverlay, { opacity: 0, duration: 0.3, delay: 0.1, onComplete: () => {
+                successOverlay.style.pointerEvents = 'none';
+            }});
+        } else {
+            successOverlay.style.opacity = '0';
+            successOverlay.style.pointerEvents = 'none';
+        }
+    });
+
+    closeErrorBtn.addEventListener('click', () => {
+        if (typeof gsap !== 'undefined') {
+            gsap.to(errorModal, { scale: 0.7, opacity: 0, duration: 0.3, ease: 'power2.in' });
+            gsap.to(errorOverlay, { opacity: 0, duration: 0.3, delay: 0.1, onComplete: () => {
+                errorOverlay.style.pointerEvents = 'none';
+            }});
+        } else {
+            errorOverlay.style.opacity = '0';
+            errorOverlay.style.pointerEvents = 'none';
+        }
+    });
+
+    // Reset input highlights on user typing/input
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            input.style.borderColor = '#0a0a0a';
+            input.style.backgroundColor = 'white';
+        });
+    });
+});
+</script>
