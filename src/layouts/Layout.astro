@@ -9,9 +9,10 @@ import { pageUrl } from '../utils/seo';
 interface Props {
 	title: string;
 	description?: string;
+	robots?: string;
 }
 
-const { title, description = "Portfolio of Shivrajsinh Zala" } = Astro.props;
+const { title, description = "Portfolio of Shivrajsinh Zala", robots = "index, follow" } = Astro.props;
 const canonicalURL = pageUrl(Astro.url.pathname);
 ---
 
@@ -22,7 +23,7 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="robots" content="index, follow" />
+		<meta name="robots" content={robots} />
 		<meta name="theme-color" content="#FFE900" />
 		<meta name="author" content="Shivrajsinh Zala" />
 		<link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
@@ -32,9 +33,6 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<link rel="canonical" href={canonicalURL} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
 		<!-- Global Analytics: Google Analytics -->
 		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-170NQJN07E"></script>
 		<script is:inline>
@@ -73,10 +71,10 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<Footer />
 
         <!-- Global Scripts -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-        <script src="https://unpkg.com/lucide@0.460.0" defer></script>
+        <script is:inline src="/assets/vendor/gsap.min.js" defer></script>
+        <script is:inline src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+        <script is:inline src="/assets/vendor/lenis.min.js" defer></script>
+        <script is:inline src="/assets/vendor/lucide.min.js" defer></script>
         
         <GlobalScripts />
 	</body>

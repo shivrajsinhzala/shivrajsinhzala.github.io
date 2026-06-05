@@ -20,7 +20,14 @@ const blogIndexUrl = pageUrl('/blog');
 			content="Articles on frontend development, WordPress, Shopify, and web design from Shivrajsinh Zala in Rajkot, Gujarat."
 		/>
 		<meta property="og:image" content="https://shivrajsinh.in/assets/images/og-image.png" />
-		<script type="application/ld+json" set:html={JSON.stringify({
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Blog — Shivrajsinh Zala" />
+		<meta
+			name="twitter:description"
+			content="Articles on frontend development, WordPress, Shopify, and web design from Shivrajsinh Zala in Rajkot, Gujarat."
+		/>
+		<meta name="twitter:image" content="https://shivrajsinh.in/assets/images/og-image.png" />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify({
 			'@context': 'https://schema.org',
 			'@type': 'Blog',
 			name: 'Shivrajsinh Zala Blog',

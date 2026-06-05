@@ -3,9 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 import HumanRedirect from '../../components/HumanRedirect.astro';
 ---
 
-<Layout title="Brutalist Web Design: Why &quot;Ugly&quot; is the New Beautiful | Shivrajsinh Zala" description="Explore why brutalist web design is taking over modern frontend development. Break the rules of UI/UX with high contrast, raw fonts, and unpolished aesthetics.">
+<Layout title="Brutalist Web Design for Frontend Developers" description="Explore why brutalist web design is growing in modern frontend work, using high contrast, raw type, strong layouts, and bold interaction.">
     <Fragment slot="head">
-        <meta name="keywords" content="Brutalist web design, modern frontend development, creative developer, UI/UX trends 2026, raw html aesthetic">
 <meta name="author" content="Shivrajsinh Zala">
 <meta property="og:title" content="Brutalist Web Design: Why Ugly is the New Beautiful">
 <meta property="og:image" content="https://shivrajsinh.in/assets/images/blog_brutalist_cover.webp">
@@ -147,7 +146,7 @@ import HumanRedirect from '../../components/HumanRedirect.astro';
     </main>
 
     <script is:inline>
-        lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons();
     </script>
 
     

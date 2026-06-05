@@ -5,9 +5,7 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Shivrajsinh Zala — Frontend Developer" description="Portfolio of Shivrajsinh Zala — Frontend Developer specializing in WordPress, Squarespace, Webflow, Shopify, and Digital Marketing. Based in Rajkot, Gujarat.">
     <Fragment slot="head">
         <meta name="google-site-verification" content="r_ohihwtpmUNEaxpkMTGONtJlv6Pk8p7J2eEX6NTm9A" />
-<meta name="keywords" content="WordPress Developer, Squarespace Developer, Webflow Developer, Shopify Developer, Frontend Developer, Digital Marketing, Amazon Listing, Web Designer, Rajkot, Gujarat, Shivrajsinh Zala">
 <meta name="author" content="Shivrajsinh Zala">
-<meta name="robots" content="index, follow">
 <meta name="theme-color" content="#FFE900">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shivrajsinh.in/">
@@ -519,7 +517,7 @@ import Layout from '../layouts/Layout.astro';
                                     <div class="font-mono text-[10px] md:text-xs text-gray-500 mb-1 line-clamp-1">REACT / VITE / TAILWIND / NODE.JS</div>
                                     <h3 class="text-xl md:text-2xl font-bold leading-tight scramble-text" data-scramble>Website Builder</h3>
                                 </div>
-                                <a href="https://github.com/shivrajsinhzala/website-builder" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] md:text-xs bg-brutal-yellow brutal-border px-2 md:px-3 py-1 md:py-2 flex-shrink-0 hover:bg-black hover:text-white transition-colors cursor-pointer">REPO</a>
+                                <a href="https://github.com/shivrajsinhzala" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] md:text-xs bg-brutal-yellow brutal-border px-2 md:px-3 py-1 md:py-2 flex-shrink-0 hover:bg-black hover:text-white transition-colors cursor-pointer">GITHUB</a>
                             </div>
                         </div>
                     </div>
@@ -570,7 +568,7 @@ import Layout from '../layouts/Layout.astro';
                                     <div class="font-mono text-[10px] md:text-xs text-gray-500 mb-1 line-clamp-1">REACT / TAILWIND</div>
                                     <h3 class="text-xl md:text-2xl font-bold leading-tight scramble-text" data-scramble>Quote Generator</h3>
                                 </div>
-                                <a href="https://github.com/shivrajsinhzala/ADInfocom-QuoteGen" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] md:text-xs bg-brutal-orange text-black brutal-border px-2 md:px-3 py-1 md:py-2 flex-shrink-0 hover:bg-black hover:text-white transition-colors cursor-pointer">REPO</a>
+                                <a href="https://github.com/shivrajsinhzala" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] md:text-xs bg-brutal-orange text-black brutal-border px-2 md:px-3 py-1 md:py-2 flex-shrink-0 hover:bg-black hover:text-white transition-colors cursor-pointer">GITHUB</a>
                             </div>
                         </div>
                     </div>
@@ -846,7 +844,8 @@ import Layout from '../layouts/Layout.astro';
         }
     </style>
 
-    <script>
+    <script is:inline>
+        // @ts-nocheck
         // Mock terminal typing animation
         (function() {
             const el = document.getElementById('mock-cursor-text');
@@ -1069,7 +1068,8 @@ import Layout from '../layouts/Layout.astro';
     </div>
     </main>
 
-    <script>
+    <script is:inline>
+        // @ts-nocheck
         window.addEventListener('DOMContentLoaded', () => {
         // ===== TEXT SCRAMBLE CLASS =====
         class TextScramble {
@@ -1696,8 +1696,8 @@ import Layout from '../layouts/Layout.astro';
         });
 
         // Initialize Lucide Icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
+        if (window.lucide) {
+            window.lucide.createIcons();
         }
 
 

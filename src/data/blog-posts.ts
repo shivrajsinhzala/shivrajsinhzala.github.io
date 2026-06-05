@@ -22,13 +22,6 @@ export const blogPosts: BlogPost[] = [
 		tag: 'HIRE',
 	},
 	{
-		slug: 'freelance-web-developer-india-remote-hire',
-		title: 'Hire a Freelance Web Developer from India',
-		description: 'Why remote Indian developers deliver better results. A guide to hiring Shivrajsinh Zala as your freelance developer.',
-		date: '2026-05-25',
-		tag: 'FREELANCE',
-	},
-	{
 		slug: 'about-shivrajsinh-zala-frontend-developer',
 		title: 'Who is Shivrajsinh Zala?',
 		description: 'Profile of a Rajkot-based frontend developer specializing in React, WordPress, Webflow, and Shopify.',
@@ -39,7 +32,7 @@ export const blogPosts: BlogPost[] = [
 		slug: 'shivrajsinh-zala-tech-stack-react-gsap-tailwind',
 		title: 'Tech Stack: React, GSAP, Tailwind',
 		description: 'Why this stack wins for brutalist design and performance.',
-		date: '2026-05-18',
+		date: '2026-04-20',
 		tag: 'STACK',
 	},
 	{
@@ -55,13 +48,6 @@ export const blogPosts: BlogPost[] = [
 		description: 'Why custom WordPress beats bloated templates for business sites in Gujarat.',
 		date: '2026-05-15',
 		tag: 'WORDPRESS',
-	},
-	{
-		slug: 'website-cost-rajkot-gujarat-pricing-guide',
-		title: 'How Much Does a Website Cost in Rajkot? 2026 Pricing Guide',
-		description: 'Complete pricing breakdown for websites in Gujarat — WordPress, React, Shopify and more.',
-		date: '2026-05-12',
-		tag: 'PRICING',
 	},
 	{
 		slug: 'custom-wordpress-development-2026',
@@ -88,15 +74,8 @@ export const blogPosts: BlogPost[] = [
 		slug: 'shivrajsinh-zala-developer-journey-rajkot-gujarat',
 		title: "Developer's Journey: Rajkot to the World",
 		description: 'Biography and career path of a Gujarat-based frontend developer.',
-		date: '2026-04-20',
+		date: '2026-04-01',
 		tag: 'STACK',
-	},
-	{
-		slug: 'react-vs-wordpress-which-to-choose-2026',
-		title: 'React vs WordPress in 2026: Which Should You Choose?',
-		description: 'Expert analysis comparing React and WordPress for modern web projects.',
-		date: '2026-04-15',
-		tag: 'COMPARISON',
 	},
 	{
 		slug: 'brutalist-web-design-frontend',
@@ -113,4 +92,3 @@ export const blogPosts: BlogPost[] = [
 		tag: 'INTERVIEW',
 	},
 ];
-
