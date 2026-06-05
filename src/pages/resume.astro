@@ -1,0 +1,256 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Resume | Shivrajsinh Zala | Frontend Developer" description="Professional resume and qualifications of Shivrajsinh Zala, Frontend Developer specializing in React, custom WordPress theme design, Squarespace, and GSAP web animations.">
+    <Fragment slot="head">
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://shivrajsinh.in/resume" />
+        <meta property="og:title" content="Shivrajsinh Zala — Resume / CV" />
+        <meta property="og:description" content="Professional qualifications, experience, and development stack of Shivrajsinh Zala, Frontend Developer in Rajkot, Gujarat." />
+        <meta property="og:image" content="https://shivrajsinh.in/assets/images/og-image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <script type="application/ld+json" is:inline>
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://shivrajsinh.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Resume",
+              "item": "https://shivrajsinh.in/resume"
+            }
+          ]
+        }
+        </script>
+    </Fragment>
+
+    <main class="relative z-10 pt-28 pb-24 px-4 max-w-4xl mx-auto print:pt-4 print:pb-4">
+        <!-- Print Header & Controls (hidden in print) -->
+        <div class="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 bg-white brutal-border p-4 shadow-[4px_4px_0_0_#000] print:hidden">
+            <span class="font-mono text-xs font-bold text-gray-700 flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4 text-brutal-pink"></i>
+                This page is optimized for paper printing and PDF export.
+            </span>
+            <button 
+                id="print-btn"
+                class="w-full sm:w-auto brutal-border bg-brutal-yellow text-black hover:bg-black hover:text-white px-5 py-2 font-mono font-bold text-xs md:text-sm tracking-wider cursor-pointer shadow-[3px_3px_0_0_#000] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] active:translate-y-[3px] transition-all flex items-center justify-center gap-2"
+            >
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                PRINT / SAVE PDF
+            </button>
+        </div>
+
+        <!-- Resume Container -->
+        <article class="bg-white brutal-border p-6 md:p-10 shadow-[12px_12px_0_0_#000] print:shadow-none print:border-0 print:p-0">
+            <!-- Header Block -->
+            <header class="border-b-4 border-black pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 print:border-b-2">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tighter uppercase text-black">
+                        Shivrajsinh Zala
+                    </h1>
+                    <p class="font-mono text-base md:text-lg text-brutal-pink font-bold mt-1 uppercase print:text-black">
+                        Frontend Developer & WordPress Engineer
+                    </p>
+                    <p class="font-mono text-xs text-gray-500 mt-2">
+                        Rajkot, Gujarat, India · hello@shivrajsinh.in
+                    </p>
+                </div>
+                
+                <!-- Quick social / metadata -->
+                <div class="font-mono text-xs space-y-1 text-left w-full md:w-auto border-t-2 border-black md:border-t-0 pt-4 md:pt-0">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold w-16 text-gray-400">GITHUB:</span>
+                        <a href="https://github.com/shivrajsinhzala" target="_blank" class="hover:underline font-bold">github.com/shivrajsinhzala</a>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold w-16 text-gray-400">LINKEDIN:</span>
+                        <a href="https://www.linkedin.com/in/shivrajsinh-zala/" target="_blank" class="hover:underline font-bold">linkedin.com/in/shivrajsinh-zala</a>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold w-16 text-gray-400">TELEGRAM:</span>
+                        <a href="https://t.me/ShivrajsinhZala" target="_blank" class="hover:underline font-bold">t.me/ShivrajsinhZala</a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Summary / Objective -->
+            <section class="py-8 border-b-2 border-black">
+                <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-3 print:text-black print:font-black">01 // PROFILE</h2>
+                <p class="font-mono text-sm leading-relaxed text-gray-800 print:text-black">
+                    Highly motivated and results-oriented Frontend Developer and MCA graduate with 2+ years of hands-on experience. 
+                    Specialized in custom WordPress theme engineering, responsive web application development with React and Tailwind CSS, 
+                    and creating high-impact scrolling interactions utilizing GSAP and ScrollTrigger. Strong track record of building and managing 30+ client websites with excellent client satisfaction.
+                </p>
+            </section>
+
+            <!-- Grid Split for Experience and Education / Skills -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
+                <!-- Column 1 & 2: Experience -->
+                <div class="md:col-span-2 space-y-8">
+                    <section>
+                        <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-5 print:text-black print:font-black">02 // WORK EXPERIENCE</h2>
+                        
+                        <div class="space-y-6">
+                            <!-- Job 1 -->
+                            <div class="brutal-border p-5 bg-brutal-gray/30 shadow-[4px_4px_0_0_#000] print:border print:shadow-none print:p-0 print:bg-white">
+                                <div class="flex justify-between items-start flex-wrap gap-2 mb-2">
+                                    <div>
+                                        <h3 class="text-lg font-black font-mono">Frontend Developer</h3>
+                                        <h4 class="text-sm font-bold text-gray-700 font-mono">Just Digital Gurus</h4>
+                                    </div>
+                                    <span class="font-mono text-[10px] bg-brutal-yellow brutal-border px-2 py-0.5 font-bold print:border print:bg-white">
+                                        FEB 2025 — PRESENT
+                                    </span>
+                                </div>
+                                <p class="font-mono text-xs text-gray-500 mb-4">Rajkot, Gujarat</p>
+                                <ul class="space-y-2 font-mono text-xs text-gray-800 list-disc list-inside print:text-black">
+                                    <li>Develop and maintain 30+ client websites, ensuring fast loading speeds and high SEO ranks.</li>
+                                    <li>Custom WordPress theme architecture, code optimization, and custom plugins management.</li>
+                                    <li>Implement high-fidelity responsive layout designs from Sketch/Figma files in Squarespace and Webflow.</li>
+                                    <li>Design sophisticated UI animations and scroll-driven page elements using GSAP & ScrollTrigger.</li>
+                                    <li>Optimize developer workflows using modern web systems and AI-assisted compilation.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-5 print:text-black print:font-black">03 // EDUCATION</h2>
+                        
+                        <div class="space-y-4">
+                            <!-- MCA -->
+                            <div class="flex gap-4 items-start border-l-4 border-brutal-pink pl-4 py-1 print:border-l-2 print:border-black">
+                                <div class="flex-1 font-mono">
+                                    <h3 class="text-sm font-black">Master of Computer Applications (MCA)</h3>
+                                    <p class="text-xs text-gray-600">B H Gardi College of Engineering & Technology, Rajkot</p>
+                                    <p class="text-[10px] text-gray-400">Gujarat Technological University (GTU)</p>
+                                </div>
+                                <span class="font-mono text-xs text-gray-500 font-bold whitespace-nowrap">2023 — 2025</span>
+                            </div>
+
+                            <!-- BCA -->
+                            <div class="flex gap-4 items-start border-l-4 border-brutal-cyan pl-4 py-1 print:border-l-2 print:border-black">
+                                <div class="flex-1 font-mono">
+                                    <h3 class="text-sm font-black">Bachelor of Computer Applications (BCA)</h3>
+                                    <p class="text-xs text-gray-600">OMVVIM College, Morbi</p>
+                                    <p class="text-[10px] text-gray-400">Saurashtra University</p>
+                                </div>
+                                <span class="font-mono text-xs text-gray-500 font-bold whitespace-nowrap">2020 — 2023</span>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Column 3: Skills & Stack -->
+                <div class="space-y-8 md:col-span-1 border-t-2 border-black md:border-t-0 md:border-l-2 md:pl-8 pt-8 md:pt-0 print:border-l-0 print:pl-0">
+                    <section>
+                        <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-5 print:text-black print:font-black">04 // CORE STACK</h2>
+                        
+                        <div class="space-y-4 font-mono">
+                            <!-- Skill 1 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span>WordPress / Custom Themes</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 brutal-border h-3 overflow-hidden print:border print:bg-white">
+                                    <div class="bg-brutal-black h-full print:bg-black" style="width: 95%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Skill 2 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span>React.js / GSAP Animations</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 brutal-border h-3 overflow-hidden print:border print:bg-white">
+                                    <div class="bg-brutal-black h-full print:bg-black" style="width: 90%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Skill 3 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span>Shopify / Webflow Store</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 brutal-border h-3 overflow-hidden print:border print:bg-white">
+                                    <div class="bg-brutal-black h-full print:bg-black" style="width: 85%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Skill 4 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span>HTML5 / CSS3 / Tailwind</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 brutal-border h-3 overflow-hidden print:border print:bg-white">
+                                    <div class="bg-brutal-black h-full print:bg-black" style="width: 95%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="pt-4">
+                        <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-3 print:text-black print:font-black">05 // TECHNICAL</h2>
+                        <div class="flex flex-wrap gap-2 font-mono text-[10px] print:text-xs">
+                            <span class="border border-black bg-brutal-yellow/20 px-2 py-0.5 print:bg-white print:border">Git / Version Control</span>
+                            <span class="border border-black bg-brutal-cyan/20 px-2 py-0.5 print:bg-white print:border">Squarespace Theme</span>
+                            <span class="border border-black bg-brutal-pink/20 px-2 py-0.5 print:bg-white print:border">Figma Integration</span>
+                            <span class="border border-black bg-gray-100 px-2 py-0.5 print:bg-white print:border">REST API / Fetch</span>
+                            <span class="border border-black bg-gray-100 px-2 py-0.5 print:bg-white print:border">Vite / Bundlers</span>
+                            <span class="border border-black bg-gray-100 px-2 py-0.5 print:bg-white print:border">SEO Auditing</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <style>
+        /* Custom print page setups */
+        @media print {
+            body {
+                background: #ffffff !important;
+                background-image: none !important;
+                color: #000000 !important;
+            }
+            .paper-texture, .custom-cursor {
+                display: none !important;
+            }
+            /* Reset layout margins for paper margins */
+            main {
+                max-width: 100% !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+        }
+    </style>
+
+    <script is:inline>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Re-initialize Lucide Icons for dynamic content
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+
+            // Bind print trigger
+            const printBtn = document.getElementById('print-btn');
+            if (printBtn) {
+                printBtn.addEventListener('click', () => {
+                    window.print();
+                });
+            }
+        });
+    </script>
+</Layout>
