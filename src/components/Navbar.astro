@@ -1,4 +1,20 @@
 ---
+const pathname = Astro.url.pathname;
+// Check if homepage
+const isHomepage = pathname === '/' || pathname === '/index.html' || pathname.endsWith('/');
+
+const isActive = (path: string) => {
+    if (path === '/blog') {
+        return pathname.startsWith('/blog');
+    }
+    if (path === '/gallery') {
+        return pathname.startsWith('/gallery');
+    }
+    if (path === '/contact') {
+        return pathname.startsWith('/contact');
+    }
+    return pathname === path;
+};
 ---
 <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-white focus:text-black focus:p-4 focus:z-[999] focus:brutal-border focus:brutal-shadow font-mono text-sm">Skip to content</a>
 
@@ -10,21 +26,40 @@
                 SZ://DEV
             </a>
             <div class="!hidden md:!flex gap-3">
-                <a href="/#about"
-                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-pink hover:text-white magnetic-btn"
-                    data-magnetic>ABOUT</a>
-                <a href="/#experience"
-                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-cyan magnetic-btn"
-                    data-magnetic>WORK</a>
-                <a href="/#skills"
-                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow magnetic-btn"
-                    data-magnetic>SKILLS</a>
-                <a href="/#projects"
-                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-orange hover:text-white magnetic-btn"
-                    data-magnetic>PROJECTS</a>
-                <a href="/contact"
-                    class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-black hover:text-white magnetic-btn"
-                    data-magnetic>CONTACT</a>
+                {isHomepage ? (
+                    <>
+                        <a href="#about"
+                            class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-pink hover:text-white magnetic-btn"
+                            data-magnetic>ABOUT</a>
+                        <a href="#experience"
+                            class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-cyan magnetic-btn"
+                            data-magnetic>WORK</a>
+                        <a href="#skills"
+                            class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow magnetic-btn"
+                            data-magnetic>SKILLS</a>
+                        <a href="#projects"
+                            class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-orange hover:text-white magnetic-btn"
+                            data-magnetic>PROJECTS</a>
+                        <a href="/contact"
+                            class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-black hover:text-white magnetic-btn"
+                            data-magnetic>CONTACT</a>
+                    </>
+                ) : (
+                    <>
+                        <a href="/"
+                            class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow magnetic-btn"
+                            data-magnetic>HOME</a>
+                        <a href="/blog"
+                            class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/blog') ? 'bg-brutal-pink text-white' : 'bg-white hover:bg-brutal-pink hover:text-white'}`}
+                            data-magnetic>BLOG</a>
+                        <a href="/gallery"
+                            class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/gallery') ? 'bg-brutal-cyan text-black font-bold' : 'bg-white hover:bg-brutal-cyan'}`}
+                            data-magnetic>GALLERY</a>
+                        <a href="/contact"
+                            class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/contact') ? 'bg-brutal-black text-white font-bold' : 'bg-white hover:bg-brutal-black hover:text-white'}`}
+                            data-magnetic>CONTACT</a>
+                    </>
+                )}
                 <button id="header-terminal-btn"
                     class="brutal-border bg-brutal-black text-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow hover:text-black magnetic-btn nav-terminal-btn"
                     data-magnetic>_TERMINAL</button>
@@ -43,11 +78,22 @@
 
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="fixed inset-0 bg-brutal-yellow z-[60] hidden flex-col justify-center items-center gap-6">
-        <a href="/#about" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">ABOUT</a>
-        <a href="/#experience" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">WORK</a>
-        <a href="/#skills" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">SKILLS</a>
-        <a href="/#projects" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">PROJECTS</a>
-        <a href="/contact" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">CONTACT</a>
+        {isHomepage ? (
+            <>
+                <a href="#about" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">ABOUT</a>
+                <a href="#experience" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">WORK</a>
+                <a href="#skills" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">SKILLS</a>
+                <a href="#projects" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">PROJECTS</a>
+                <a href="/contact" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">CONTACT</a>
+            </>
+        ) : (
+            <>
+                <a href="/" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">HOME</a>
+                <a href="/blog" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/blog') ? 'text-brutal-pink' : 'hover:text-white'}`}>BLOG</a>
+                <a href="/gallery" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/gallery') ? 'text-brutal-cyan' : 'hover:text-white'}`}>GALLERY</a>
+                <a href="/contact" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/contact') ? 'text-brutal-black' : 'hover:text-white'}`}>CONTACT</a>
+            </>
+        )}
         <button id="mobile-terminal-btn" class="text-4xl font-bold font-mono hover:text-white transition-colors nav-terminal-btn mobile-link">_TERMINAL</button>
         <button id="close-menu"
             class="absolute top-6 right-6 text-2xl font-mono brutal-border bg-white px-4 py-2" aria-label="Close navigation menu">CLOSE</button>
