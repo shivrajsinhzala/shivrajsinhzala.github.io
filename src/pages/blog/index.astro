@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import HumanRedirect from '../../components/HumanRedirect.astro';
 import { blogPosts } from '../../data/blog-posts';
 import { pageUrl } from '../../utils/seo';
 
@@ -79,4 +80,5 @@ const blogIndexUrl = pageUrl('/blog');
 			</p>
 		</div>
 	</main>
+    <HumanRedirect />
 </Layout>

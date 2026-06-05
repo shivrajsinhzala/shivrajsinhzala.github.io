@@ -1,0 +1,242 @@
+---
+// HumanRedirect.astro
+// Phase 1: Human detected → small loading toast appears at bottom
+// Phase 2: After 2.5s → loading toast fades out, full redirect popup fades in
+// Phase 3: 5s countdown → redirect to homepage
+// Bots are detected by user-agent and skipped entirely.
+---
+
+<!-- ─── Phase 1: Loading Toast (bottom-right) ─── -->
+<div id="hr-toast" style="
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999998;
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.75rem 1.1rem;
+    border: 2px solid #333;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 4px 4px 0 0 #FF006E;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+">
+    <!-- Spinner -->
+    <span id="hr-spinner" style="
+        display: inline-block;
+        width: 14px; height: 14px;
+        border: 2px solid #444;
+        border-top-color: #00FF88;
+        border-radius: 50%;
+        animation: hrSpin 0.7s linear infinite;
+        flex-shrink: 0;
+    "></span>
+    <span>Checking access…</span>
+</div>
+
+<!-- ─── Phase 2: Full Redirect Popup ─── -->
+<div id="hr-overlay" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999999;
+    background: rgba(10,10,10,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+">
+    <div id="hr-card" style="
+        max-width: 460px;
+        width: 90%;
+        background: #fff;
+        border: 3px solid #0a0a0a;
+        box-shadow: 10px 10px 0 0 #0a0a0a;
+        padding: 2.25rem 2.5rem 2rem;
+        font-family: 'Space Grotesk', sans-serif;
+        transform: translateY(24px);
+        transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        position: relative;
+        overflow: hidden;
+    ">
+        <!-- Top accent bar -->
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#FF006E;"></div>
+
+        <!-- Icon row -->
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:1.25rem;">
+            <div style="width:48px;height:48px;background:#FFE900;border:3px solid #0a0a0a;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🔒</div>
+            <div>
+                <div style="font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:#999;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;">Access Notice</div>
+                <h2 style="margin:0;font-size:1.15rem;font-weight:800;color:#0a0a0a;letter-spacing:-0.02em;text-transform:uppercase;">This page isn't public</h2>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <p style="font-size:0.875rem;color:#444;line-height:1.65;margin:0 0 1.5rem;font-family:'JetBrains Mono',monospace;">
+            This content exists for indexing purposes and isn't meant for public reading just yet.
+            <br><br>
+            You'll be taken back to the portfolio shortly.
+        </p>
+
+        <!-- Timer row -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;">
+            <!-- Big countdown number -->
+            <div style="width:52px;height:52px;border:3px solid #0a0a0a;background:#0a0a0a;color:#FFE900;font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;" id="hr-big-count">10</div>
+            <div style="flex:1;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#999;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.08em;">Redirecting in</div>
+                <!-- Progress bar -->
+                <div style="width:100%;height:6px;background:#f0f0f0;border:2px solid #0a0a0a;overflow:hidden;position:relative;">
+                    <div id="hr-bar" style="height:100%;background:#FF006E;width:100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Go now link -->
+        <div style="text-align:right;margin-top:0.5rem;">
+            <a href="/" style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#FF006E;font-weight:700;text-decoration:none;border-bottom:2px solid #FF006E;padding-bottom:1px;">Take me there now →</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes hrSpin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+<script is:inline>
+(function () {
+
+    // ── 1. BOT / CRAWLER DETECTION ─────────────────────────────────────────
+    var botPatterns = [
+        'googlebot','google-inspectiontool','google-extended','storebot-google',
+        'bingbot','bingpreview','msnbot','adidxbot',
+        'slurp','duckduckbot','baiduspider',
+        'yandexbot','yandeximages','yandexmobile','yandexaccessibilitybot',
+        'sogou','exabot',
+        'facebot','facebookexternalhit','facebookcatalog',
+        'ia_archiver','archive.org_bot',
+        'semrushbot','ahrefsbot','mj12bot','dotbot','rogerbot',
+        'seznambot','twitterbot','linkedinbot','whatsapp',
+        'applebot','daumoa','petalbot','coccocbot','naver',
+        'crawler','spider','scraper','fetcher',
+        'headlesschrome','lighthouse','chrome-lighthouse',
+        'gtmetrix','pingdom','pagespeed',
+        'wget','curl','python-requests','python-urllib',
+        'java/','go-http-client','axios','node-fetch','node.js'
+    ];
+
+    var ua = navigator.userAgent.toLowerCase();
+    for (var i = 0; i < botPatterns.length; i++) {
+        if (ua.indexOf(botPatterns[i]) !== -1) return; // Bot — do nothing
+    }
+
+    // ── 2. PHASE STATE ────────────────────────────────────────────────────
+    var triggered = false;
+    var toast     = document.getElementById('hr-toast');
+    var overlay   = document.getElementById('hr-overlay');
+    var card      = document.getElementById('hr-card');
+    var bar       = document.getElementById('hr-bar');
+    var bigCount  = document.getElementById('hr-big-count');
+
+    // ── 3. PHASE 1: SHOW LOADING TOAST ────────────────────────────────────
+    function showLoadingToast() {
+        if (triggered) return;
+        triggered = true;
+
+        // Remove interaction listeners
+        document.removeEventListener('mousemove', showLoadingToast);
+        document.removeEventListener('touchstart', showLoadingToast);
+        document.removeEventListener('scroll',    showLoadingToast, true);
+        document.removeEventListener('keydown',   showLoadingToast);
+
+        if (!toast) return;
+
+        // Slide toast in
+        toast.style.display = 'flex';
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            });
+        });
+
+        // After 2.5s → transition to Phase 2
+        setTimeout(showPopup, 2500);
+    }
+
+    // ── 4. PHASE 2: HIDE TOAST, SHOW POPUP ────────────────────────────────
+    function showPopup() {
+        // Fade toast out
+        if (toast) {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(12px)';
+            setTimeout(function () { toast.style.display = 'none'; }, 350);
+        }
+
+        if (!overlay) return;
+
+        // Show overlay + animate card up
+        overlay.style.display = 'flex';
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                overlay.style.opacity = '1';
+                if (card) card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Start countdown
+        startCountdown();
+    }
+
+    // ── 5. PHASE 3: COUNTDOWN → REDIRECT ──────────────────────────────────
+    function startCountdown() {
+        var SECONDS = 10;
+        var remaining = SECONDS;
+
+        // Shrink the bar over SECONDS seconds
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                if (bar) {
+                    bar.style.transition = 'width ' + SECONDS + 's linear';
+                    bar.style.width = '0%';
+                }
+            });
+        });
+
+        // Tick the big number every second
+        var tick = setInterval(function () {
+            remaining -= 1;
+            if (bigCount) bigCount.textContent = remaining;
+            if (remaining <= 0) {
+                clearInterval(tick);
+                window.location.href = '/';
+            }
+        }, 1000);
+    }
+
+    // ── 6. LISTEN FOR FIRST HUMAN SIGNAL ──────────────────────────────────
+    document.addEventListener('mousemove', showLoadingToast, { once: true, passive: true });
+    document.addEventListener('touchstart', showLoadingToast, { once: true, passive: true });
+    document.addEventListener('scroll',    showLoadingToast, { once: true, passive: true, capture: true });
+    document.addEventListener('keydown',   showLoadingToast, { once: true });
+
+    // Safety net: if 9s pass with no interaction (sophisticated bot), silently clean up
+    setTimeout(function () {
+        if (!triggered) {
+            document.removeEventListener('mousemove', showLoadingToast);
+            document.removeEventListener('touchstart', showLoadingToast);
+            document.removeEventListener('scroll',    showLoadingToast, true);
+            document.removeEventListener('keydown',   showLoadingToast);
+        }
+    }, 9000);
+
+})();
+</script>

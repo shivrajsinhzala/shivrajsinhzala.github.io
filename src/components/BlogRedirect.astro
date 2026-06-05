@@ -1,0 +1,114 @@
+---
+/**
+ * BlogRedirect.astro
+ * 
+ * Smart bot-aware redirect for blog pages.
+ * - Crawlers/bots: See full article content (for indexing)
+ * - Human visitors: See a 5-second countdown, then redirect to homepage
+ * 
+ * Usage: Place <BlogRedirect /> anywhere inside a blog post page.
+ */
+---
+
+<!-- Redirect Overlay (hidden by default, shown via JS for humans) -->
+<div id="blog-redirect-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-500" aria-hidden="true">
+    <div class="absolute inset-0 bg-white/95 backdrop-blur-sm"></div>
+    <div class="relative z-10 text-center px-6 max-w-lg">
+        <div class="border-4 border-black bg-white p-8 md:p-12 shadow-[12px_12px_0_0_#000]">
+            <div class="font-mono text-xs bg-black text-white inline-block px-3 py-1 mb-6 tracking-widest">REDIRECTING</div>
+            <h2 class="text-3xl md:text-5xl font-black tracking-tighter uppercase mb-4">Taking you to the portfolio</h2>
+            <div class="w-full bg-gray-200 border-2 border-black h-4 mb-6 overflow-hidden">
+                <div id="redirect-progress" class="h-full bg-[#FFE900] transition-all duration-1000 ease-linear" style="width: 0%"></div>
+            </div>
+            <p class="font-mono text-sm text-gray-600 mb-4">
+                Redirecting in <span id="redirect-countdown" class="font-bold text-black text-lg">5</span> seconds
+            </p>
+            <a href="/" class="inline-block border-2 border-black bg-[#FFE900] px-6 py-3 font-mono font-bold text-sm hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#FF006E]">
+                GO NOW →
+            </a>
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+(function() {
+    'use strict';
+
+    // Comprehensive list of known bot/crawler user-agents
+    var BOT_PATTERNS = [
+        'googlebot', 'google-inspectiontool', 'storebot-google',
+        'bingbot', 'slurp', 'duckduckbot', 'baiduspider',
+        'yandexbot', 'yandexmobilebot', 'yandexrenderresourcebot',
+        'sogou', 'exabot', 'ia_archiver', 'facebot',
+        'facebookexternalhit', 'facebookcatalog',
+        'twitterbot', 'linkedinbot', 'pinterest', 'whatsapp',
+        'telegrambot', 'discordbot', 'slackbot',
+        'applebot', 'petalbot', 'semrushbot', 'ahrefsbot',
+        'mj12bot', 'dotbot', 'rogerbot', 'screaming frog',
+        'uptimerobot', 'sitebulb',
+        'chatgpt-user', 'gptbot', 'oai-searchbot',
+        'claudebot', 'claude-web', 'anthropic-ai',
+        'perplexitybot', 'cohere-ai', 'youbot',
+        'ccbot', 'bytespider', 'amazonbot',
+        'google-extended', 'googleother',
+        'mediapartners-google', 'adsbot-google',
+        'lighthouse', 'pagespeed', 'chrome-lighthouse',
+        'headlesschrome', 'phantomjs', 'prerender',
+        'snapchat', 'redditbot', 'embedly',
+        'quora link preview', 'outbrain',
+        'w3c_validator', 'w3c-checklink',
+        'feedfetcher', 'curl', 'wget', 'python-requests', 'go-http-client',
+        'node-fetch', 'axios', 'java/', 'ruby',
+        'scrapy', 'nutch', 'archive.org_bot', 'ia_archiver'
+    ];
+
+    function isBot() {
+        // Check navigator.webdriver (Lighthouse, Puppeteer, etc.)
+        if (navigator.webdriver) return true;
+
+        var ua = (navigator.userAgent || '').toLowerCase();
+        
+        // No user-agent? Probably a bot
+        if (!ua || ua.length < 10) return true;
+
+        for (var i = 0; i < BOT_PATTERNS.length; i++) {
+            if (ua.indexOf(BOT_PATTERNS[i]) !== -1) return true;
+        }
+
+        return false;
+    }
+
+    // Only redirect human visitors
+    if (isBot()) return;
+
+    var overlay = document.getElementById('blog-redirect-overlay');
+    var countdown = document.getElementById('redirect-countdown');
+    var progress = document.getElementById('redirect-progress');
+
+    if (!overlay || !countdown || !progress) return;
+
+    // Show overlay after a small delay so the page feels loaded
+    var TOTAL = 5;
+    var remaining = TOTAL;
+
+    setTimeout(function() {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+        overlay.setAttribute('aria-hidden', 'false');
+        
+        // Start progress bar immediately
+        progress.style.width = '20%';
+
+        var timer = setInterval(function() {
+            remaining--;
+            countdown.textContent = remaining;
+            progress.style.width = (((TOTAL - remaining) / TOTAL) * 100) + '%';
+
+            if (remaining <= 0) {
+                clearInterval(timer);
+                window.location.href = '/';
+            }
+        }, 1000);
+    }, 500);
+})();
+</script>

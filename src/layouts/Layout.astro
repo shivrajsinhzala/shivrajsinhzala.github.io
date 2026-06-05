@@ -22,8 +22,12 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#FFE900" />
+		<meta name="author" content="Shivrajsinh Zala" />
 		<link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+		<link rel="manifest" href="/manifest.json" />
 		<meta property="og:site_name" content="Shivrajsinh Zala | Portfolio" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
@@ -31,6 +35,22 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+		<!-- Global Analytics: Google Analytics -->
+		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-170NQJN07E"></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-170NQJN07E');
+		</script>
+		<!-- Global Analytics: Microsoft Clarity -->
+		<script is:inline type="text/javascript">
+			(function(c,l,a,r,i,t,y){
+				c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+				t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+				y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+			})(window, document, "clarity", "script", "wwamkblght");
+		</script>
 		<slot name="head" />
         <script is:inline>
           if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
