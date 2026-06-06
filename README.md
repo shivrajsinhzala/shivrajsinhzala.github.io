@@ -63,10 +63,3 @@ All commands are run from the project root directory:
 | `npm run build` | Builds optimized static production bundle in `/dist/` |
 | `npm run preview` | Previews the compiled `/dist/` output locally |
 
-### Regenerating the PDF Resume
-If you update your credentials in the resume page and want to regenerate the clean ATS PDF, run the local server (`npm run dev`) and compile it using Google Chrome's CLI headless print engine:
-
-```bash
-"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu --print-to-pdf-no-header --print-to-pdf="./public/assets/resume-shivrajsinh-zala.pdf" http://localhost:4321/resume-pdf
-```
-Then build the site (`npm run build`) to copy the newly generated PDF into your production deployment assets.
