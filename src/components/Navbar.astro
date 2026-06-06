@@ -55,12 +55,6 @@ const isActive = (path: string) => {
                         <a href="/"
                             class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow magnetic-btn"
                             data-magnetic>HOME</a>
-                        <a href="/blog"
-                            class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/blog') ? 'bg-brutal-pink text-white' : 'bg-white hover:bg-brutal-pink hover:text-white'}`}
-                            data-magnetic>BLOG</a>
-                        <a href="/gallery"
-                            class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/gallery') ? 'bg-brutal-cyan text-black font-bold' : 'bg-white hover:bg-brutal-cyan'}`}
-                            data-magnetic>GALLERY</a>
                         <a href="/resume"
                             class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/resume') ? 'bg-brutal-purple text-white font-bold' : 'bg-white hover:bg-brutal-purple hover:text-white'}`}
                             data-magnetic>RESUME</a>
@@ -99,8 +93,6 @@ const isActive = (path: string) => {
         ) : (
             <>
                 <a href="/" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">HOME</a>
-                <a href="/blog" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/blog') ? 'text-brutal-pink' : 'hover:text-white'}`}>BLOG</a>
-                <a href="/gallery" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/gallery') ? 'text-brutal-cyan' : 'hover:text-white'}`}>GALLERY</a>
                 <a href="/resume" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/resume') ? 'text-brutal-purple' : 'hover:text-white'}`}>RESUME</a>
                 <a href="/contact" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/contact') ? 'text-brutal-black' : 'hover:text-white'}`}>CONTACT</a>
             </>
