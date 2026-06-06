@@ -119,113 +119,250 @@ import Layout from '../layouts/Layout.astro';
     <noscript><style>.preloader{display:none!important}</style></noscript>
 
     <main id="main-content">
-    <!-- Redesigned Minimal & Sophisticated Hero Section -->
-    <section id="about" class="relative min-h-screen flex items-center justify-center px-6 pt-36 pb-24 overflow-hidden bg-[#fbfbf9]">
-        <!-- Refined Background Elements -->
-        <div class="absolute inset-0 z-0 pointer-events-none opacity-40">
-            <div class="absolute top-12 left-12 w-96 h-96 rounded-full bg-brutal-yellow/20 blur-3xl"></div>
-            <div class="absolute bottom-12 right-12 w-96 h-96 rounded-full bg-brutal-cyan/20 blur-3xl"></div>
-            <div class="absolute top-1/3 right-1/4 w-96 h-96 rounded-full bg-brutal-pink/15 blur-3xl"></div>
+    <!-- ===== AWWWARDS HERO SECTION ===== -->
+    <section id="about" class="hero-aww relative min-h-screen overflow-hidden">
+
+        <!-- === BACKGROUND: Split dark left / light right === -->
+        <div class="absolute inset-0 z-0">
+            <!-- Dark left panel -->
+            <div class="hero-panel-dark absolute left-0 top-0 w-full lg:w-[55%] h-full bg-[#0a0a0a] origin-left"></div>
+            <!-- Light right panel -->
+            <div class="hero-panel-light absolute right-0 top-0 w-full lg:w-[45%] h-full bg-[#f5f3ee] origin-right"></div>
         </div>
 
-        <div class="relative z-10 max-w-6xl mx-auto w-full">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <!-- Left Column: Typographic Branding & Content -->
-                <div class="lg:col-span-7 space-y-8 text-left">
-                    <div class="inline-flex items-center gap-2 bg-brutal-black text-white px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest brutal-border reveal-badge opacity-0">
-                        <span class="w-2 h-2 bg-brutal-cyan animate-pulse rounded-full"></span>
-                        Available for client projects
+        <!-- === ANIMATED GRADIENT ORBS (dark side) === -->
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <div class="orb-1 absolute w-[600px] h-[600px] rounded-full" style="background: radial-gradient(circle, rgba(255,0,110,0.15) 0%, transparent 70%); top: -10%; left: -5%;"></div>
+            <div class="orb-2 absolute w-[500px] h-[500px] rounded-full" style="background: radial-gradient(circle, rgba(0,245,255,0.10) 0%, transparent 70%); bottom: -5%; left: 20%;"></div>
+            <div class="orb-3 absolute w-[400px] h-[400px] rounded-full" style="background: radial-gradient(circle, rgba(255,233,0,0.12) 0%, transparent 70%); top: 30%; right: 10%;"></div>
+        </div>
+
+        <!-- === NOISE CANVAS OVERLAY === -->
+        <canvas id="hero-noise-canvas" class="absolute inset-0 z-[1] pointer-events-none opacity-[0.035]"></canvas>
+
+        <!-- === MAIN CONTENT GRID === -->
+        <div class="relative z-10 min-h-screen grid grid-cols-1 lg:grid-cols-[55fr_45fr]">
+
+            <!-- ===== LEFT: DARK KINETIC TYPE SIDE ===== -->
+            <div class="flex flex-col justify-between px-8 md:px-12 lg:px-16 pt-32 pb-10 lg:py-12">
+
+                <!-- TOP: Status pill + number -->
+                <div class="flex items-center justify-between hero-top-row">
+                    <div id="hero-status-pill" class="inline-flex items-center gap-2 border border-white/20 text-white/70 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest opacity-0">
+                        <span class="w-1.5 h-1.5 bg-[#00ff88] rounded-full animate-pulse"></span>
+                        Available Now
+                    </div>
+                    <div class="font-mono text-[10px] text-white/30 tracking-widest opacity-0" id="hero-year-label">2026 ©</div>
+                </div>
+
+                <!-- MIDDLE: GIANT KINETIC TITLE -->
+                <div class="my-auto py-8 lg:py-0">
+                    <div class="overflow-hidden" aria-label="SHIVRAJSINH">
+                        <div id="hero-name-1" class="hero-char-row flex leading-none">
+                            <!-- chars injected by JS -->
+                        </div>
+                    </div>
+                    <div class="overflow-hidden mt-1" aria-label="ZALA">
+                        <div id="hero-name-2" class="hero-char-row flex leading-none">
+                            <!-- chars injected by JS -->
+                        </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <h1 class="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.85] tracking-tighter uppercase text-black" id="hero-title">
-                            <span class="line-mask"><span class="line-inner hover-word text-transparent stroke-text">SHIVRAJSINH</span></span><br>
-                            <span class="line-mask"><span class="line-inner text-black hover-word">ZALA</span></span>
-                        </h1>
-                        <p class="font-mono text-xs uppercase tracking-widest text-gray-500">
-                            Frontend Developer &bull; WordPress Specialist &bull; Interaction Designer
-                        </p>
+                    <!-- Role tags line -->
+                    <div id="hero-role-line" class="flex flex-wrap items-center gap-3 mt-6 opacity-0">
+                        <span class="font-mono text-[11px] text-white/50 uppercase tracking-widest">Frontend Dev</span>
+                        <span class="w-1 h-1 bg-[#ff006e] rounded-full"></span>
+                        <span class="font-mono text-[11px] text-white/50 uppercase tracking-widest">WordPress</span>
+                        <span class="w-1 h-1 bg-[#00f5ff] rounded-full"></span>
+                        <span class="font-mono text-[11px] text-white/50 uppercase tracking-widest">Interaction Design</span>
                     </div>
 
-                    <p class="text-xl md:text-2xl font-light text-gray-800 max-w-xl leading-relaxed reveal-text opacity-0">
-                        I create modern, high-performance web experiences at 
-                        <span class="font-bold border-b-2 border-brutal-pink pb-0.5">Just Digital Gurus</span>, 
-                        bridging the gap between design and motion physics.
+                    <!-- Subtext -->
+                    <p id="hero-desc" class="mt-6 text-white/60 font-light text-lg max-w-sm leading-relaxed opacity-0">
+                        Building high-performance web experiences at
+                        <span class="text-white font-semibold">Just Digital Gurus</span>.
+                        Bridging design &amp; motion physics.
                     </p>
+                </div>
 
-                    <!-- Core highlights as a sophisticated minimal row -->
-                    <div class="flex flex-wrap gap-8 border-t border-black/10 pt-6 reveal-text opacity-0">
-                        <div class="font-mono">
-                            <span class="block text-2xl font-black text-black">30+</span>
-                            <span class="text-[10px] uppercase tracking-wider text-gray-500">Sites Built</span>
-                        </div>
-                        <div class="font-mono">
-                            <span class="block text-2xl font-black text-black">2+ Years</span>
-                            <span class="text-[10px] uppercase tracking-wider text-gray-500">Exp Active</span>
-                        </div>
-                        <div class="font-mono">
-                            <span class="block text-2xl font-black text-black">Rajkot</span>
-                            <span class="text-[10px] uppercase tracking-wider text-gray-500">Gujarat, IN</span>
-                        </div>
-                    </div>
+                <!-- BOTTOM: CTAs + scroll indicator -->
+                <div class="flex flex-wrap items-center gap-5 hero-ctas opacity-0">
+                    <a href="#contact"
+                        class="group relative overflow-hidden bg-[#ff006e] text-white px-7 py-3.5 font-mono font-bold text-sm tracking-wider uppercase inline-flex items-center gap-3"
+                    >
+                        <span class="relative z-10">Start Project</span>
+                        <span class="relative z-10 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                        <span class="absolute inset-0 bg-white translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
+                        <span class="absolute inset-0 bg-white translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-out" style="color: #ff006e;"></span>
+                    </a>
+                    <a href="/resume"
+                        class="font-mono text-sm text-white/60 tracking-wider uppercase border-b border-white/20 hover:text-white hover:border-white transition-all pb-0.5"
+                    >
+                        View CV ↗
+                    </a>
+                </div>
+            </div>
 
-                    <div class="flex flex-wrap items-center gap-6 pt-4 reveal-buttons opacity-0 translate-y-8">
-                        <a href="#contact"
-                            class="brutal-border bg-brutal-black text-white px-8 py-4 brutal-shadow font-mono font-bold text-sm tracking-wider uppercase hover:bg-white hover:text-black transition-colors duration-300"
-                        >
-                            Start Project &rarr;
-                        </a>
-                        <a href="/resume"
-                            class="font-mono font-bold text-sm tracking-wider uppercase border-b-2 border-transparent hover:border-black transition-all pb-1 flex items-center gap-2"
-                        >
-                            View CV
-                            <span class="w-1.5 h-1.5 bg-brutal-purple rounded-full"></span>
-                        </a>
+            <!-- ===== RIGHT: LIGHT PORTRAIT SIDE ===== -->
+            <div class="relative flex flex-col justify-center items-center px-8 pt-20 pb-12 lg:pt-0 lg:pb-0 hero-right-col">
+
+                <!-- === 3D PORTRAIT CARD === -->
+                <div id="hero-portrait-wrap" class="relative w-full max-w-[360px] opacity-0">
+
+                    <!-- Floating skill chips -->
+                    <div class="floating-chip chip-wp" aria-hidden="true">⚡ WordPress</div>
+                    <div class="floating-chip chip-gsap" aria-hidden="true">✦ GSAP</div>
+                    <div class="floating-chip chip-react" aria-hidden="true">⚛ React</div>
+                    <div class="floating-chip chip-shopify" aria-hidden="true">🛍 Shopify</div>
+                    <div class="floating-chip chip-css" aria-hidden="true">🎨 CSS</div>
+                    <div class="floating-chip chip-wf" aria-hidden="true">◈ Webflow</div>
+
+                    <!-- Shadow stacks -->
+                    <div class="absolute inset-0 -rotate-6 scale-95 bg-brutal-pink"></div>
+                    <div class="absolute inset-0 rotate-3 scale-97 bg-brutal-yellow"></div>
+
+                    <!-- Main portrait -->
+                    <div id="hero-portrait-card" class="relative bg-white border-2 border-black p-3 shadow-[8px_8px_0_0_#000]">
+                        <div class="overflow-hidden border-2 border-black aspect-square">
+                            <img
+                                src="/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp"
+                                alt="Shivrajsinh Zala — Frontend Developer from Rajkot"
+                                width="1024" height="1024"
+                                class="w-full h-full object-cover block portrait-img"
+                                loading="eager"
+                                fetchpriority="high"
+                            />
+                        </div>
+                        <div class="flex justify-between items-center mt-2 px-1 font-mono text-[9px] text-black/50 uppercase tracking-wider">
+                            <span>SZ://DEV_PROFILE</span>
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 bg-[#00ff88] rounded-full animate-pulse inline-block"></span>
+                                ACTIVE
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Sophisticated Profile Frame -->
-                <div class="lg:col-span-5 flex justify-center items-center mt-12 lg:mt-0 reveal-cards opacity-0 translate-y-8">
-                    <div class="relative w-full max-w-[380px]">
-                        <!-- Underlay color layers -->
-                        <div class="absolute -inset-4 bg-brutal-cyan brutal-border -rotate-3 z-0"></div>
-                        <div class="absolute -inset-4 bg-brutal-yellow brutal-border rotate-2 z-0"></div>
-                        
-                        <!-- Main Card -->
-                        <div class="relative bg-white brutal-border p-3 shadow-[8px_8px_0_0_#000] z-10 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0_0_#ff006e] transition-all duration-300 group">
-                            <div class="relative overflow-hidden brutal-border aspect-square mb-4">
-                                <img src="/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp" 
-                                     alt="Shivrajsinh Zala" 
-                                     width="1024" height="1024" 
-                                     class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
-                                     loading="eager" 
-                                     fetchpriority="high"
-                                />
-                            </div>
-                            
-                            <!-- Frame Meta Info -->
-                            <div class="flex justify-between items-center px-1 font-mono text-[10px]">
-                                <span class="font-bold text-black uppercase tracking-wider">SZ://DEV_PROFILE</span>
-                                <span class="text-gray-500">2026 EDITION</span>
-                            </div>
-                        </div>
+                <!-- === STAT ROW (bottom of right col) === -->
+                <div class="flex gap-8 mt-10 hero-stat-row opacity-0">
+                    <div class="text-center">
+                        <div class="text-3xl font-black text-black font-mono"><span id="s-stat-sites">0</span>+</div>
+                        <div class="font-mono text-[9px] uppercase tracking-wider text-black/40 mt-1">Sites Built</div>
+                    </div>
+                    <div class="w-px bg-black/10"></div>
+                    <div class="text-center">
+                        <div class="text-3xl font-black text-black font-mono">2+</div>
+                        <div class="font-mono text-[9px] uppercase tracking-wider text-black/40 mt-1">Yrs Exp</div>
+                    </div>
+                    <div class="w-px bg-black/10"></div>
+                    <div class="text-center">
+                        <div class="text-3xl font-black text-black font-mono">5+</div>
+                        <div class="font-mono text-[9px] uppercase tracking-wider text-black/40 mt-1">Platforms</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10" id="scroll-indicator" aria-hidden="true">
-            <div class="w-6 h-10 border-2 border-black rounded-full flex justify-center pt-2 bg-white">
-                <div class="w-1 h-2 bg-black rounded-full animate-bounce"></div>
-            </div>
+        <!-- === BOTTOM SCROLL INDICATOR === -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2" id="scroll-indicator" aria-hidden="true">
+            <div class="font-mono text-[9px] tracking-widest text-white/30 uppercase">Scroll</div>
+            <div class="w-px h-12 bg-gradient-to-b from-white/20 to-transparent animate-pulse"></div>
         </div>
     </section>
 
-    <!-- CSS Utility styling inside stage page for outline text -->
+    <!-- CSS: Awwwards Hero Styles -->
     <style>
-        .stroke-text {
-            -webkit-text-stroke: 1.5px #000000;
+        /* === HERO LAYOUT === */
+        .hero-aww { font-family: inherit; }
+
+        /* === KINETIC CHARS === */
+        .hero-char {
+            display: inline-block;
+            font-size: clamp(4rem, 9vw, 10rem);
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.04em;
+            color: #ffffff;
+            transform: translateY(110%);
+            opacity: 0;
+            will-change: transform, opacity;
         }
+        .hero-char.accent-char {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.35);
+        }
+
+        /* === FLOATING CHIPS === */
+        .floating-chip {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 5px 10px;
+            border: 1.5px solid #0a0a0a;
+            background: #fff;
+            color: #0a0a0a;
+            white-space: nowrap;
+            z-index: 20;
+            pointer-events: none;
+            box-shadow: 2px 2px 0 0 #0a0a0a;
+            opacity: 0;
+            will-change: transform;
+        }
+        /* default chip positions — GSAP will animate from here */
+        .chip-wp     { top: -8%;  left: -18%; transform: rotate(-4deg); }
+        .chip-gsap   { top: 12%;  right: -20%; transform: rotate(3deg); }
+        .chip-react  { top: 38%;  left: -22%; transform: rotate(-2deg); }
+        .chip-shopify{ bottom: 22%; right: -18%; transform: rotate(4deg); }
+        .chip-css    { bottom: 5%; left: -12%; transform: rotate(-3deg); }
+        .chip-wf     { top: 62%;  right: -20%; transform: rotate(2deg); }
+
+        /* === PORTRAIT PARALLAX === */
+        #hero-portrait-card {
+            transition: transform 0.1s ease;
+            will-change: transform;
+        }
+        .portrait-img {
+            filter: grayscale(20%) contrast(1.05);
+            transition: filter 0.6s ease;
+        }
+        #hero-portrait-card:hover .portrait-img {
+            filter: grayscale(0%) contrast(1);
+        }
+
+        /* === GRADIENT ORB ANIMATIONS === */
+        .orb-1 { animation: orbFloat1 12s ease-in-out infinite; }
+        .orb-2 { animation: orbFloat2 16s ease-in-out infinite; }
+        .orb-3 { animation: orbFloat3 10s ease-in-out infinite; }
+
+        @keyframes orbFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(4%, 6%) scale(1.08); }
+        }
+        @keyframes orbFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-3%, -5%) scale(1.05); }
+        }
+        @keyframes orbFloat3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, -4%) scale(1.1); }
+        }
+
+        /* === CTA HOVER FIX (text color on white fill) === */
+        .group:hover span:last-child { color: #ff006e; }
+
+        /* === MOBILE ADJUSTMENTS === */
+        @media (max-width: 1023px) {
+            .hero-aww { min-height: auto; }
+            .hero-panel-dark { width: 100%; height: 70%; }
+            .hero-panel-light { top: auto; bottom: 0; width: 100%; height: 35%; }
+            .chip-wp, .chip-gsap, .chip-react, .chip-shopify, .chip-css, .chip-wf { display: none; }
+            .hero-right-col { background: #f5f3ee; }
+        }
+
+        /* === SCROLLBAR HIDE on hero canvas === */
+        #hero-noise-canvas { mix-blend-mode: screen; }
     </style>
 
     <!-- AI Banner -->
@@ -1410,21 +1547,152 @@ import Layout from '../layouts/Layout.astro';
         function initAnimations() {
             gsap.to('#navbar', { y: 0, duration: 0.8, ease: 'power4.out', delay: 0.2 });
 
-            gsap.to('.line-inner', {
-                y: 0,
-                rotateX: 0,
-                opacity: 1,
-                duration: 1.2,
-                stagger: 0.1,
-                ease: 'power4.out',
-                delay: 0.4
+            // ====== BUILD KINETIC CHAR SPANS ======
+            function buildChars(containerId, word, isOutline) {
+                const el = document.getElementById(containerId);
+                if (!el) return;
+                el.innerHTML = word.split('').map((ch, i) => {
+                    const accent = isOutline && i % 3 === 2 ? ' accent-char' : '';
+                    return `<span class="hero-char${accent}" aria-hidden="true">${ch}</span>`;
+                }).join('');
+            }
+            buildChars('hero-name-1', 'SHIVRAJSINH', true);
+            buildChars('hero-name-2', 'ZALA', false);
+
+            // ====== MAIN HERO ENTRANCE TIMELINE ======
+            const heroTl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+            // Step 0: Panel reveals
+            heroTl
+                .fromTo('.hero-panel-dark', { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: 'power3.inOut' }, 0)
+                .fromTo('.hero-panel-light', { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: 'power3.inOut' }, 0.15)
+
+            // Step 1: Status pill
+                .to('#hero-status-pill', { opacity: 1, y: 0, duration: 0.6 }, 0.7)
+                .to('#hero-year-label', { opacity: 1, duration: 0.6 }, 0.7)
+
+            // Step 2: Name line 1 chars
+                .to('#hero-name-1 .hero-char', {
+                    y: 0, opacity: 1, duration: 0.9, stagger: 0.04, ease: 'power4.out'
+                }, 0.85)
+
+            // Step 3: Name line 2 chars
+                .to('#hero-name-2 .hero-char', {
+                    y: 0, opacity: 1, duration: 0.9, stagger: 0.06, ease: 'power4.out'
+                }, 1.1)
+
+            // Step 4: Role line + desc
+                .to('#hero-role-line', { opacity: 1, y: 0, duration: 0.7 }, 1.5)
+                .to('#hero-desc', { opacity: 1, y: 0, duration: 0.7 }, 1.65)
+
+            // Step 5: CTAs
+                .to('.hero-ctas', { opacity: 1, y: 0, duration: 0.7 }, 1.8)
+
+            // Step 6: Portrait wrap
+                .to('#hero-portrait-wrap', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 1.2)
+
+            // Step 7: Stat row
+                .to('.hero-stat-row', { opacity: 1, y: 0, duration: 0.7 }, 1.7)
+
+            // Step 8: Floating chips (staggered pop-in)
+                .to('.floating-chip', {
+                    opacity: 1, scale: 1, duration: 0.5, stagger: 0.12, ease: 'back.out(1.7)',
+                    transformOrigin: 'center'
+                }, 1.9)
+
+            // Step 9: Scroll indicator
+                .to('#scroll-indicator', { opacity: 1, duration: 0.6 }, 2.2);
+
+
+            // ====== SITES COUNTER ANIMATION ======
+            const siteStatEl = document.getElementById('s-stat-sites');
+            if (siteStatEl) {
+                let obj = { val: 0 };
+                gsap.to(obj, {
+                    val: 30, duration: 2.5, delay: 1.8, ease: 'power4.out',
+                    onUpdate: () => { siteStatEl.textContent = Math.floor(obj.val); }
+                });
+            }
+
+            // ====== FLOATING CHIP DRIFT LOOP ======
+            document.querySelectorAll('.floating-chip').forEach((chip, i) => {
+                gsap.to(chip, {
+                    y: `${Math.sin(i) * 10 - 5}px`,
+                    x: `${Math.cos(i) * 6 - 3}px`,
+                    rotation: parseFloat(chip.style.transform?.match(/rotate\(([^)]+)\)/)?.[1] || '0') + (i % 2 === 0 ? 1 : -1),
+                    duration: 3 + i * 0.4,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut',
+                    delay: i * 0.3
+                });
             });
 
-            gsap.to('.reveal-badge', { opacity: 1, y: 0, duration: 0.8, delay: 0.6, ease: 'power4.out' });
-            gsap.to('.reveal-card', { opacity: 1, y: 0, duration: 1, delay: 0.8, ease: 'power4.out' });
-            gsap.to('.reveal-buttons', { opacity: 1, y: 0, duration: 1, delay: 1, ease: 'power4.out' });
-            gsap.to('.reveal-cards', { opacity: 1, y: 0, duration: 1, stagger: 0.1, delay: 1.2, ease: 'power4.out' });
+            // ====== PORTRAIT CARD MOUSE PARALLAX ======
+            const heroSection = document.getElementById('about');
+            const portraitCard = document.getElementById('hero-portrait-card');
+            const portraitWrap = document.getElementById('hero-portrait-wrap');
+            if (heroSection && portraitCard && navigator.maxTouchPoints === 0) {
+                heroSection.addEventListener('mousemove', (e) => {
+                    const rect = heroSection.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const dx = (e.clientX - cx) / rect.width;  // -0.5 to 0.5
+                    const dy = (e.clientY - cy) / rect.height; // -0.5 to 0.5
+                    gsap.to(portraitCard, {
+                        rotateY: dx * 12,
+                        rotateX: -dy * 8,
+                        transformPerspective: 800,
+                        duration: 0.6,
+                        ease: 'power2.out',
+                        overwrite: 'auto'
+                    });
+                    // Subtle parallax on wrap
+                    gsap.to(portraitWrap, {
+                        x: dx * 14,
+                        y: dy * 8,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                        overwrite: 'auto'
+                    });
+                });
+                heroSection.addEventListener('mouseleave', () => {
+                    gsap.to([portraitCard, portraitWrap], {
+                        rotateX: 0, rotateY: 0, x: 0, y: 0,
+                        duration: 0.8, ease: 'power3.out', overwrite: 'auto'
+                    });
+                });
+            }
 
+            // ====== HERO NOISE CANVAS ======
+            const canvas = document.getElementById('hero-noise-canvas');
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                const ctx = canvas.getContext('2d');
+                let frame = 0;
+                function drawNoise() {
+                    frame++;
+                    if (frame % 3 !== 0) { requestAnimationFrame(drawNoise); return; } // throttle
+                    const imgData = ctx.createImageData(canvas.width, canvas.height);
+                    for (let i = 0; i < imgData.data.length; i += 4) {
+                        const v = Math.random() * 255;
+                        imgData.data[i] = v;
+                        imgData.data[i + 1] = v;
+                        imgData.data[i + 2] = v;
+                        imgData.data[i + 3] = 255;
+                    }
+                    ctx.putImageData(imgData, 0, 0);
+                    requestAnimationFrame(drawNoise);
+                }
+                drawNoise();
+                window.addEventListener('resize', () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                });
+            }
+
+            // ====== SCRAMBLE TEXT HOVER (non-hero) ======
             document.querySelectorAll('[data-scramble]').forEach(el => {
                 if (el.closest('#preloader')) return;
                 const fx = new TextScramble(el);
@@ -1538,25 +1806,37 @@ import Layout from '../layouts/Layout.astro';
             });
         });
 
-        // ===== GLITCH EFFECT =====
-        const glitchTitle = document.getElementById('hero-title');
+        // ===== GLITCH EFFECT on hero chars =====
+        const glitchTarget = document.getElementById('hero-name-1');
         let glitchInterval = null;
-        const glitchObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (!glitchInterval) {
-                        glitchInterval = setInterval(() => {
-                            glitchTitle.style.textShadow = `${Math.random() * 4 - 2}px 0 #FF006E, ${Math.random() * 4 - 2}px 0 #00F5FF`;
-                            setTimeout(() => { glitchTitle.style.textShadow = 'none'; }, 100);
-                        }, 5000);
+        if (glitchTarget) {
+            const glitchObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!glitchInterval) {
+                            glitchInterval = setInterval(() => {
+                                const chars = glitchTarget.querySelectorAll('.hero-char');
+                                const idx = Math.floor(Math.random() * chars.length);
+                                if (chars[idx]) {
+                                    chars[idx].style.textShadow = `${Math.random() * 6 - 3}px 0 #FF006E, ${Math.random() * 6 - 3}px 0 #00F5FF`;
+                                    chars[idx].style.transform = `translateY(${Math.random() * 4 - 2}px)`;
+                                    setTimeout(() => {
+                                        if (chars[idx]) {
+                                            chars[idx].style.textShadow = 'none';
+                                            chars[idx].style.transform = '';
+                                        }
+                                    }, 100);
+                                }
+                            }, 3500);
+                        }
+                    } else {
+                        clearInterval(glitchInterval);
+                        glitchInterval = null;
                     }
-                } else {
-                    clearInterval(glitchInterval);
-                    glitchInterval = null;
-                }
-            });
-        }, { threshold: 0 });
-        glitchObserver.observe(glitchTitle);
+                });
+            }, { threshold: 0 });
+            glitchObserver.observe(glitchTarget);
+        }
 
         // Refresh ScrollTrigger on resize and full load
         let resizeTimer;

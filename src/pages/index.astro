@@ -315,10 +315,38 @@ import Layout from '../layouts/Layout.astro';
                     <div class="font-mono text-[10px] md:text-xs">PLATFORMS</div>
                 </div>
                 <div
-                    class="brutal-border bg-brutal-orange text-black p-5 md:p-6 brutal-shadow text-center stat-item opacity-0 translate-y-6 hover:-translate-y-2 hover:shadow-[8px_8px_0_0_#000] hover:bg-brutal-black transition-all duration-300 overflow-hidden relative group">
-                    <div class="text-3xl md:text-5xl font-bold mb-1 md:mb-2 group-hover:animate-bounce">∞</div>
+                    id="stat-chai-card"
+                    class="brutal-border bg-brutal-orange text-black p-5 md:p-6 brutal-shadow text-center stat-item opacity-0 translate-y-6 hover:-translate-y-2 hover:shadow-[8px_8px_0_0_#000] hover:bg-brutal-black hover:text-white transition-all duration-300 overflow-hidden relative group select-none cursor-pointer">
+                    <div class="text-3xl md:text-5xl font-bold mb-1 md:mb-2 group-hover:animate-bounce" id="stat-chai-value">1042</div>
                     <div class="font-mono text-[10px] md:text-xs relative z-10">CUPS OF CHAI</div>
                     <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xNyA4aDFhNCA0IDAgMTEwIDhoLTEiLz48cGF0aCBkPSJNMTEgMTJ2LTciLz48cGF0aCBkPSJNOSA1SDExTTEyIDIwaDEwIi8+PC9zdmc+')] opacity-0 group-hover:opacity-100 transition-opacity" style="background-size: 30px;"></div>
+                </div>
+            </div>
+
+            <!-- Easter Egg Sticker Board -->
+            <div class="mt-8 brutal-border bg-white p-6 brutal-shadow text-left opacity-0 translate-y-6 stat-item" id="sticker-board">
+                <div class="font-mono text-xs bg-brutal-pink text-white inline-block px-2 py-1 mb-3">SYSTEM EASTER EGGS</div>
+                <h3 class="text-xl font-bold mb-2 font-mono">_DECORATE_LAPTOP.SH</h3>
+                <p class="font-mono text-xs text-gray-600 mb-6">Click stickers to toggle interactive modes. Yes, this is real.</p>
+                
+                <div class="flex flex-wrap gap-3 font-mono text-xs">
+                    <!-- Sticker 1: Antigravity -->
+                    <button id="btn-antigravity" class="sticker-btn bg-brutal-cyan text-black brutal-border px-3 py-2 rotate-[-2deg] hover:rotate-0 cursor-pointer shadow-[3px_3px_0_0_#000] active:translate-y-0.5 hover:bg-black hover:text-white transition-all select-none">
+                        ✦ ANTIGRAVITY MODE
+                    </button>
+                    <!-- Sticker 2: Caffeine Overload -->
+                    <button id="btn-caffeine" class="sticker-btn bg-brutal-yellow text-black brutal-border px-3 py-2 rotate-[3deg] hover:rotate-0 cursor-pointer shadow-[3px_3px_0_0_#000] active:translate-y-0.5 hover:bg-black hover:text-white transition-all select-none">
+                        ☕ CAFFEINE RAIN
+                    </button>
+                    <!-- Sticker 3: Sarcasm Pipe -->
+                    <button id="btn-sarcasm" class="sticker-btn bg-brutal-pink text-black brutal-border px-3 py-2 rotate-[-1deg] hover:rotate-0 cursor-pointer shadow-[3px_3px_0_0_#000] active:translate-y-0.5 hover:bg-black hover:text-white transition-all select-none">
+                        🗣️ SARCASM ENGINE
+                    </button>
+                </div>
+                
+                <!-- Interactive pop-up display for sarcasm or warnings -->
+                <div id="dev-console-msg" class="mt-4 p-3 bg-black text-[#00ff88] font-mono text-xs brutal-border hidden">
+                    <span class="text-white">sz://dev$</span> <span id="console-text"></span>
                 </div>
             </div>
         </div>
@@ -1739,6 +1767,157 @@ import Layout from '../layouts/Layout.astro';
         console.log("%c    ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═══╝  ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝", "color: #FF006E; font-weight: bold; font-family: monospace;");
         console.log("%c Oh, you're a developer too?", "font-size: 20px; font-weight: bold; color: #00F5FF; background: #000; padding: 5px;");
         console.log("%c I see you poking around. If you like the code, let's talk. shivrajsinhzala@hotmail.com", "font-size: 14px; color: #FFE900; background: #000; padding: 5px;");
+
+        // ===== INTERACTIVE SYSTEM EASTER EGGS =====
+        const consoleMsg = document.getElementById('dev-console-msg');
+        const consoleText = document.getElementById('console-text');
+
+        function showConsoleMsg(text) {
+            if (!consoleMsg || !consoleText) return;
+            consoleMsg.classList.remove('hidden');
+            consoleText.textContent = text;
+        }
+
+        // 1. Antigravity Mode
+        let antigravityActive = false;
+        const antigravityBtn = document.getElementById('btn-antigravity');
+        if (antigravityBtn) {
+            antigravityBtn.addEventListener('click', () => {
+                antigravityActive = !antigravityActive;
+                if (antigravityActive) {
+                    antigravityBtn.classList.add('bg-black', 'text-white');
+                    showConsoleMsg("Initiating anti-gravity field. All layout grids now weightless.");
+                    gsap.to('.reveal-heading, .tilt-card, .skill-card, .project-card', {
+                        y: () => Math.random() * 50 - 25,
+                        x: () => Math.random() * 30 - 15,
+                        rotation: () => Math.random() * 6 - 3,
+                        duration: 4,
+                        ease: 'sine.inOut',
+                        repeat: -1,
+                        yoyo: true,
+                        stagger: 0.1
+                    });
+                } else {
+                    antigravityBtn.classList.remove('bg-black', 'text-white');
+                    showConsoleMsg("Anti-gravity field collapsed. Gravity restored.");
+                    gsap.killTweensOf('.reveal-heading, .tilt-card, .skill-card, .project-card');
+                    gsap.to('.reveal-heading, .tilt-card, .skill-card, .project-card', {
+                        x: 0,
+                        y: 0,
+                        rotation: 0,
+                        duration: 0.8,
+                        ease: 'power3.out'
+                    });
+                }
+            });
+        }
+
+        // 2. Caffeine Overload Rain
+        let caffeineActive = false;
+        let caffeineInterval;
+        const caffeineBtn = document.getElementById('btn-caffeine');
+        if (caffeineBtn) {
+            caffeineBtn.addEventListener('click', () => {
+                caffeineActive = !caffeineActive;
+                if (caffeineActive) {
+                    caffeineBtn.classList.add('bg-black', 'text-white');
+                    showConsoleMsg("Caffeine stream activated: code speed +200%, heart rate +150%.");
+                    caffeineInterval = setInterval(() => {
+                        const items = ['☕', '🍵', '🍪', '⚡', '💻', '💡'];
+                        const drop = document.createElement('div');
+                        drop.textContent = items[Math.floor(Math.random() * items.length)];
+                        drop.style.position = 'fixed';
+                        drop.style.top = '-40px';
+                        drop.style.left = Math.random() * window.innerWidth + 'px';
+                        drop.style.fontSize = Math.random() * 24 + 16 + 'px';
+                        drop.style.zIndex = '999999';
+                        drop.style.pointerEvents = 'none';
+                        drop.style.userSelect = 'none';
+                        document.body.appendChild(drop);
+
+                        gsap.to(drop, {
+                            y: window.innerHeight + 50,
+                            x: '+=' + (Math.random() * 120 - 60),
+                            rotation: Math.random() * 360,
+                            duration: Math.random() * 3.5 + 2.5,
+                            ease: 'none',
+                            onComplete: () => drop.remove()
+                        });
+                    }, 140);
+                } else {
+                    caffeineBtn.classList.remove('bg-black', 'text-white');
+                    showConsoleMsg("Caffeine stream suspended. Initiating developer crash sequence.");
+                    clearInterval(caffeineInterval);
+                }
+            });
+        }
+
+        // 3. Sarcasm Quotes Engine
+        const sarcasmQuotes = [
+            "It works on my machine. ¯\\_(ツ)_/¯",
+            "WordPress isn't a CMS, it's a lifestyle choice.",
+            "AI writes 2x faster, which means I can compile 2x more bugs.",
+            "CSS is easy. It's like styling a lion while riding it.",
+            "There are 10 types of people: those who understand binary, and those who don't.",
+            "Chai is the compile-time asset that keeps my brain alive.",
+            "Adding more features to fix broken features is standard architecture.",
+            "Git push force is the ultimate deployment framework.",
+            "My code runs on coffee, chai, and sheer willpower."
+        ];
+        const sarcasmBtn = document.getElementById('btn-sarcasm');
+        if (sarcasmBtn) {
+            sarcasmBtn.addEventListener('click', () => {
+                const quote = sarcasmQuotes[Math.floor(Math.random() * sarcasmQuotes.length)];
+                showConsoleMsg(quote);
+                gsap.fromTo('#dev-console-msg', { scale: 0.96 }, { scale: 1, duration: 0.35, ease: 'back.out' });
+            });
+        }
+
+        // 4. Interactive Chai Counter
+        let chaiCount = 1042;
+        const chaiCard = document.getElementById('stat-chai-card');
+        const chaiValue = document.getElementById('stat-chai-value');
+        if (chaiCard && chaiValue) {
+            chaiValue.textContent = chaiCount;
+            chaiCard.addEventListener('click', (e) => {
+                chaiCount++;
+                chaiValue.textContent = chaiCount;
+                
+                // Shake / bounce effect
+                gsap.fromTo(chaiCard, { scale: 0.94 }, { scale: 1, duration: 0.4, ease: 'back.out' });
+                
+                // Spawn a flying icon at the click coordinate
+                const bubble = document.createElement('div');
+                bubble.textContent = '☕ +1 Chai';
+                bubble.style.position = 'fixed';
+                bubble.style.left = e.clientX + 'px';
+                bubble.style.top = e.clientY - 20 + 'px';
+                bubble.style.color = '#ff006e';
+                bubble.style.fontFamily = 'monospace';
+                bubble.style.fontWeight = 'bold';
+                bubble.style.fontSize = '12px';
+                bubble.style.pointerEvents = 'none';
+                bubble.style.zIndex = '999999';
+                document.body.appendChild(bubble);
+                
+                gsap.to(bubble, {
+                    y: -100,
+                    x: Math.random() * 40 - 20,
+                    opacity: 0,
+                    duration: 1.2,
+                    ease: 'power2.out',
+                    onComplete: () => bubble.remove()
+                });
+            });
+        }
+
+        // Keyboard Shortcut: press T to open interactive terminal
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 't' || e.key === 'T') && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                const terminalBtn = document.getElementById('header-terminal-btn');
+                if (terminalBtn) terminalBtn.click();
+            }
+        });
 
         // Konami Code
         const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
