@@ -1,0 +1,385 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HumanRedirect from '../../components/HumanRedirect.astro';
+import { pageUrl } from '../../utils/seo';
+
+const postUrl = pageUrl('/blog/modern-web-development-guide');
+---
+
+<Layout
+	title="Modern Web Development, E-Commerce, & Brutalist Design — The Ultimate Guide"
+	description="A comprehensive guide to frontend engineering, custom WordPress theme design, Shopify & Webflow strategies, GSAP ScrollTrigger animations, and the brutalist aesthetic by Shivrajsinh Zala."
+>
+	<Fragment slot="head">
+		<meta name="author" content="Shivrajsinh Zala" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content={postUrl} />
+		<meta property="og:title" content="Modern Web Development, E-Commerce, & Brutalist Design — The Ultimate Guide" />
+		<meta
+			property="og:description"
+			content="A comprehensive guide to frontend engineering, custom WordPress theme design, Shopify & Webflow, GSAP animations, and the brutalist aesthetic by Shivrajsinh Zala."
+		/>
+		<meta property="og:image" content="https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Modern Web Development, E-Commerce, & Brutalist Design — The Ultimate Guide" />
+		<meta
+			name="twitter:description"
+			content="A comprehensive guide to frontend engineering, custom WordPress theme design, Shopify & Webflow, GSAP animations, and the brutalist aesthetic by Shivrajsinh Zala."
+		/>
+		<meta name="twitter:image" content="https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp" />
+		
+		<script is:inline type="application/ld+json" set:html={JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'TechArticle',
+			headline: 'The Ultimate Guide to Modern Web Development, E-Commerce, & Brutalist Design',
+			description: 'A comprehensive deep-dive into advanced frontend engineering, custom WordPress theme design, Shopify & Webflow strategies, GSAP ScrollTrigger animations, and the brutalist aesthetic.',
+			image: 'https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp',
+			author: {
+				'@type': 'Person',
+				name: 'Shivrajsinh Zala',
+				url: 'https://shivrajsinh.in/',
+			},
+			publisher: {
+				'@type': 'Person',
+				name: 'Shivrajsinh Zala',
+				url: 'https://shivrajsinh.in/',
+			},
+			datePublished: '2026-06-08',
+			inLanguage: 'en-US',
+		})} />
+	</Fragment>
+
+	<main class="relative z-10 pt-24 pb-20 px-4">
+		<div class="max-w-6xl mx-auto mt-6">
+			<!-- Breadcrumb -->
+			<nav class="mb-6 font-mono text-xs uppercase">
+				<a href="/" class="hover:text-brutal-pink">Home</a> / 
+				<a href="/blog" class="hover:text-brutal-pink">Blog</a> / 
+				<span class="text-gray-500">The Ultimate Guide</span>
+			</nav>
+
+			<!-- Hero Section -->
+			<header class="border-4 border-black bg-white p-6 md:p-12 shadow-[12px_12px_0_0_#000] mb-12">
+				<div class="flex flex-wrap items-center gap-3 mb-6">
+					<span class="font-mono text-xs bg-brutal-pink text-white px-3 py-1 border-2 border-black font-bold">PILLAR GUIDE</span>
+					<span class="font-mono text-xs text-gray-600">Published June 8, 2026</span>
+					<span class="font-mono text-xs text-gray-600">· 15 Min Read</span>
+				</div>
+				<h1 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-6">
+					The Ultimate Guide to Modern Web Development, E-Commerce, & Brutalist Design
+				</h1>
+				<p class="font-mono text-base md:text-lg text-gray-700 max-w-3xl border-l-4 border-black pl-4">
+					A comprehensive deep-dive into advanced frontend engineering, custom WordPress theme design, Shopify & Webflow strategies, GSAP ScrollTrigger animations, and the brutalist aesthetic.
+				</p>
+			</header>
+
+			<!-- Split Layout -->
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+				<!-- Table of Contents (Sticky on Desktop) -->
+				<aside class="lg:col-span-4 lg:sticky lg:top-28 border-4 border-black bg-brutal-yellow p-6 shadow-[8px_8px_0_0_#000]">
+					<h3 class="font-mono font-black text-lg uppercase mb-4 border-b-2 border-black pb-2">GUIDE TOPICS</h3>
+					<ul class="font-mono text-xs md:text-sm space-y-3" id="toc-list">
+						<li>
+							<a href="#section-journey" class="toc-link block hover:underline border-l-2 border-black pl-2 py-0.5 transition-colors">
+								1. Shivrajsinh Zala & Journey
+							</a>
+						</li>
+						<li>
+							<a href="#section-techstack" class="toc-link block hover:underline border-l-2 border-transparent pl-2 py-0.5 text-gray-700 hover:text-black transition-colors">
+								2. The Modern Frontend Stack
+							</a>
+						</li>
+						<li>
+							<a href="#section-brutalist" class="toc-link block hover:underline border-l-2 border-transparent pl-2 py-0.5 text-gray-700 hover:text-black transition-colors">
+								3. Brutalist Design Philosophy
+							</a>
+						</li>
+						<li>
+							<a href="#section-wordpress" class="toc-link block hover:underline border-l-2 border-transparent pl-2 py-0.5 text-gray-700 hover:text-black transition-colors">
+								4. Custom WordPress Development
+							</a>
+						</li>
+						<li>
+							<a href="#section-ecommerce" class="toc-link block hover:underline border-l-2 border-transparent pl-2 py-0.5 text-gray-700 hover:text-black transition-colors">
+								5. Shopify vs. Webflow
+							</a>
+						</li>
+						<li>
+							<a href="#section-gsap" class="toc-link block hover:underline border-l-2 border-transparent pl-2 py-0.5 text-gray-700 hover:text-black transition-colors">
+								6. Mastering Scroll Animations
+							</a>
+						</li>
+					</ul>
+					<div class="mt-6 border-t-2 border-black pt-4 text-center">
+						<a href="#contact-cta" class="inline-block w-full text-center bg-black text-white font-mono font-bold text-xs uppercase py-3 border-2 border-black hover:bg-brutal-pink hover:text-white transition-all shadow-[4px_4px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5">
+							Get in touch →
+						</a>
+					</div>
+				</aside>
+
+				<!-- Article Body -->
+				<article class="lg:col-span-8 bg-white border-4 border-black p-6 md:p-10 shadow-[8px_8px_0_0_#000] prose max-w-none">
+					
+					<!-- Section 1 -->
+					<section id="section-journey" class="scroll-mt-28 mb-16 border-b-2 border-black pb-12">
+						<h2 class="text-3xl md:text-4xl font-black uppercase mb-6 flex items-center gap-3">
+							<span class="bg-black text-white px-2 py-0.5 font-mono text-xl md:text-2xl">01</span>
+							Shivrajsinh Zala: Biography & Journey
+						</h2>
+						<p class="text-lg leading-relaxed mb-6">
+							The journey of a modern developer is rarely a straight line. For <strong>Shivrajsinh Zala</strong>, a frontend engineer based in Rajkot, Gujarat, India, the path has been defined by a constant pursuit of blending core technical architecture with high-impact aesthetics. 
+						</p>
+						<p class="leading-relaxed mb-6">
+							Holding an MCA (2023-2025) and a BCA (2020-2023), Shivrajsinh built his foundation on standard computer science principles—algorithms, systems database administration, and software design. However, he quickly realized that the modern web was suffering from a lack of character. Corporate templates and bloated website builders had homogenized the internet. 
+						</p>
+						<p class="leading-relaxed mb-6">
+							Starting his professional career in Gujarat, he focused on custom frontend systems, helping brands differentiate themselves. Today, he works as a frontend specialist, managing custom client themes, Shopify stores, and animated React platforms that capture attention instantly. His dual experience in product optimization, custom animation, and design makes him a valuable partner for clients who need clean code that converts.
+						</p>
+						<div class="bg-brutal-gray/30 brutal-border p-5 my-8 shadow-[4px_4px_0_0_#000] font-mono text-sm">
+							<strong class="uppercase text-brutal-pink block mb-2">Key Accomplishments:</strong>
+							<ul class="list-none p-0 m-0 space-y-2">
+								<li>✓ Master's in Computer Applications (MCA) – Technical core.</li>
+								<li>✓ Expert in brutalist web interfaces and high-performance layouts.</li>
+								<li>✓ Comprehensive knowledge of local and international E-Commerce architectures.</li>
+							</ul>
+						</div>
+					</section>
+
+					<!-- Section 2 -->
+					<section id="section-techstack" class="scroll-mt-28 mb-16 border-b-2 border-black pb-12">
+						<h2 class="text-3xl md:text-4xl font-black uppercase mb-6 flex items-center gap-3">
+							<span class="bg-black text-white px-2 py-0.5 font-mono text-xl md:text-2xl">02</span>
+							The Modern Frontend Stack
+						</h2>
+						<p class="text-lg leading-relaxed mb-6">
+							Performance on the web is no longer just a metric; it is directly tied to conversions and SEO. Selecting the right stack is critical. My chosen engineering stack centers on:
+						</p>
+						<div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+							<div class="border-2 border-black p-4 bg-brutal-cyan/10">
+								<h4 class="font-bold font-mono text-sm uppercase mb-2">React & Astro</h4>
+								<p class="font-mono text-xs text-gray-700">A dynamic frontend UI paired with Astro's zero-JS-by-default architecture for maximum speed and clean HTML rendering.</p>
+							</div>
+							<div class="border-2 border-black p-4 bg-brutal-purple/10">
+								<h4 class="font-bold font-mono text-sm uppercase mb-2">GSAP & Lenis</h4>
+								<p class="font-mono text-xs text-gray-700">Industrial-grade scroll animations orchestrated via GSAP ScrollTrigger, combined with Lenis for silky-smooth custom scroll behavior.</p>
+							</div>
+							<div class="border-2 border-black p-4 bg-brutal-yellow/10">
+								<h4 class="font-bold font-mono text-sm uppercase mb-2">Tailwind CSS</h4>
+								<p class="font-mono text-xs text-gray-700">Utility-first styling to ensure high-performance, rapid layout adjustments, and zero unused CSS delivery to browsers.</p>
+							</div>
+						</div>
+						<p class="leading-relaxed mb-6">
+							Using **Astro** as the framework base allows us to deliver near-perfect Core Web Vitals (including excellent Largest Contentful Paint [LCP] and Interaction to Next Paint [INP]). Astro compiles pages statically, loading React components only when interactivity is required (known as the Islands Architecture). This eliminates heavy JavaScript bundles that typically slow down WordPress or standard React apps.
+						</p>
+					</section>
+
+					<!-- Section 3 -->
+					<section id="section-brutalist" class="scroll-mt-28 mb-16 border-b-2 border-black pb-12">
+						<h2 class="text-3xl md:text-4xl font-black uppercase mb-6 flex items-center gap-3">
+							<span class="bg-black text-white px-2 py-0.5 font-mono text-xl md:text-2xl">03</span>
+							Brutalist Design Philosophy
+						</h2>
+						<p class="text-lg leading-relaxed mb-6">
+							Brutalist web design is a deliberate rebellion against standard corporate, clean-line interfaces. Originating from the architecture movement of the 1950s (raw concrete, bold structures), digital brutalism uses raw typography, stark colors, thick black lines, and intentional asymmetry to create impact.
+						</p>
+						<blockquote class="border-l-8 border-brutal-pink bg-brutal-gray/20 p-6 font-mono text-sm my-8 shadow-[4px_4px_0_0_#000]">
+							"Brutalism is about honesty. It doesn't hide behind stock imagery, soft shadows, or friendly rounded corners. It presents content directly, forcefully, and memorably."
+						</blockquote>
+						<p class="leading-relaxed mb-6">
+							How to implement premium brutalist design:
+						</p>
+						<ul class="space-y-3">
+							<li>
+								<strong>1. Thick Black Borders:</strong> Use heavy stroke borders (`border-4 border-black`) on cards, buttons, and sections. This creates a solid structure resembling print newspaper layouts.
+							</li>
+							<li>
+								<strong>2. Flat Shadows:</strong> Avoid soft gradients. Use flat, offset solid black shadows (`shadow-[8px_8px_0_0_#000]`) to give elements a tangible 3D physical block look.
+							</li>
+							<li>
+								<strong>3. Neon Color Accents:</strong> Pair raw background grids with high-saturation colors such as Brutal Yellow (`#ffe900`), Cyan (`#00F5FF`), and Pink (`#ff006e`). Use these exclusively to draw attention to interactive points.
+							</li>
+							<li>
+								<strong>4. Typography Contrasts:</strong> Mix ultra-bold condensed displays (like Bebas Neue) with structured monospaced typefaces (like JetBrains Mono) for body text and telemetry labels.
+							</li>
+						</ul>
+					</section>
+
+					<!-- Section 4 -->
+					<section id="section-wordpress" class="scroll-mt-28 mb-16 border-b-2 border-black pb-12">
+						<h2 class="text-3xl md:text-4xl font-black uppercase mb-6 flex items-center gap-3">
+							<span class="bg-black text-white px-2 py-0.5 font-mono text-xl md:text-2xl">04</span>
+							Custom WordPress Development
+						</h2>
+						<p class="text-lg leading-relaxed mb-6">
+							Many developers build WordPress sites by grabbing a pre-made template, installing a page builder like Elementor, and piling on 30+ plugins. This leads to slow loading speeds, database clutter, and severe security vulnerabilities.
+						</p>
+						<p class="leading-relaxed mb-6">
+							My approach to <strong>Custom WordPress Development</strong> focuses on custom PHP theme architectures, utilizing Gutenberg Blocks natively, or building headless architectures:
+						</p>
+						<div class="border-4 border-black p-6 bg-white shadow-[6px_6px_0_0_#000] my-8">
+							<h4 class="font-black uppercase mb-4">The Custom WordPress Advantage</h4>
+							<table class="w-full text-left font-mono text-xs md:text-sm border-collapse">
+								<thead>
+									<tr class="border-b-2 border-black">
+										<th class="pb-2">Metric</th>
+										<th class="pb-2">Pre-Made Templates</th>
+										<th class="pb-2">Custom WordPress</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="border-b border-gray-200">
+										<td class="py-2 font-bold">LCP Score</td>
+										<td class="py-2 text-red-600">4.5s+ (Slow)</td>
+										<td class="py-2 text-green-600">&lt; 1.5s (Fast)</td>
+									</tr>
+									<tr class="border-b border-gray-200">
+										<td class="py-2 font-bold">Plugin Count</td>
+										<td class="py-2">30 - 50 plugins</td>
+										<td class="py-2">5 - 10 critical plugins</td>
+									</tr>
+									<tr class="border-b border-gray-200">
+										<td class="py-2 font-bold">Database Queries</td>
+										<td class="py-2 text-red-600">120+ queries per load</td>
+										<td class="py-2 text-green-600">Under 25 queries</td>
+									</tr>
+									<tr>
+										<td class="py-2 font-bold">Maintenance Cost</td>
+										<td class="py-2">High (Frequent breakages)</td>
+										<td class="py-2">Low (Extremely stable)</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="leading-relaxed mb-6">
+							By writing custom themes, we generate clean, semantic HTML with zero styling bloat. The result is a website that ranks higher on Google because of its page speed, provides an optimal mobile experience, and is extremely secure.
+						</p>
+					</section>
+
+					<!-- Section 5 -->
+					<section id="section-ecommerce" class="scroll-mt-28 mb-16 border-b-2 border-black pb-12">
+						<h2 class="text-3xl md:text-4xl font-black uppercase mb-6 flex items-center gap-3">
+							<span class="bg-black text-white px-2 py-0.5 font-mono text-xl md:text-2xl">05</span>
+							Shopify vs. Webflow for E-Commerce
+						</h2>
+						<p class="text-lg leading-relaxed mb-6">
+							Businesses seeking to launch an online shop often get stuck choosing a platform. Having engineered systems in both Shopify and Webflow, I recommend selecting them based on specific requirements:
+						</p>
+						
+						<div class="space-y-6 my-8">
+							<div class="border-2 border-black p-5 bg-white">
+								<h3 class="text-xl font-bold uppercase mb-2 text-brutal-pink">Shopify</h3>
+								<p class="leading-relaxed mb-3">
+									The absolute gold standard for pure e-commerce. If you have a large inventory (100+ items), need complex discount configurations, localized multi-currency checkouts, or deep payment gateway integrations, Shopify wins.
+								</p>
+								<span class="font-mono text-xs bg-black text-white px-2 py-1">BEST FOR: HIGH INVENTORY & TRANSACTION SCALE</span>
+							</div>
+
+							<div class="border-2 border-black p-5 bg-white">
+								<h3 class="text-xl font-bold uppercase mb-2 text-brutal-cyan">Webflow</h3>
+								<p class="leading-relaxed mb-3">
+									Best for storytelling e-commerce. If you sell a small, curated set of premium products (under 30 items) and want complete visual design freedom without writing hundreds of lines of liquid/custom code, Webflow is ideal.
+								</p>
+								<span class="font-mono text-xs bg-black text-white px-2 py-1">BEST FOR: BESPOKE DESIGN & CUSTOM BRAND STORIES</span>
+							</div>
+						</div>
+
+						<p class="leading-relaxed mb-6">
+							Beyond platform architecture, I specialize in optimizing product listings for Amazon and general storefronts. This includes structural schema markup, structured JSON-LD data, and image layouts that optimize conversion rates from search query pages.
+						</p>
+					</section>
+
+					<!-- Section 6 -->
+					<section id="section-gsap" class="scroll-mt-28 mb-16">
+						<h2 class="text-3xl md:text-4xl font-black uppercase mb-6 flex items-center gap-3">
+							<span class="bg-black text-white px-2 py-0.5 font-mono text-xl md:text-2xl">06</span>
+							Mastering Scroll Animations
+						</h2>
+						<p class="text-lg leading-relaxed mb-6">
+							Modern websites can feel rigid. Introducing motion brings interfaces to life. However, poorly implemented animations can ruin the user experience by causing scroll lag and layout shifts.
+						</p>
+						<p class="leading-relaxed mb-6">
+							By coupling **GSAP (GreenSock Animation Platform) ScrollTrigger** with a smooth-scrolling engine like **Lenis**, we can intercept user scroll events and compute precise hardware-accelerated transitions. Look at the general setup pattern for a premium reveal animation:
+						</p>
+						
+						<pre class="bg-black text-white p-5 border-4 border-black font-mono text-xs md:text-sm overflow-x-auto shadow-[4px_4px_0_0_#000] mb-8">
+<code>// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
+
+// Target headings for split-text scroll reveals
+gsap.utils.toArray('.reveal-heading').forEach((heading: any) => &#123;
+  gsap.from(heading, &#123;
+    scrollTrigger: &#123;
+      trigger: heading,
+      start: 'top 85%',
+      end: 'bottom 20%',
+      toggleActions: 'play none none reverse'
+    &#125;,
+    y: 50,
+    opacity: 0,
+    duration: 0.85,
+    ease: 'power3.out'
+  &#125;);
+&#125;);</code></pre>
+
+						<p class="leading-relaxed mb-6">
+							This ensures animations only run when the target element enters the user's viewport, minimizing GPU/CPU overhead. Additionally, setting animations to scale/transform rather than modifying width/height properties avoids browser repaints, keeping frame rates at a consistent 60fps.
+						</p>
+					</section>
+
+					<!-- Contact CTA Box -->
+					<section id="contact-cta" class="bg-brutal-cyan p-6 md:p-10 border-4 border-black shadow-[8px_8px_0_0_#000] text-black my-8">
+						<h3 class="text-2xl md:text-4xl font-black uppercase mb-3">Let's Build Something Memorable</h3>
+						<p class="font-mono text-xs md:text-sm mb-6 max-w-xl">
+							Whether you need a custom high-performance frontend build, custom WordPress development, an e-commerce setup, or premium scroll animations, I can help.
+						</p>
+						<a href="/contact" class="inline-block bg-black text-white font-mono font-bold text-xs uppercase px-6 py-4 border-2 border-black hover:bg-white hover:text-black transition-colors shadow-[4px_4px_0_0_#000]">
+							Start a Project →
+						</a>
+					</section>
+
+				</article>
+			</div>
+
+			<!-- Back Button -->
+			<p class="mt-16 text-center font-mono text-sm">
+				<a href="/blog" class="underline hover:text-brutal-pink">← Back to Blog</a>
+				<span class="mx-3">·</span>
+				<a href="/" class="underline hover:text-brutal-pink">Home</a>
+			</p>
+		</div>
+	</main>
+
+	<!-- Table of Contents Active Link Script -->
+	<script>
+		// Setup active links on scroll
+		const sections = document.querySelectorAll('section[id]');
+		const tocLinks = document.querySelectorAll('.toc-link');
+
+		window.addEventListener('scroll', () => {
+			let currentSectionId = '';
+			const scrollPos = window.scrollY + 200;
+
+			sections.forEach((section) => {
+				const sectionTop = (section as HTMLElement).offsetTop;
+				const sectionHeight = (section as HTMLElement).offsetHeight;
+
+				if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+					currentSectionId = section.getAttribute('id') || '';
+				}
+			});
+
+			tocLinks.forEach((link) => {
+				const href = link.getAttribute('href');
+				if (href === `#${currentSectionId}`) {
+					link.classList.remove('border-transparent', 'text-gray-700');
+					link.classList.add('border-black', 'font-bold', 'text-black');
+				} else {
+					link.classList.remove('border-black', 'font-bold', 'text-black');
+					link.classList.add('border-transparent', 'text-gray-700');
+				}
+			});
+		});
+	</script>
+
+	<HumanRedirect />
+</Layout>

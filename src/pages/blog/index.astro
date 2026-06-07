@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import HumanRedirect from '../../components/HumanRedirect.astro';
-import { blogPosts } from '../../data/blog-posts';
 import { pageUrl } from '../../utils/seo';
 
 const blogIndexUrl = pageUrl('/blog');
@@ -9,7 +8,7 @@ const blogIndexUrl = pageUrl('/blog');
 
 <Layout
 	title="Blog — Shivrajsinh Zala | Frontend Developer Rajkot"
-	description="Articles on frontend development, WordPress, Shopify, Webflow, brutalist design, and hiring a developer in Rajkot, Gujarat."
+	description="In-depth guides on frontend engineering, custom WordPress custom themes, Shopify & Webflow strategies, GSAP animations, and brutalist design from Rajkot, Gujarat."
 >
 	<Fragment slot="head">
 		<meta property="og:type" content="website" />
@@ -37,50 +36,83 @@ const blogIndexUrl = pageUrl('/blog');
 				'@type': 'Person',
 				name: 'Shivrajsinh Zala',
 				url: 'https://shivrajsinh.in/',
-			},
-			blogPost: blogPosts.map((post) => ({
-				'@type': 'BlogPosting',
-				headline: post.title,
-				url: pageUrl(`/blog/${post.slug}`),
-				datePublished: post.date,
-			})),
+			}
 		})} />
 	</Fragment>
 
 	<main class="relative z-10 pt-24 pb-20 px-4">
 		<div class="max-w-5xl mx-auto">
+			<!-- Page Header -->
 			<header class="mb-12 border-4 border-black bg-brutal-yellow p-6 md:p-10 shadow-[12px_12px_0_0_#000]">
-				<div class="font-mono text-xs bg-black text-white inline-block px-3 py-1 mb-4">WRITING</div>
-				<h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-4">Blog</h1>
+				<div class="font-mono text-xs bg-black text-white inline-block px-3 py-1 mb-4">EDITORIAL</div>
+				<h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase mb-4">RESOURCES</h1>
 				<p class="font-mono text-sm md:text-base max-w-2xl">
-					Notes on frontend development, WordPress, Shopify, and design — from Rajkot, Gujarat.
+					Highly detailed guides, research, and deep-dives on frontend engineering, custom WordPress, e-commerce, and animations.
 				</p>
 			</header>
 
-			<ul class="space-y-4">
-				{
-					blogPosts.map((post) => (
-						<li>
-							<a
-								href={`/blog/${post.slug}`}
-								class="block bg-white border-4 border-black p-5 md:p-6 shadow-[6px_6px_0_0_#000] hover:shadow-[10px_10px_0_0_#FF006E] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all group"
-							>
-								<div class="flex flex-wrap items-center gap-3 mb-2">
-									<span class="font-mono text-[10px] bg-brutal-black text-white px-2 py-1">{post.tag}</span>
-									<time datetime={post.date} class="font-mono text-xs text-gray-600">
-										{post.date}
-									</time>
-								</div>
-								<h2 class="text-xl md:text-2xl font-bold group-hover:text-brutal-pink transition-colors">{post.title}</h2>
-								<p class="font-mono text-sm text-gray-700 mt-2">{post.description}</p>
-								<span class="inline-block mt-3 font-mono text-xs font-bold">READ →</span>
-							</a>
-						</li>
-					))
-				}
-			</ul>
+			<!-- Featured Pillar Article Card -->
+			<div class="bg-white border-4 border-black p-6 md:p-10 shadow-[12px_12px_0_0_#000] relative">
+				<!-- Tag and Meta -->
+				<div class="flex flex-wrap items-center gap-3 mb-4">
+					<span class="font-mono text-xs bg-brutal-pink text-white px-3 py-1 border-2 border-black font-bold">FEATURING PILLAR ARTICLE</span>
+					<span class="font-mono text-xs text-gray-500">June 8, 2026</span>
+					<span class="font-mono text-xs text-gray-500">· 15 Min Read</span>
+				</div>
 
-			<p class="mt-12 text-center font-mono text-sm">
+				<!-- Title -->
+				<h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight mb-4 hover:text-brutal-pink transition-colors">
+					<a href="/blog/modern-web-development-guide">
+						The Ultimate Guide to Modern Web Development, E-Commerce, & Brutalist Design
+					</a>
+				</h2>
+
+				<!-- Excerpt -->
+				<p class="font-mono text-sm md:text-base text-gray-700 mb-8 max-w-3xl border-l-4 border-black pl-4">
+					A comprehensive deep-dive into advanced frontend engineering, custom WordPress theme design, Shopify & Webflow strategies, GSAP ScrollTrigger animations, and the brutalist aesthetic.
+				</p>
+
+				<!-- Inside this Guide subgrid -->
+				<div class="mb-8 border-t-2 border-dashed border-black pt-6">
+					<h3 class="font-mono font-bold text-xs uppercase text-gray-500 mb-4 tracking-wider">INSIDE THIS PILLAR GUIDE:</h3>
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+						<a href="/blog/modern-web-development-guide#section-journey" class="border-2 border-black p-4 bg-brutal-gray/20 hover:bg-brutal-cyan/20 transition-all shadow-[4px_4px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5">
+							<span class="font-mono text-xs text-gray-600 block mb-1">SECTION 01</span>
+							<span class="font-bold text-sm uppercase">Journey & Background</span>
+						</a>
+						<a href="/blog/modern-web-development-guide#section-techstack" class="border-2 border-black p-4 bg-brutal-gray/20 hover:bg-brutal-purple/20 transition-all shadow-[4px_4px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5">
+							<span class="font-mono text-xs text-gray-600 block mb-1">SECTION 02</span>
+							<span class="font-bold text-sm uppercase">Modern Frontend Stack</span>
+						</a>
+						<a href="/blog/modern-web-development-guide#section-brutalist" class="border-2 border-black p-4 bg-brutal-gray/20 hover:bg-brutal-yellow/20 transition-all shadow-[4px_4px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5">
+							<span class="font-mono text-xs text-gray-600 block mb-1">SECTION 03</span>
+							<span class="font-bold text-sm uppercase">Brutalist Design</span>
+						</a>
+						<a href="/blog/modern-web-development-guide#section-wordpress" class="border-2 border-black p-4 bg-brutal-gray/20 hover:bg-[#00FF88]/20 transition-all shadow-[4px_4px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5">
+							<span class="font-mono text-xs text-gray-600 block mb-1">SECTION 04</span>
+							<span class="font-bold text-sm uppercase">Custom WordPress</span>
+						</a>
+						<a href="/blog/modern-web-development-guide#section-ecommerce" class="border-2 border-black p-4 bg-brutal-gray/20 hover:bg-brutal-cyan/20 transition-all shadow-[4px_4px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5">
+							<span class="font-mono text-xs text-gray-600 block mb-1">SECTION 05</span>
+							<span class="font-bold text-sm uppercase">Shopify vs. Webflow</span>
+						</a>
+						<a href="/blog/modern-web-development-guide#section-gsap" class="border-2 border-black p-4 bg-brutal-gray/20 hover:bg-brutal-pink/20 transition-all shadow-[4px_4px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5">
+							<span class="font-mono text-xs text-gray-600 block mb-1">SECTION 06</span>
+							<span class="font-bold text-sm uppercase">GSAP Scroll Animations</span>
+						</a>
+					</div>
+				</div>
+
+				<!-- Big Call to Action -->
+				<div class="text-right">
+					<a href="/blog/modern-web-development-guide" class="inline-block brutal-border bg-brutal-black text-white px-8 py-4 font-mono font-bold hover:bg-brutal-pink hover:text-white transition-all shadow-[6px_6px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 text-center w-full md:w-auto">
+						READ COMPLETE GUIDE →
+					</a>
+				</div>
+			</div>
+
+			<!-- Portfolio Back Button -->
+			<p class="mt-16 text-center font-mono text-sm">
 				<a href="/" class="underline hover:text-brutal-pink">← Back to portfolio</a>
 				<span class="mx-2">·</span>
 				<a href="/directory" class="underline hover:text-brutal-pink">Site directory</a>
