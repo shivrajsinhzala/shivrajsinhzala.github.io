@@ -25,6 +25,15 @@
 }
 
 @font-face {
+  font-family: "Bebas Neue";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/bebas-neue-400.ttf") format("truetype");
+}
+
+
+@font-face {
   font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 300;
@@ -72,7 +81,33 @@
   --color-brutal-orange: #ff5e00;
   --color-brutal-purple: #9d00ff;
   --color-brutal-yellow: #ffe900;
+  --font-display: "Bebas Neue", "Space Grotesk", sans-serif;
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
+
+/* ===== DISPLAY FONT HEADING OVERRIDES ===== */
+/* Big section headings, hero name, project numbers — all get Bebas Neue */
+h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+}
+
+/* Preloader number */
+.preloader-counter {
+    font-family: var(--font-display) !important;
+}
+
+/* Section heading override (reveal-heading class used across site) */
+.reveal-heading {
+    font-family: var(--font-display);
+}
+
+/* Project number bg text */
+.project-number {
+    font-family: var(--font-display) !important;
+}
+
         html.lenis,
         html.lenis body {
             height: auto;
@@ -200,7 +235,7 @@
             font-weight: 800;
             color: #0a0a0a;
             line-height: 1;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-display, 'Bebas Neue', monospace);
         }
 
         .preloader-bar {
@@ -546,7 +581,7 @@
             top: -2rem;
             right: 2rem;
             pointer-events: none;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-display, 'Bebas Neue', sans-serif);
             z-index: 0;
         }
 
