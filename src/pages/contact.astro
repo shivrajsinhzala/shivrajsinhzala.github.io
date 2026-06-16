@@ -268,7 +268,10 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script is:inline>
-document.addEventListener('astro:page-load', () => {
+if (!window.__contact_scripts_loaded) {
+    window.__contact_scripts_loaded = true;
+    document.addEventListener('astro:page-load', () => {
+        if (!document.getElementById('contact-form')) return;
     // Re-initialize Lucide Icons for dynamic content
     if (window.lucide) {
         window.lucide.createIcons();
@@ -460,5 +463,6 @@ document.addEventListener('astro:page-load', () => {
             input.style.backgroundColor = 'white';
         });
     });
-});
+    });
+}
 </script>

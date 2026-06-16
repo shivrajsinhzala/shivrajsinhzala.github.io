@@ -2,167 +2,7 @@
 ---
 
 <script is:inline>
-document.addEventListener('astro:page-load', () => {
-    // ===== LENIS SMOOTH SCROLL =====
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothTouch: false,
-        touchMultiplier: 2,
-    });
-    
-    // Attach to window so index.astro can use it for scroll triggers
-    window.lenis = lenis;
-
-    gsap.registerPlugin(ScrollTrigger);
-    
-    // Clear any cached scroll position from previous page visit
-    ScrollTrigger.clearScrollMemory('manual');
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-    }
-
-    gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
-
-    // ===== CUSTOM CURSOR =====
-    const customCursor = document.querySelector('.custom-cursor');
-    let cursorX = 0, cursorY = 0;
-    let isTouchDevice = navigator.maxTouchPoints > 0;
-
-    if (!isTouchDevice && customCursor) {
-        document.addEventListener('mousemove', (e) => {
-            cursorX = e.clientX;
-            cursorY = e.clientY;
-            // Use requestAnimationFrame for smoother cursor
-            requestAnimationFrame(() => {
-                customCursor.style.left = cursorX + 'px';
-                customCursor.style.top = cursorY + 'px';
-            });
-        });
-
-        const interactiveElements = document.querySelectorAll('a, button, [data-magnetic], .tilt-card, .brutal-shadow, .brutal-shadow-sm');
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                customCursor.classList.add('hover');
-                customCursor.classList.remove('view');
-            });
-            el.addEventListener('mouseleave', () => {
-                customCursor.classList.remove('hover');
-                customCursor.classList.remove('view');
-            });
-        });
-
-        // View cursor for projects
-        document.querySelectorAll('[data-cursor="view"]').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                customCursor.classList.remove('hover');
-                customCursor.classList.add('view');
-            });
-            el.addEventListener('mouseleave', () => {
-                customCursor.classList.remove('view');
-            });
-        });
-    } else if (customCursor) {
-        customCursor.style.display = 'none';
-    }
-
-    // ===== MAGNETIC BUTTONS =====
-    const isTouch = () => navigator.maxTouchPoints > 0;
-    if (!isTouch()) {
-        document.querySelectorAll('[data-magnetic]').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
-            });
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = 'translate(0, 0)';
-            });
-        });
-    }
-
-    // ===== SUBPAGE NAVBAR ENTRANCE =====
-    const isHomepage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/');
-    if (!isHomepage) {
-        const navbar = document.getElementById('navbar');
-        if (navbar) {
-            if (typeof gsap !== 'undefined') {
-                gsap.to(navbar, { y: 0, duration: 0.8, ease: 'power4.out', delay: 0.15 });
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
-        }
-    }
-
-    // ===== MOBILE MENU (GLOBAL) =====
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const closeMenu = document.getElementById('close-menu');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
-
-    if (menuBtn && mobileMenu && closeMenu) {
-        function trapFocus(el) {
-            const focusable = el.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
-            if(focusable.length === 0) return;
-            const first = focusable[0], last = focusable[focusable.length - 1];
-            el.addEventListener('keydown', function handler(e) {
-                if (e.key !== 'Tab') return;
-                if (e.shiftKey && document.activeElement === first) {
-                    e.preventDefault(); last.focus();
-                } else if (!e.shiftKey && document.activeElement === last) {
-                    e.preventDefault(); first.focus();
-                }
-            });
-        }
-        trapFocus(mobileMenu);
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('hidden');
-            mobileMenu.classList.add('flex');
-            menuBtn.setAttribute('aria-expanded', 'true');
-            mobileMenu.setAttribute('role', 'dialog');
-            mobileMenu.setAttribute('aria-modal', 'true');
-            mobileMenu.setAttribute('aria-label', 'Navigation');
-            if (typeof gsap !== 'undefined') {
-                gsap.from('.mobile-link', { y: 50, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power4.out' });
-            }
-            setTimeout(() => {
-                const focusable = mobileMenu.querySelectorAll('a, button');
-                if(focusable.length > 0) focusable[0].focus();
-            }, 100);
-        });
-
-        function closeMobileMenu() {
-            if (typeof gsap !== 'undefined') {
-                gsap.to('.mobile-link', {
-                    y: -50, opacity: 0, stagger: 0.05, duration: 0.3, ease: 'power4.in',
-                    onComplete: () => {
-                        mobileMenu.classList.add('hidden');
-                        mobileMenu.classList.remove('flex');
-                        menuBtn.setAttribute('aria-expanded', 'false');
-                        gsap.set('.mobile-link', { y: 0, opacity: 1 });
-                        menuBtn.focus();
-                    }
-                });
-            } else {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.classList.remove('flex');
-                menuBtn.setAttribute('aria-expanded', 'false');
-                menuBtn.focus();
-            }
-        }
-
-        closeMenu.addEventListener('click', closeMobileMenu);
-        mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
-    }
-
-    // ===== PAGE TRANSITIONS AND CONTENT ANIMATIONS =====
-    const pageTransition = document.getElementById('page-transition');
-
+(function() {
     // Helper: Determine transition type based on URL path
     function getTransitionType(url) {
         try {
@@ -223,6 +63,7 @@ document.addEventListener('astro:page-load', () => {
 
     // Function: Build transition overlay DOM structure
     function buildTransitionDOM(settings) {
+        const pageTransition = document.getElementById('page-transition');
         if (!pageTransition) return;
         pageTransition.innerHTML = '';
         
@@ -259,6 +100,7 @@ document.addEventListener('astro:page-load', () => {
     // Function: Play Exit Animation (returns Promise)
     function playExitTransition(type) {
         return new Promise((resolve) => {
+            const pageTransition = document.getElementById('page-transition');
             if (!pageTransition || typeof gsap === 'undefined') {
                 resolve();
                 return;
@@ -325,6 +167,7 @@ document.addEventListener('astro:page-load', () => {
             window.lenis.stop(); // Stop Lenis scroll immediately
         }
 
+        const pageTransition = document.getElementById('page-transition');
         if (!pageTransition || typeof gsap === 'undefined') {
             document.documentElement.classList.remove('transitioning');
             if (window.lenis) window.lenis.start();
@@ -529,45 +372,215 @@ document.addEventListener('astro:page-load', () => {
         }
     }
 
-    // ===== ASTRO TRANSITIONS LIFECYCLE =====
-    document.addEventListener('astro:before-preparation', (e) => {
-        // Skip non-internal/ignored elements
-        if (!e.to) return;
-        const type = getTransitionType(e.to.href);
+    // Function: Initialize Global Scripts (runs on page-load)
+    function initializeGlobalScripts() {
+        // ===== LENIS SMOOTH SCROLL =====
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+        
+        // Attach to window so index.astro can use it for scroll triggers
+        window.lenis = lenis;
 
-        const originalLoader = e.loader;
-        // Override loader to wait for GSAP exit animation to complete
-        e.loader = async () => {
-            await playExitTransition(type);
-            await originalLoader();
-        };
-    });
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Clear any cached scroll position from previous page visit
+            ScrollTrigger.clearScrollMemory('manual');
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
 
-    document.addEventListener('astro:before-swap', () => {
-        // Clean up Lenis
-        if (window.lenis) {
-            window.lenis.destroy();
+            gsap.ticker.add((time) => {
+                lenis.raf(time * 1000);
+            });
+            gsap.ticker.lagSmoothing(0);
         }
-        // Clean up ScrollTrigger
-        if (typeof ScrollTrigger !== 'undefined') {
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        }
-    });
 
-    // ===== CHECK ENTRANCE TRANSITION ON LOAD =====
-    const storedTransitionType = sessionStorage.getItem('page-transition-type');
-    const fromOldTerminalTransition = sessionStorage.getItem('page-transition'); // Backward compatibility
-    
-    if (storedTransitionType) {
-        sessionStorage.removeItem('page-transition-type');
-        playEntranceTransition(storedTransitionType);
-    } else if (fromOldTerminalTransition === 'entering') {
-        sessionStorage.removeItem('page-transition');
-        playEntranceTransition('terminal');
-    } else {
-        document.documentElement.classList.remove('transitioning');
-        // Direct load (no transition) - animate content immediately
-        setTimeout(animatePageContent, 100);
+        // ===== CUSTOM CURSOR =====
+        const customCursor = document.querySelector('.custom-cursor');
+        let cursorX = 0, cursorY = 0;
+        let isTouchDevice = navigator.maxTouchPoints > 0;
+
+        if (!isTouchDevice && customCursor) {
+            // Rebind mousemove listener safely
+            document.removeEventListener('mousemove', window.__cursor_move_handler);
+            window.__cursor_move_handler = (e) => {
+                cursorX = e.clientX;
+                cursorY = e.clientY;
+                requestAnimationFrame(() => {
+                    customCursor.style.left = cursorX + 'px';
+                    customCursor.style.top = cursorY + 'px';
+                });
+            };
+            document.addEventListener('mousemove', window.__cursor_move_handler);
+
+            const interactiveElements = document.querySelectorAll('a, button, [data-magnetic], .tilt-card, .brutal-shadow, .brutal-shadow-sm');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    customCursor.classList.add('hover');
+                    customCursor.classList.remove('view');
+                });
+                el.addEventListener('mouseleave', () => {
+                    customCursor.classList.remove('hover');
+                    customCursor.classList.remove('view');
+                });
+            });
+
+            // View cursor for projects
+            document.querySelectorAll('[data-cursor="view"]').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    customCursor.classList.remove('hover');
+                    customCursor.classList.add('view');
+                });
+                el.addEventListener('mouseleave', () => {
+                    customCursor.classList.remove('view');
+                });
+            });
+        } else if (customCursor) {
+            customCursor.style.display = 'none';
+        }
+
+        // ===== MAGNETIC BUTTONS =====
+        const isTouch = () => navigator.maxTouchPoints > 0;
+        if (!isTouch()) {
+            document.querySelectorAll('[data-magnetic]').forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+                });
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = 'translate(0, 0)';
+                });
+            });
+        }
+
+        // ===== SUBPAGE NAVBAR ENTRANCE =====
+        const isHomepage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/');
+        if (!isHomepage) {
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(navbar, { y: 0, duration: 0.8, ease: 'power4.out', delay: 0.15 });
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
+            }
+        }
+
+        // ===== MOBILE MENU (GLOBAL) =====
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (menuBtn && mobileMenu && closeMenu) {
+            function trapFocus(el) {
+                const focusable = el.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+                if(focusable.length === 0) return;
+                const first = focusable[0], last = focusable[focusable.length - 1];
+                el.addEventListener('keydown', function handler(e) {
+                    if (e.key !== 'Tab') return;
+                    if (e.shiftKey && document.activeElement === first) {
+                        e.preventDefault(); last.focus();
+                    } else if (!e.shiftKey && document.activeElement === last) {
+                        e.preventDefault(); first.focus();
+                    }
+                });
+            }
+            trapFocus(mobileMenu);
+
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex');
+                menuBtn.setAttribute('aria-expanded', 'true');
+                mobileMenu.setAttribute('role', 'dialog');
+                mobileMenu.setAttribute('aria-modal', 'true');
+                mobileMenu.setAttribute('aria-label', 'Navigation');
+                if (typeof gsap !== 'undefined') {
+                    gsap.from('.mobile-link', { y: 50, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power4.out' });
+                }
+                setTimeout(() => {
+                    const focusable = mobileMenu.querySelectorAll('a, button');
+                    if(focusable.length > 0) focusable[0].focus();
+                }, 100);
+            });
+
+            function closeMobileMenu() {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to('.mobile-link', {
+                        y: -50, opacity: 0, stagger: 0.05, duration: 0.3, ease: 'power4.in',
+                        onComplete: () => {
+                            mobileMenu.classList.add('hidden');
+                            mobileMenu.classList.remove('flex');
+                            menuBtn.setAttribute('aria-expanded', 'false');
+                            gsap.set('.mobile-link', { y: 0, opacity: 1 });
+                            menuBtn.focus();
+                        }
+                    });
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                    menuBtn.setAttribute('aria-expanded', 'false');
+                    menuBtn.focus();
+                }
+            }
+
+            closeMenu.addEventListener('click', closeMobileMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+        }
+
+        // ===== CHECK ENTRANCE TRANSITION ON LOAD =====
+        const storedTransitionType = sessionStorage.getItem('page-transition-type');
+        const fromOldTerminalTransition = sessionStorage.getItem('page-transition'); // Backward compatibility
+        
+        if (storedTransitionType) {
+            sessionStorage.removeItem('page-transition-type');
+            playEntranceTransition(storedTransitionType);
+        } else if (fromOldTerminalTransition === 'entering') {
+            sessionStorage.removeItem('page-transition');
+            playEntranceTransition('terminal');
+        } else {
+            document.documentElement.classList.remove('transitioning');
+            // Direct load (no transition) - animate content immediately
+            setTimeout(animatePageContent, 100);
+        }
     }
-});
+
+    // ===== REGISTER EVENTS EXACTLY ONCE =====
+    if (!window.__global_scripts_loaded) {
+        window.__global_scripts_loaded = true;
+
+        document.addEventListener('astro:before-preparation', (e) => {
+            if (!e.to) return;
+            const type = getTransitionType(e.to.href);
+
+            const originalLoader = e.loader;
+            e.loader = async () => {
+                await playExitTransition(type);
+                await originalLoader();
+            };
+        });
+
+        document.addEventListener('astro:before-swap', () => {
+            // Clean up Lenis
+            if (window.lenis) {
+                window.lenis.destroy();
+            }
+            // Clean up ScrollTrigger
+            if (typeof ScrollTrigger !== 'undefined') {
+                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            }
+        });
+
+        document.addEventListener('astro:page-load', () => {
+            initializeGlobalScripts();
+        });
+    }
+})();
 </script>

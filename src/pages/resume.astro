@@ -284,7 +284,10 @@ import Layout from '../layouts/Layout.astro';
     </style>
 
     <script is:inline>
-        document.addEventListener('astro:page-load', () => {
+        if (!window.__resume_scripts_loaded) {
+            window.__resume_scripts_loaded = true;
+            document.addEventListener('astro:page-load', () => {
+                if (!document.getElementById('download-pdf-btn')) return;
             // Re-initialize Lucide Icons for dynamic content
             if (window.lucide) {
                 window.lucide.createIcons();
@@ -328,6 +331,7 @@ import Layout from '../layouts/Layout.astro';
                     };
                 });
             }
-        });
+            });
+        }
     </script>
 </Layout>

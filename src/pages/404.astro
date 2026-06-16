@@ -43,7 +43,10 @@ import '../styles/global.css';
     </div>
 
     <script is:inline>
-    document.addEventListener('astro:page-load', () => {
+    if (!window.__error_scripts_loaded) {
+        window.__error_scripts_loaded = true;
+        document.addEventListener('astro:page-load', () => {
+            if (window.location.pathname !== '/404' && !window.location.pathname.endsWith('/404.html')) return;
         const customCursor = document.querySelector('.custom-cursor');
         if (!customCursor || navigator.maxTouchPoints > 0) {
             if (customCursor) customCursor.style.display = 'none';
@@ -59,7 +62,8 @@ import '../styles/global.css';
             el.addEventListener('mouseenter', () => customCursor.classList.add('hover'));
             el.addEventListener('mouseleave', () => customCursor.classList.remove('hover'));
         });
-    });
+        });
+    }
     </script>
 </body>
 </html>

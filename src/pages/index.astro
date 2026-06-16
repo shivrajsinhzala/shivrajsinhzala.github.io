@@ -1087,7 +1087,10 @@ import Layout from '../layouts/Layout.astro';
 
     <script is:inline>
         // @ts-nocheck
-        document.addEventListener('astro:page-load', () => {
+        if (!window.__homepage_scripts_loaded) {
+            window.__homepage_scripts_loaded = true;
+            document.addEventListener('astro:page-load', () => {
+                if (!document.getElementById('hero-title')) return;
         // ===== TEXT SCRAMBLE CLASS =====
         class TextScramble {
             constructor(el) {
@@ -1707,7 +1710,7 @@ import Layout from '../layouts/Layout.astro';
             }
         });
 
-        }); // end DOMContentLoaded
-
+        }); // end astro:page-load
+    } // end window.__homepage_scripts_loaded guard
     </script>
 </Layout>
