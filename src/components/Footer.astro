@@ -41,16 +41,7 @@
 </footer>
 
 <!-- Page Transition Overlay -->
-<div class="page-transition-overlay" id="page-transition" style="position:fixed;inset:0;z-index:999999;display:flex;flex-direction:column;pointer-events:none;">
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-    <div class="transition-bar" style="flex:1;background:#00FF88;transform:scaleX(0);transform-origin:left;"></div>
-</div>
+<div class="page-transition-overlay" id="page-transition" style="position:fixed;inset:0;z-index:999999;pointer-events:none;display:flex;"></div>
 
 <script is:inline>
 window.addEventListener('DOMContentLoaded', () => {
@@ -66,57 +57,5 @@ window.addEventListener('DOMContentLoaded', () => {
             })
             .catch(() => { /* Silently fail — not critical */ });
     }
-
-    // ===== TERMINAL BUTTON + PAGE TRANSITIONS =====
-    const terminalBtns = document.querySelectorAll('#terminal-btn, #header-terminal-btn, #mobile-terminal-btn');
-    const pageTransition = document.getElementById('page-transition');
-    const transitionBars = pageTransition ? pageTransition.querySelectorAll('.transition-bar') : [];
-
-    if (terminalBtns.length > 0 && transitionBars.length > 0 && typeof gsap !== 'undefined') {
-        terminalBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                pageTransition.style.pointerEvents = 'all';
-                gsap.to(transitionBars, {
-                    scaleX: 1,
-                    duration: 0.5,
-                    stagger: 0.05,
-                    ease: 'power4.inOut',
-                    onComplete: () => {
-                        sessionStorage.setItem('page-transition', 'entering');
-                        window.location.href = '/terminal.html';
-                    }
-                });
-            });
-        });
-    }
-
-    // Entrance animation (when returning from terminal)
-    (function checkEntrance() {
-        const fromTransition = sessionStorage.getItem('page-transition');
-        if (fromTransition === 'entering' && transitionBars.length > 0 && typeof gsap !== 'undefined') {
-            sessionStorage.removeItem('page-transition');
-            gsap.set(transitionBars, { scaleX: 1 });
-            requestAnimationFrame(() => {
-                gsap.to(transitionBars, {
-                    scaleX: 0,
-                    duration: 0.5,
-                    stagger: 0.05,
-                    ease: 'power4.inOut',
-                    delay: 0.3,
-                    onStart: () => {
-                        transitionBars.forEach(bar => {
-                            bar.style.transformOrigin = 'right';
-                        });
-                    },
-                    onComplete: () => {
-                        pageTransition.style.pointerEvents = 'none';
-                        transitionBars.forEach(bar => {
-                            bar.style.transformOrigin = 'left';
-                        });
-                    }
-                });
-            });
-        }
-    })();
 });
 </script>

@@ -39,14 +39,13 @@ import Layout from '../layouts/Layout.astro';
                 <i data-lucide="info" class="w-4 h-4 text-brutal-pink"></i>
                 Download the highly optimized, ATS-friendly PDF resume.
             </span>
-            <a 
-                href="/assets/resume-shivrajsinh-zala.pdf"
-                download="Shivrajsinh_Zala_Resume.pdf"
+            <button 
+                id="download-pdf-btn"
                 class="w-full sm:w-auto brutal-border bg-brutal-yellow text-black hover:bg-black hover:text-white px-5 py-2 font-mono font-bold text-xs md:text-sm tracking-wider cursor-pointer shadow-[3px_3px_0_0_#000] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] active:translate-y-[3px] transition-all flex items-center justify-center gap-2 text-center"
             >
                 <i data-lucide="download" class="w-4 h-4"></i>
                 DOWNLOAD PDF
-            </a>
+            </button>
         </div>
 
         <!-- ========================================== -->
@@ -63,7 +62,8 @@ import Layout from '../layouts/Layout.astro';
                         Frontend Developer & WordPress Engineer
                     </p>
                     <p class="font-mono text-xs text-gray-500 mt-2">
-                        Rajkot, Gujarat, India · hello@shivrajsinh.in
+                        Rajkot, Gujarat, India · hello@shivrajsinh.in<br>
+                        Date of Birth: 26 April 2003
                     </p>
                 </div>
                 
@@ -150,6 +150,23 @@ import Layout from '../layouts/Layout.astro';
                             </div>
                         </div>
                     </section>
+
+                    <section class="pt-6 border-t-2 border-black">
+                        <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-5">06 // KEY PROJECTS</h2>
+                        <div class="space-y-4">
+                            <div class="brutal-border p-4 bg-brutal-gray/30 shadow-[3px_3px_0_0_#000]">
+                                <h3 class="text-sm font-black font-mono flex justify-between items-center">
+                                    <span>ToDesktop Clone (React / Tailwind)</span>
+                                    <a href="https://github.com/shivrajsinhzala/ToDesktop_react" target="_blank" class="text-[10px] bg-brutal-pink text-white px-2 py-0.5 brutal-border hover:bg-black transition-colors">REPO</a>
+                                </h3>
+                                <p class="font-mono text-xs text-gray-700 mt-1">High-fidelity responsive pixel-perfect clone of ToDesktop marketing homepage. Focus on modern layout engineering and brutalist aesthetic alignment.</p>
+                            </div>
+                            <div class="brutal-border p-4 bg-brutal-gray/30 shadow-[3px_3px_0_0_#000]">
+                                <h3 class="text-sm font-black font-mono">Custom Client Portals (WordPress)</h3>
+                                <p class="font-mono text-xs text-gray-700 mt-1">Designed and deployed multiple custom dashboards for client sites to manage digital assets, service requests, and analytics data seamlessly.</p>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
                 <!-- Column 3: Skills & Stack -->
@@ -215,6 +232,30 @@ import Layout from '../layouts/Layout.astro';
                             <span class="border border-black bg-gray-100 px-2 py-0.5">SEO Auditing</span>
                         </div>
                     </section>
+
+                    <section class="pt-6 border-t-2 border-black">
+                        <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-3">07 // COMPETENCIES</h2>
+                        <div class="flex flex-wrap gap-2 font-mono text-[10px]">
+                            <span class="border border-black bg-brutal-yellow/20 px-2 py-0.5 font-bold">SEO Optimization</span>
+                            <span class="border border-black bg-brutal-cyan/20 px-2 py-0.5 font-bold">Core Web Vitals Tuning</span>
+                            <span class="border border-black bg-brutal-pink/20 px-2 py-0.5 font-bold">WCAG Accessibility (a11y)</span>
+                            <span class="border border-black bg-gray-100 px-2 py-0.5">Performance Auditing</span>
+                            <span class="border border-black bg-gray-100 px-2 py-0.5">Semantic Markup</span>
+                            <span class="border border-black bg-gray-100 px-2 py-0.5">Mobile-First Layouts</span>
+                        </div>
+                    </section>
+
+                    <section class="pt-6 border-t-2 border-black">
+                        <h2 class="font-bold font-mono text-xs uppercase tracking-widest text-gray-400 mb-3">08 // LANGUAGES & INTERESTS</h2>
+                        <div class="space-y-3 font-mono text-xs text-gray-800">
+                            <div>
+                                <span class="font-bold text-gray-500">LANGUAGES:</span> English (Fluent), Gujarati (Native), Hindi (Conversational)
+                            </div>
+                            <div>
+                                <span class="font-bold text-gray-500">INTERESTS:</span> Tech Blogging, Open Source Development, Chess, UI/UX Design
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </article>
@@ -244,6 +285,45 @@ import Layout from '../layouts/Layout.astro';
             // Re-initialize Lucide Icons for dynamic content
             if (window.lucide) {
                 window.lucide.createIcons();
+            }
+
+            // Client-side dynamic PDF generation via hidden iframe
+            const downloadBtn = document.getElementById('download-pdf-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Show visual loading state
+                    const originalHTML = downloadBtn.innerHTML;
+                    downloadBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> COMPILING...';
+                    downloadBtn.disabled = true;
+                    if (window.lucide) window.lucide.createIcons();
+                    
+                    const iframe = document.createElement('iframe');
+                    iframe.style.position = 'fixed';
+                    iframe.style.width = '0';
+                    iframe.style.height = '0';
+                    iframe.style.border = 'none';
+                    iframe.src = '/resume-pdf';
+                    document.body.appendChild(iframe);
+                    
+                    iframe.onload = () => {
+                        setTimeout(() => {
+                            iframe.contentWindow.focus();
+                            iframe.contentWindow.print();
+                            
+                            // Restore button state
+                            downloadBtn.innerHTML = originalHTML;
+                            downloadBtn.disabled = false;
+                            if (window.lucide) window.lucide.createIcons();
+                            
+                            // Clean up
+                            setTimeout(() => {
+                                document.body.removeChild(iframe);
+                            }, 2000);
+                        }, 500); // Give browser time to fetch fonts & render styles
+                    };
+                });
             }
         });
     </script>

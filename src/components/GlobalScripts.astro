@@ -97,5 +97,466 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+    // ===== MOBILE MENU (GLOBAL) =====
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMenu = document.getElementById('close-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    if (menuBtn && mobileMenu && closeMenu) {
+        function trapFocus(el) {
+            const focusable = el.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+            if(focusable.length === 0) return;
+            const first = focusable[0], last = focusable[focusable.length - 1];
+            el.addEventListener('keydown', function handler(e) {
+                if (e.key !== 'Tab') return;
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault(); last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault(); first.focus();
+                }
+            });
+        }
+        trapFocus(mobileMenu);
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.add('flex');
+            menuBtn.setAttribute('aria-expanded', 'true');
+            mobileMenu.setAttribute('role', 'dialog');
+            mobileMenu.setAttribute('aria-modal', 'true');
+            mobileMenu.setAttribute('aria-label', 'Navigation');
+            if (typeof gsap !== 'undefined') {
+                gsap.from('.mobile-link', { y: 50, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power4.out' });
+            }
+            setTimeout(() => {
+                const focusable = mobileMenu.querySelectorAll('a, button');
+                if(focusable.length > 0) focusable[0].focus();
+            }, 100);
+        });
+
+        function closeMobileMenu() {
+            if (typeof gsap !== 'undefined') {
+                gsap.to('.mobile-link', {
+                    y: -50, opacity: 0, stagger: 0.05, duration: 0.3, ease: 'power4.in',
+                    onComplete: () => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('flex');
+                        menuBtn.setAttribute('aria-expanded', 'false');
+                        gsap.set('.mobile-link', { y: 0, opacity: 1 });
+                        menuBtn.focus();
+                    }
+                });
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuBtn.focus();
+            }
+        }
+
+        closeMenu.addEventListener('click', closeMobileMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+    }
+
+    // ===== PAGE TRANSITIONS AND CONTENT ANIMATIONS =====
+    const pageTransition = document.getElementById('page-transition');
+
+    // Helper: Determine transition type based on URL path
+    function getTransitionType(url) {
+        try {
+            const path = new URL(url, window.location.origin).pathname;
+            if (path === '/resume' || path.startsWith('/resume/')) return 'resume';
+            if (path === '/contact' || path.startsWith('/contact/')) return 'contact';
+            if (path === '/gallery' || path.startsWith('/gallery/')) return 'gallery';
+            if (path === '/directory' || path.startsWith('/directory/')) return 'directory';
+            if (path === '/blog' || path.startsWith('/blog/')) return 'blog';
+            if (path === '/terminal' || path.startsWith('/terminal.') || path.endsWith('/terminal.html')) return 'terminal';
+            if (path === '/' || path.endsWith('/index.html') || path.endsWith('/')) return 'home';
+            return 'default';
+        } catch (e) {
+            return 'default';
+        }
+    }
+
+    // Helper: Get transition settings (color, layout structure) based on type
+    function getTransitionSettings(type) {
+        let barColor = '#00FF88'; // Default green (terminal)
+        let isVertical = false;
+        let isGrid = false;
+        let isSingle = false;
+
+        switch (type) {
+            case 'home':
+                barColor = '#ffe900'; // Yellow
+                break;
+            case 'resume':
+                barColor = '#9d00ff'; // Purple
+                isVertical = true;
+                break;
+            case 'contact':
+                barColor = '#0a0a0a'; // Black
+                isSingle = true;
+                break;
+            case 'gallery':
+                barColor = '#ff006e'; // Pink
+                isGrid = true;
+                break;
+            case 'directory':
+                barColor = '#ff5e00'; // Orange
+                break;
+            case 'blog':
+                barColor = '#00f5ff'; // Cyan
+                isSingle = true;
+                break;
+            case 'terminal':
+                barColor = '#00FF88'; // Green
+                break;
+            default:
+                barColor = '#ffe900'; // Fallback Yellow
+                break;
+        }
+
+        return { barColor, isVertical, isGrid, isSingle };
+    }
+
+    // Function: Build transition overlay DOM structure
+    function buildTransitionDOM(settings) {
+        if (!pageTransition) return;
+        pageTransition.innerHTML = '';
+        
+        if (settings.isSingle) {
+            pageTransition.style.display = 'flex';
+            pageTransition.style.flexDirection = 'column';
+            const block = document.createElement('div');
+            block.style.width = '100%';
+            block.style.height = '100%';
+            block.style.background = settings.barColor;
+            pageTransition.appendChild(block);
+        } else if (settings.isGrid) {
+            pageTransition.style.display = 'grid';
+            pageTransition.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            pageTransition.style.gridTemplateRows = 'repeat(3, 1fr)';
+            for (let i = 0; i < 12; i++) {
+                const cell = document.createElement('div');
+                cell.style.background = settings.barColor;
+                pageTransition.appendChild(cell);
+            }
+        } else {
+            pageTransition.style.display = 'flex';
+            pageTransition.style.flexDirection = settings.isVertical ? 'row' : 'column';
+            for (let i = 0; i < 8; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'transition-bar';
+                bar.style.flex = '1';
+                bar.style.background = settings.barColor;
+                pageTransition.appendChild(bar);
+            }
+        }
+    }
+
+    // Function: Play Exit Animation & redirect
+    function playExitTransition(type, targetUrl) {
+        if (!pageTransition || typeof gsap === 'undefined') {
+            window.location.href = targetUrl;
+            return;
+        }
+
+        const settings = getTransitionSettings(type);
+        buildTransitionDOM(settings);
+        pageTransition.style.pointerEvents = 'all';
+
+        if (settings.isSingle) {
+            const block = pageTransition.querySelector('div');
+            const startXPercent = type === 'contact' ? 100 : -100;
+            gsap.set(block, { xPercent: startXPercent });
+            gsap.to(block, {
+                xPercent: 0,
+                duration: 0.6,
+                ease: 'power3.inOut',
+                onComplete: () => {
+                    sessionStorage.setItem('page-transition-type', type);
+                    window.location.href = targetUrl;
+                }
+            });
+        } else if (settings.isGrid) {
+            const cells = pageTransition.children;
+            gsap.set(cells, { scale: 0 });
+            gsap.to(cells, {
+                scale: 1,
+                duration: 0.5,
+                stagger: {
+                    grid: [3, 4],
+                    from: 'center',
+                    amount: 0.3
+                },
+                ease: 'power3.inOut',
+                onComplete: () => {
+                    sessionStorage.setItem('page-transition-type', type);
+                    window.location.href = targetUrl;
+                }
+            });
+        } else {
+            const bars = pageTransition.querySelectorAll('.transition-bar');
+            if (settings.isVertical) {
+                gsap.set(bars, { scaleY: 0, scaleX: 1, transformOrigin: 'top' });
+                gsap.to(bars, {
+                    scaleY: 1,
+                    duration: 0.5,
+                    stagger: 0.05,
+                    ease: 'power4.inOut',
+                    onComplete: () => {
+                        sessionStorage.setItem('page-transition-type', type);
+                        window.location.href = targetUrl;
+                    }
+                });
+            } else {
+                gsap.set(bars, { scaleX: 0, scaleY: 1, transformOrigin: 'left' });
+                gsap.to(bars, {
+                    scaleX: 1,
+                    duration: 0.5,
+                    stagger: 0.05,
+                    ease: 'power4.inOut',
+                    onComplete: () => {
+                        sessionStorage.setItem('page-transition-type', type);
+                        window.location.href = targetUrl;
+                    }
+                });
+            }
+        }
+    }
+
+    // Function: Play Entrance Animation
+    function playEntranceTransition(type) {
+        document.documentElement.classList.remove('transitioning');
+        if (!pageTransition || typeof gsap === 'undefined') {
+            animatePageContent();
+            return;
+        }
+
+        const settings = getTransitionSettings(type);
+        buildTransitionDOM(settings);
+        pageTransition.style.pointerEvents = 'all';
+
+        if (settings.isSingle) {
+            const block = pageTransition.querySelector('div');
+            const targetXPercent = type === 'contact' ? -100 : 100;
+            gsap.set(block, { xPercent: 0 });
+            gsap.to(block, {
+                xPercent: targetXPercent,
+                duration: 0.6,
+                ease: 'power3.inOut',
+                delay: 0.1,
+                onComplete: () => {
+                    pageTransition.style.pointerEvents = 'none';
+                    pageTransition.innerHTML = '';
+                    animatePageContent();
+                }
+            });
+        } else if (settings.isGrid) {
+            const cells = pageTransition.children;
+            gsap.set(cells, { scale: 1 });
+            gsap.to(cells, {
+                scale: 0,
+                duration: 0.5,
+                stagger: {
+                    grid: [3, 4],
+                    from: 'center',
+                    amount: 0.3
+                },
+                ease: 'power3.inOut',
+                delay: 0.1,
+                onComplete: () => {
+                    pageTransition.style.display = 'flex'; // Reset display structure
+                    pageTransition.style.pointerEvents = 'none';
+                    pageTransition.innerHTML = '';
+                    animatePageContent();
+                }
+            });
+        } else {
+            const bars = pageTransition.querySelectorAll('.transition-bar');
+            if (settings.isVertical) {
+                gsap.set(bars, { scaleY: 1, scaleX: 1, transformOrigin: 'bottom' });
+                gsap.to(bars, {
+                    scaleY: 0,
+                    duration: 0.5,
+                    stagger: 0.05,
+                    ease: 'power4.inOut',
+                    delay: 0.15,
+                    onComplete: () => {
+                        pageTransition.style.pointerEvents = 'none';
+                        pageTransition.innerHTML = '';
+                        animatePageContent();
+                    }
+                });
+            } else {
+                gsap.set(bars, { scaleX: 1, scaleY: 1, transformOrigin: 'right' });
+                gsap.to(bars, {
+                    scaleX: 0,
+                    duration: 0.5,
+                    stagger: 0.05,
+                    ease: 'power4.inOut',
+                    delay: 0.15,
+                    onComplete: () => {
+                        pageTransition.style.pointerEvents = 'none';
+                        pageTransition.innerHTML = '';
+                        animatePageContent();
+                    }
+                });
+            }
+        }
+    }
+
+    // Function: Animate page content after reveal
+    function animatePageContent() {
+        if (typeof gsap === 'undefined') return;
+
+        const path = window.location.pathname;
+
+        if (path === '/resume' || path.startsWith('/resume/')) {
+            // A. Resume Page Animations
+            gsap.fromTo("main > div.print:hidden", 
+                { y: -30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }
+            );
+            gsap.fromTo("main article", 
+                { scale: 0.95, opacity: 0, rotate: -2, y: 50 }, 
+                { scale: 1, opacity: 1, rotate: 0, y: 0, duration: 1.0, ease: "elastic.out(1, 0.8)", delay: 0.1 }
+            );
+            gsap.fromTo("main article section", 
+                { y: 30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.6, stagger: 0.12, ease: "power3.out", delay: 0.3 }
+            );
+            gsap.fromTo("main article .w-full.bg-gray-200.brutal-border.h-3 > div", 
+                { scaleX: 0, transformOrigin: "left" }, 
+                { scaleX: 1, duration: 1.2, delay: 0.8, ease: "power4.out", stagger: 0.1 }
+            );
+        } else if (path === '/contact' || path.startsWith('/contact/')) {
+            // B. Contact Page Animations
+            gsap.fromTo("main header > div", 
+                { y: -20, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }
+            );
+            gsap.fromTo("main header h1", 
+                { y: 30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.8, ease: "power4.out", delay: 0.1 }
+            );
+            gsap.fromTo("main header p", 
+                { opacity: 0 }, 
+                { opacity: 1, duration: 0.8, delay: 0.3 }
+            );
+            gsap.fromTo("main .grid > div:first-child > div", 
+                { x: -50, opacity: 0, rotate: -2 }, 
+                { x: 0, opacity: 1, rotate: 0, duration: 0.8, stagger: 0.15, ease: "elastic.out(1, 0.75)", delay: 0.2 }
+            );
+            gsap.fromTo("main .grid > div:last-child", 
+                { x: 50, opacity: 0, rotate: 2 }, 
+                { x: 0, opacity: 1, rotate: 0, duration: 0.8, ease: "elastic.out(1, 0.75)", delay: 0.3 }
+            );
+            gsap.fromTo("main form > div", 
+                { y: 15, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: "power2.out", delay: 0.5 }
+            );
+        } else if (path === '/gallery' || path.startsWith('/gallery/')) {
+            // C. Gallery Page Animations
+            gsap.fromTo("main header", 
+                { x: -50, opacity: 0, rotate: -1 }, 
+                { x: 0, opacity: 1, rotate: 0, duration: 0.8, ease: "power4.out" }
+            );
+            const galleryItems = document.querySelectorAll("main .grid > div");
+            if (galleryItems.length > 0) {
+                gsap.fromTo(galleryItems, 
+                    { scale: 0.7, opacity: 0, rotate: () => Math.random() * 8 - 4 }, 
+                    { scale: 1, opacity: 1, rotate: 0, duration: 0.8, stagger: 0.02, ease: "back.out(1.4)", delay: 0.2 }
+                );
+            }
+        } else if (path === '/directory' || path.startsWith('/directory/')) {
+            // D. Directory Page Animations
+            gsap.fromTo("main header", 
+                { y: -30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }
+            );
+            gsap.fromTo("main section", 
+                { y: 30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: "power3.out", delay: 0.2 }
+            );
+            gsap.fromTo("main section a", 
+                { x: -30, opacity: 0 }, 
+                { x: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: "power2.out", delay: 0.3 }
+            );
+        } else if (path === '/blog' || path.startsWith('/blog/')) {
+            // E. Blog Pages Animations
+            gsap.fromTo("main header", 
+                { y: -30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }
+            );
+            gsap.fromTo("main .max-w-5xl > div", 
+                { y: 40, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", delay: 0.2 }
+            );
+            gsap.fromTo("main article", 
+                { y: 50, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.2 }
+            );
+        }
+    }
+
+    // ===== LINK INTERCEPTOR FOR EXIT TRANSITIONS =====
+    document.addEventListener('click', (e) => {
+        const anchor = e.target.closest('a');
+        if (!anchor) return;
+
+        const href = anchor.getAttribute('href');
+        if (!href) return;
+
+        // Skip non-internal transitions
+        if (
+            href.startsWith('#') || 
+            href.startsWith('mailto:') || 
+            href.startsWith('tel:') || 
+            anchor.hasAttribute('download') || 
+            anchor.getAttribute('target') === '_blank'
+        ) {
+            return;
+        }
+
+        try {
+            const targetUrl = new URL(anchor.href);
+            if (targetUrl.origin !== window.location.origin) return;
+
+            // Intercept internal page switch
+            e.preventDefault();
+            const type = getTransitionType(anchor.href);
+            playExitTransition(type, anchor.href);
+        } catch (err) {
+            // Fallback for malformed URLs
+        }
+    });
+
+    // ===== TERMINAL BUTTON CLICK HANDLER (INTEGRATED) =====
+    const terminalBtns = document.querySelectorAll('#terminal-btn, #header-terminal-btn, #mobile-terminal-btn');
+    terminalBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            playExitTransition('terminal', '/terminal.html');
+        });
+    });
+
+    // ===== CHECK ENTRANCE TRANSITION ON LOAD =====
+    const storedTransitionType = sessionStorage.getItem('page-transition-type');
+    const fromOldTerminalTransition = sessionStorage.getItem('page-transition'); // Backward compatibility
+    
+    if (storedTransitionType) {
+        sessionStorage.removeItem('page-transition-type');
+        playEntranceTransition(storedTransitionType);
+    } else if (fromOldTerminalTransition === 'entering') {
+        sessionStorage.removeItem('page-transition');
+        playEntranceTransition('terminal');
+    } else {
+        document.documentElement.classList.remove('transitioning');
+        // Direct load (no transition) - animate content immediately
+        setTimeout(animatePageContent, 100);
+    }
 });
 </script>

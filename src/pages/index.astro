@@ -131,7 +131,7 @@ import Layout from '../layouts/Layout.astro';
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pointer-events-auto items-center">
                 <div class="lg:col-span-7 space-y-4 md:space-y-6">
                     <div
-                        class="inline-block bg-brutal-pink text-black px-4 py-2 brutal-border brutal-shadow-sm font-mono text-sm rotate-[-2deg] reveal-badge opacity-0">
+                        class="inline-block bg-brutal-pink text-white px-4 py-2 brutal-border brutal-shadow-sm font-mono text-sm rotate-[-2deg] reveal-badge opacity-0">
                         FRONTEND DEVELOPER • WORDPRESS & SQUARESPACE
                     </div>
 
@@ -239,7 +239,7 @@ import Layout from '../layouts/Layout.astro';
                         WHERE I<br>WORK
                     </h2>
                 </div>
-                <div class="stamp bg-brutal-pink text-black px-4 py-2 font-mono text-xs font-bold rotate-3">
+                <div class="stamp bg-brutal-pink text-white px-4 py-2 font-mono text-xs font-bold rotate-3">
                     CURRENTLY HERE
                 </div>
             </div>
@@ -381,7 +381,7 @@ import Layout from '../layouts/Layout.astro';
                     data-tilt>
                     <div class="tilt-inner">
                         <div class="flex justify-between items-start mb-4">
-                            <span class="font-mono text-xs bg-brutal-pink text-black brutal-border px-2 py-1">03</span>
+                            <span class="font-mono text-xs bg-brutal-pink text-white brutal-border px-2 py-1">03</span>
                             <span class="text-3xl md:text-4xl"><i data-lucide="droplet" style="width: 1em; height: 1em;" stroke-width="2.5"></i></span>
                         </div>
                         <h3 class="text-2xl md:text-3xl font-bold mb-2">WEBFLOW</h3>
@@ -453,7 +453,7 @@ import Layout from '../layouts/Layout.astro';
     <section class="section-padding px-4 bg-brutal-black text-white relative overflow-hidden skew-scroll">
         <div class="max-w-4xl mx-auto text-center relative z-10">
             <div
-                class="inline-block bg-brutal-pink text-black px-4 py-2 brutal-border font-mono text-xs mb-6 rotate-3 reveal-badge opacity-0">
+                class="inline-block bg-brutal-pink text-white px-4 py-2 brutal-border font-mono text-xs mb-6 rotate-3 reveal-badge opacity-0">
                 HOW I WORK
             </div>
             <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tighter reveal-heading" id="ai-heading">
@@ -551,7 +551,7 @@ import Layout from '../layouts/Layout.astro';
                                     <div class="font-mono text-[10px] md:text-xs text-gray-500 mb-1 line-clamp-1">REACT / TAILWIND</div>
                                     <h3 class="text-xl md:text-2xl font-bold leading-tight scramble-text" data-scramble>ToDesktop Clone</h3>
                                 </div>
-                                <a href="https://github.com/shivrajsinhzala/ToDesktop_react" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] md:text-xs bg-brutal-pink text-black brutal-border px-2 md:px-3 py-1 md:py-2 flex-shrink-0 hover:bg-black hover:text-white transition-colors cursor-pointer">REPO</a>
+                                <a href="https://github.com/shivrajsinhzala/ToDesktop_react" target="_blank" rel="noopener noreferrer" class="font-mono text-[10px] md:text-xs bg-brutal-pink text-white brutal-border px-2 md:px-3 py-1 md:py-2 flex-shrink-0 hover:bg-black hover:text-white transition-colors cursor-pointer">REPO</a>
                             </div>
                         </div>
                     </div>
@@ -682,7 +682,7 @@ import Layout from '../layouts/Layout.astro';
                 <div
                     class="edu-item brutal-border bg-white p-6 md:p-8 brutal-shadow flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center opacity-0 translate-x-[-40px]">
                     <div
-                        class="bg-brutal-pink text-black w-16 h-16 md:w-20 md:h-20 flex items-center justify-center font-mono text-xl md:text-2xl font-bold brutal-border flex-shrink-0">
+                        class="bg-brutal-pink text-white w-16 h-16 md:w-20 md:h-20 flex items-center justify-center font-mono text-xl md:text-2xl font-bold brutal-border flex-shrink-0">
                         MCA
                     </div>
                     <div class="flex-1">
@@ -894,9 +894,9 @@ import Layout from '../layouts/Layout.astro';
             </h2>
             <div
                 class="bg-white brutal-border brutal-shadow p-6 md:p-10 w-full reveal-card opacity-0 translate-y-8">
-                <p class="text-lg md:text-xl font-mono mb-6 md:mb-8 text-left">
+                <p class="text-lg md:text-xl font-mono mb-6 md:mb-8 text-center">
                     Have a WordPress site that needs saving?
-                    <br><span class="bg-brutal-pink text-black px-1">I'm your guy.</span>
+                    <br><span class="bg-brutal-pink text-white px-1">I'm your guy.</span>
                 </p>
 
                 <div class="space-y-3 font-mono">
@@ -1187,14 +1187,14 @@ import Layout from '../layouts/Layout.astro';
         const preloader = document.getElementById('preloader');
         let count = 0;
 
-        // Detect if loaded by Lighthouse, PageSpeed Insights, or Headless Chrome to bypass preloader for optimal LCP score
         const isLighthouse = typeof navigator !== 'undefined' && (
             navigator.userAgent.includes('Lighthouse') || 
             navigator.userAgent.includes('HeadlessChromium') || 
             navigator.webdriver
         );
 
-        if (isLighthouse) {
+        const hasTransition = sessionStorage.getItem('page-transition-type') || sessionStorage.getItem('page-transition');
+        if (isLighthouse || hasTransition) {
             if (preloader) preloader.style.display = 'none';
             initAnimations();
         } else {
@@ -1464,56 +1464,7 @@ import Layout from '../layouts/Layout.astro';
             });
         }
 
-        // ===== MOBILE MENU =====
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMenu = document.getElementById('close-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        function trapFocus(el) {
-            const focusable = el.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
-            if(focusable.length === 0) return;
-            const first = focusable[0], last = focusable[focusable.length - 1];
-            el.addEventListener('keydown', function handler(e) {
-                if (e.key !== 'Tab') return;
-                if (e.shiftKey && document.activeElement === first) {
-                    e.preventDefault(); last.focus();
-                } else if (!e.shiftKey && document.activeElement === last) {
-                    e.preventDefault(); first.focus();
-                }
-            });
-        }
-        trapFocus(mobileMenu);
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('hidden');
-            mobileMenu.classList.add('flex');
-            menuBtn.setAttribute('aria-expanded', 'true');
-            mobileMenu.setAttribute('role', 'dialog');
-            mobileMenu.setAttribute('aria-modal', 'true');
-            mobileMenu.setAttribute('aria-label', 'Navigation');
-            gsap.from('.mobile-link', { y: 50, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power4.out' });
-            setTimeout(() => {
-                const focusable = mobileMenu.querySelectorAll('a, button');
-                if(focusable.length > 0) focusable[0].focus();
-            }, 100);
-        });
-
-        function closeMobileMenu() {
-            gsap.to('.mobile-link', {
-                y: -50, opacity: 0, stagger: 0.05, duration: 0.3, ease: 'power4.in',
-                onComplete: () => {
-                    mobileMenu.classList.add('hidden');
-                    mobileMenu.classList.remove('flex');
-                    menuBtn.setAttribute('aria-expanded', 'false');
-                    gsap.set('.mobile-link', { y: 0, opacity: 1 });
-                    menuBtn.focus();
-                }
-            });
-        }
-
-        closeMenu.addEventListener('click', closeMobileMenu);
-        mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
 
         // ===== SCROLL TO SECTIONS =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

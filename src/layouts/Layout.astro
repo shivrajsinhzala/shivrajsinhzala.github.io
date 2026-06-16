@@ -65,7 +65,19 @@ const canonicalURL = pageUrl(Astro.url.pathname);
         <script is:inline>
           if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
           window.scrollTo(0, 0);
+          
+          // Immediate check for active page transition to prevent flashing
+          const transitionType = sessionStorage.getItem('page-transition-type') || sessionStorage.getItem('page-transition');
+          if (transitionType) {
+              document.documentElement.classList.add('transitioning');
+          }
         </script>
+        <style>
+          html.transitioning main,
+          html.transitioning nav {
+              opacity: 0 !important;
+          }
+        </style>
 	</head>
 	<body class="font-sans">
         <div class="paper-texture"></div>
