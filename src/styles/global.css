@@ -622,4 +622,11 @@ h1, h2, h3 {
                 border-top: 2px solid #000;
             }
         }
+
+        /* Disable browser's default cross-fade view transitions on root to let GSAP overlays control the visual navigation */
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation: none !important;
+            mix-blend-mode: normal !important;
+        }
     
