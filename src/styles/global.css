@@ -76,7 +76,7 @@
 @theme {
   --color-brutal-black: #0a0a0a;
   --color-brutal-cyan: #00f5ff;
-  --color-brutal-pink: #ff006e;
+  --color-brutal-pink: #e00062;
   --color-brutal-gray: #f0f0f0;
   --color-brutal-orange: #ff5e00;
   --color-brutal-purple: #9d00ff;
@@ -132,7 +132,7 @@ h1, h2, h3 {
 
         /* ── FOCUS RING ── */
         :focus-visible {
-            outline: 3px solid #FF006E !important;
+            outline: 3px solid #e00062 !important;
             outline-offset: 3px;
         }
 
@@ -253,7 +253,7 @@ h1, h2, h3 {
             left: 0;
             top: 0;
             height: 100%;
-            background: #FF006E;
+            background: #e00062;
             width: 0%;
         }
 
@@ -268,7 +268,7 @@ h1, h2, h3 {
         }
 
         .brutal-shadow:hover {
-            box-shadow: 10px 10px 0px 0px #FF006E;
+            box-shadow: 10px 10px 0px 0px #e00062;
         }
 
         .brutal-shadow:not([data-magnetic]):hover {
@@ -318,7 +318,7 @@ h1, h2, h3 {
             bottom: 20%;
             right: 10%;
             border-radius: 50%;
-            background: #FF006E;
+            background: #e00062;
             animation: float 25s infinite ease-in-out reverse;
         }
 
@@ -383,7 +383,7 @@ h1, h2, h3 {
             position: absolute;
             left: 0;
             top: 100%;
-            color: #FF006E;
+            color: #e00062;
         }
 
         .hover-word:hover .char {
@@ -528,11 +528,11 @@ h1, h2, h3 {
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #FF006E;
+            background: #e00062;
         }
 
         ::selection {
-            background: #FF006E;
+            background: #e00062;
             color: #fff;
         }
 

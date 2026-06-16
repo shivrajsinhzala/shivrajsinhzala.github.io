@@ -35,6 +35,10 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<title>{title}</title>
 		<link rel="canonical" href={canonicalURL} />
 
+		<!-- Preconnect to Third-Party Origins -->
+		<link rel="preconnect" href="https://scripts.clarity.ms" />
+		<link rel="preconnect" href="https://static.cloudflareinsights.com" />
+
 		<!-- Critical Web Fonts Preload -->
 		<link rel="preload" href="/assets/fonts/bebas-neue-400.ttf" as="font" type="font/ttf" crossorigin />
 		<link rel="preload" href="/assets/fonts/space-grotesk-700.ttf" as="font" type="font/ttf" crossorigin />
@@ -87,7 +91,7 @@ const canonicalURL = pageUrl(Astro.url.pathname);
         <!-- Custom Cursor -->
         <div class="custom-cursor" transition:persist>
             <svg class="cursor-icon" width="30" height="34" viewBox="0 0 30 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 3L12 30L16 19L27 15L3 3Z" fill="#FF006E" stroke="black" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M3 3L12 30L16 19L27 15L3 3Z" fill="#e00062" stroke="black" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
             </svg>
             <div class="cursor-text">VIEW</div>
         </div>

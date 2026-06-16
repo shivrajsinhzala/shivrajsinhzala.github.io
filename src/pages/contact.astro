@@ -43,7 +43,7 @@ import Layout from '../layouts/Layout.astro';
             </div>
             <h1 class="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 text-black hover-word-container relative">
                 GET IN TOUCH
-                <span class="absolute -bottom-1 left-1/4 w-1/2 h-2 bg-[#FF006E] -z-10 opacity-60 skew-x-12"></span>
+                <span class="absolute -bottom-1 left-1/4 w-1/2 h-2 bg-[#e00062] -z-10 opacity-60 skew-x-12"></span>
             </h1>
             <p class="font-mono text-sm md:text-base max-w-lg mx-auto text-gray-700 mt-2">
                 Have a WordPress project, React app, or design idea?
@@ -171,7 +171,7 @@ import Layout from '../layouts/Layout.astro';
                         <button 
                             type="submit" 
                             id="submit-btn"
-                            class="w-full brutal-border bg-brutal-black text-white hover:bg-brutal-yellow hover:text-black font-bold py-4 px-6 text-base md:text-lg transition-colors cursor-pointer shadow-[6px_6px_0_0_#00FF88] hover:shadow-[10px_10px_0_0_#ff006e] hover:-translate-y-1 hover:-translate-x-1 active:translate-y-0 active:translate-x-0 transition-all duration-300 font-mono tracking-wider flex justify-center items-center gap-3"
+                            class="w-full brutal-border bg-brutal-black text-white hover:bg-brutal-yellow hover:text-black font-bold py-4 px-6 text-base md:text-lg transition-colors cursor-pointer shadow-[6px_6px_0_0_#00FF88] hover:shadow-[10px_10px_0_0_#e00062] hover:-translate-y-1 hover:-translate-x-1 active:translate-y-0 active:translate-x-0 transition-all duration-300 font-mono tracking-wider flex justify-center items-center gap-3"
                         >
                             <span>SEND INQUIRY</span>
                             <i data-lucide="arrow-right" style="width:1.2em;height:1.2em;" stroke-width="3"></i>
@@ -228,7 +228,7 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- ERROR DIALOG OVERLAY -->
     <div id="error-overlay" class="fixed inset-0 z-[1001] bg-brutal-black/80 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
-        <div id="error-modal" class="bg-white brutal-border p-8 max-w-md w-full mx-4 shadow-[16px_16px_0_0_#ff006e] text-center font-mono relative scale-75 opacity-0">
+        <div id="error-modal" class="bg-white brutal-border p-8 max-w-md w-full mx-4 shadow-[16px_16px_0_0_#e00062] text-center font-mono relative scale-75 opacity-0">
             <div class="w-16 h-16 brutal-border bg-brutal-pink text-white flex items-center justify-center mx-auto mb-6 shadow-[4px_4px_0_0_#000]">
                 <i data-lucide="alert-triangle" style="width:2.5em;height:2.5em;" stroke-width="3"></i>
             </div>
@@ -316,8 +316,8 @@ if (!window.__contact_scripts_loaded) {
             if (!fieldValid) {
                 isValid = false;
                 // Highlight input border in pink and trigger shake
-                input.style.borderColor = '#ff006e';
-                input.style.backgroundColor = '#ff006e10';
+                input.style.borderColor = '#e00062';
+                input.style.backgroundColor = '#e0006210';
                 
                 if (typeof gsap !== 'undefined') {
                     gsap.fromTo(input, 

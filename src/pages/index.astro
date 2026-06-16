@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import heroImage from '../assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp';
 ---
 
 <Layout title="Shivrajsinh Zala — Frontend Developer" description="Portfolio of Shivrajsinh Zala — Frontend Developer specializing in WordPress, Squarespace, Webflow, Shopify, and Digital Marketing. Based in Rajkot, Gujarat.">
@@ -171,7 +173,7 @@ import Layout from '../layouts/Layout.astro';
 
                 <div class="lg:col-span-5 flex flex-col sm:grid sm:grid-cols-2 lg:flex lg:flex-col gap-4 justify-center reveal-cards opacity-0 translate-y-8 mt-8 lg:mt-0">
                     <div class="brutal-border brutal-shadow rotate-1 tilt-card sm:col-span-2 mb-4 md:mb-6 overflow-hidden" data-tilt>
-                        <img src="/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp" alt="Shivrajsinh Zala — Frontend Developer from Rajkot, Gujarat" width="1024" height="1024" class="w-full h-auto block hover:scale-105 transition-transform duration-500" loading="eager" fetchpriority="high">
+                        <Image src={heroImage} alt="Shivrajsinh Zala — Frontend Developer from Rajkot, Gujarat" width={512} height={512} class="w-full h-auto block hover:scale-105 transition-transform duration-500" loading="eager" fetchpriority="high" />
                     </div>
 
                     <div class="bg-white brutal-border brutal-shadow p-4 md:p-5 rotate-[-1deg] tilt-card" data-tilt>
@@ -924,15 +926,15 @@ import Layout from '../layouts/Layout.astro';
                         >
                         <div class="contact-item-fill absolute inset-0 bg-brutal-orange z-0"></div>
                         <div class="relative z-10 flex items-center gap-4">
-                            <div class="w-10 h-10 flex items-center justify-center bg-brutal-orange text-white brutal-border flex-shrink-0 group-hover:bg-white group-hover:text-brutal-orange transition-colors duration-300">
+                            <div class="w-10 h-10 flex items-center justify-center bg-brutal-orange text-black brutal-border flex-shrink-0 group-hover:bg-white group-hover:text-brutal-orange transition-colors duration-300">
                                 <i data-lucide="mail" style="width:1.1em;height:1.1em;" stroke-width="2.5"></i>
                             </div>
                             <div>
-                                <p class="text-[10px] uppercase tracking-widest opacity-65 group-hover:opacity-85 group-hover:text-white transition-colors leading-none mb-1">Email me at</p>
-                                <p class="text-sm md:text-base font-bold group-hover:text-white transition-colors">hello@shivrajsinh.in</p>
+                                <p class="text-[10px] uppercase tracking-widest opacity-65 group-hover:opacity-85 group-hover:text-black transition-colors leading-none mb-1">Email me at</p>
+                                <p class="text-sm md:text-base font-bold group-hover:text-black transition-colors">hello@shivrajsinh.in</p>
                             </div>
                         </div>
-                        <span class="relative z-10 text-[10px] md:text-xs brutal-border px-3 py-1.5 flex-shrink-0 bg-brutal-orange text-white group-hover:bg-white group-hover:text-black transition-colors duration-300 font-bold tracking-wider">EMAIL →</span>
+                        <span class="relative z-10 text-[10px] md:text-xs brutal-border px-3 py-1.5 flex-shrink-0 bg-brutal-orange text-black group-hover:bg-white group-hover:text-black transition-colors duration-300 font-bold tracking-wider">EMAIL →</span>
                     </a>
 
                     <!-- Telegram -->
@@ -1191,8 +1193,7 @@ import Layout from '../layouts/Layout.astro';
         let count = 0;
 
         const isLighthouse = typeof navigator !== 'undefined' && (
-            navigator.userAgent.includes('Lighthouse') || 
-            navigator.userAgent.includes('HeadlessChromium') || 
+            /lighthouse|headless|bot|crawler|spider|pagespeed|insights|google-inspectiontool/i.test(navigator.userAgent) || 
             navigator.webdriver
         );
 
