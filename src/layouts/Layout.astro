@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import GlobalScripts from '../components/GlobalScripts.astro';
 import GitHubPagesRedirect from '../components/GitHubPagesRedirect.astro';
 import { pageUrl } from '../utils/seo';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
 	title: string;
@@ -62,6 +63,7 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 			});
 		</script>
 		<slot name="head" />
+		<ClientRouter />
         <script is:inline>
           if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
           window.scrollTo(0, 0);
@@ -83,7 +85,7 @@ const canonicalURL = pageUrl(Astro.url.pathname);
         <div class="paper-texture"></div>
         
         <!-- Custom Cursor -->
-        <div class="custom-cursor">
+        <div class="custom-cursor" transition:persist>
             <svg class="cursor-icon" width="30" height="34" viewBox="0 0 30 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 3L12 30L16 19L27 15L3 3Z" fill="#FF006E" stroke="black" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
             </svg>

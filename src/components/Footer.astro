@@ -41,10 +41,10 @@
 </footer>
 
 <!-- Page Transition Overlay -->
-<div class="page-transition-overlay" id="page-transition" style="position:fixed;inset:0;z-index:999999;pointer-events:none;display:flex;"></div>
+<div class="page-transition-overlay" id="page-transition" transition:persist style="position:fixed;inset:0;z-index:999999;pointer-events:none;display:flex;"></div>
 
 <script is:inline>
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('astro:page-load', () => {
     // ===== VISITOR COUNTER =====
     const visitorEl = document.getElementById('visitor-count');
     if (visitorEl) {

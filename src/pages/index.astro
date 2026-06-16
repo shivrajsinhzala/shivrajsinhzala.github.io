@@ -1087,7 +1087,7 @@ import Layout from '../layouts/Layout.astro';
 
     <script is:inline>
         // @ts-nocheck
-        window.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('astro:page-load', () => {
         // ===== TEXT SCRAMBLE CLASS =====
         class TextScramble {
             constructor(el) {

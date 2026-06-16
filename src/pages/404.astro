@@ -43,7 +43,7 @@ import '../styles/global.css';
     </div>
 
     <script is:inline>
-    window.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('astro:page-load', () => {
         const customCursor = document.querySelector('.custom-cursor');
         if (!customCursor || navigator.maxTouchPoints > 0) {
             if (customCursor) customCursor.style.display = 'none';
