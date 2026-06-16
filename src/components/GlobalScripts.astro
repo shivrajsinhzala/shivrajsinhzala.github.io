@@ -320,9 +320,14 @@ document.addEventListener('astro:page-load', () => {
     }
 
     // Function: Play Entrance Animation
-    function playEntranceTransition(type) {
-        document.documentElement.classList.remove('transitioning');
+    async function playEntranceTransition(type) {
+        if (window.lenis) {
+            window.lenis.stop(); // Stop Lenis scroll immediately
+        }
+
         if (!pageTransition || typeof gsap === 'undefined') {
+            document.documentElement.classList.remove('transitioning');
+            if (window.lenis) window.lenis.start();
             animatePageContent();
             return;
         }
@@ -331,24 +336,53 @@ document.addEventListener('astro:page-load', () => {
         buildTransitionDOM(settings);
         pageTransition.style.pointerEvents = 'all';
 
+        // 1. Set overlay starting state (fully covering the screen)
+        if (settings.isSingle) {
+            const block = pageTransition.querySelector('div');
+            gsap.set(block, { xPercent: 0 });
+        } else if (settings.isGrid) {
+            const cells = pageTransition.children;
+            gsap.set(cells, { scale: 1 });
+        } else {
+            const bars = pageTransition.querySelectorAll('.transition-bar');
+            if (settings.isVertical) {
+                gsap.set(bars, { scaleY: 1, scaleX: 1, transformOrigin: 'bottom' });
+            } else {
+                gsap.set(bars, { scaleX: 1, scaleY: 1, transformOrigin: 'right' });
+            }
+        }
+
+        // 2. Wait for fonts to be ready so the text layout is stable
+        try {
+            await document.fonts.ready;
+        } catch (e) {
+            // Silently continue if font loading fails
+        }
+
+        // 3. Remove the hide-content class so page content is visible underneath the opaque overlay
+        document.documentElement.classList.remove('transitioning');
+
+        // 4. Force a tiny layout settlement delay (50ms) to let the browser paint the new DOM
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        // 5. Play the uncover animation
         if (settings.isSingle) {
             const block = pageTransition.querySelector('div');
             const targetXPercent = type === 'contact' ? -100 : 100;
-            gsap.set(block, { xPercent: 0 });
             gsap.to(block, {
                 xPercent: targetXPercent,
                 duration: 0.6,
                 ease: 'power3.inOut',
-                delay: 0.1,
                 onComplete: () => {
                     pageTransition.style.pointerEvents = 'none';
                     pageTransition.innerHTML = '';
+                    if (window.lenis) window.lenis.start();
+                    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
                     animatePageContent();
                 }
             });
         } else if (settings.isGrid) {
             const cells = pageTransition.children;
-            gsap.set(cells, { scale: 1 });
             gsap.to(cells, {
                 scale: 0,
                 duration: 0.5,
@@ -358,41 +392,42 @@ document.addEventListener('astro:page-load', () => {
                     amount: 0.3
                 },
                 ease: 'power3.inOut',
-                delay: 0.1,
                 onComplete: () => {
                     pageTransition.style.display = 'flex'; // Reset display structure
                     pageTransition.style.pointerEvents = 'none';
                     pageTransition.innerHTML = '';
+                    if (window.lenis) window.lenis.start();
+                    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
                     animatePageContent();
                 }
             });
         } else {
             const bars = pageTransition.querySelectorAll('.transition-bar');
             if (settings.isVertical) {
-                gsap.set(bars, { scaleY: 1, scaleX: 1, transformOrigin: 'bottom' });
                 gsap.to(bars, {
                     scaleY: 0,
                     duration: 0.5,
                     stagger: 0.05,
                     ease: 'power4.inOut',
-                    delay: 0.15,
                     onComplete: () => {
                         pageTransition.style.pointerEvents = 'none';
                         pageTransition.innerHTML = '';
+                        if (window.lenis) window.lenis.start();
+                        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
                         animatePageContent();
                     }
                 });
             } else {
-                gsap.set(bars, { scaleX: 1, scaleY: 1, transformOrigin: 'right' });
                 gsap.to(bars, {
                     scaleX: 0,
                     duration: 0.5,
                     stagger: 0.05,
                     ease: 'power4.inOut',
-                    delay: 0.15,
                     onComplete: () => {
                         pageTransition.style.pointerEvents = 'none';
                         pageTransition.innerHTML = '';
+                        if (window.lenis) window.lenis.start();
+                        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
                         animatePageContent();
                     }
                 });
