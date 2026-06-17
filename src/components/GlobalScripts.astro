@@ -535,6 +535,19 @@
             mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
         }
 
+        // ===== TERMINAL BUTTONS CLICK HANDLERS =====
+        const terminalBtns = document.querySelectorAll('#terminal-btn, .nav-terminal-btn');
+        terminalBtns.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                sessionStorage.setItem('page-transition', 'entering');
+                if (typeof playExitTransition !== 'undefined') {
+                    await playExitTransition('terminal');
+                }
+                window.location.href = '/terminal.html';
+            });
+        });
+
         // ===== CHECK ENTRANCE TRANSITION ON LOAD =====
         const storedTransitionType = sessionStorage.getItem('page-transition-type');
         const fromOldTerminalTransition = sessionStorage.getItem('page-transition'); // Backward compatibility
