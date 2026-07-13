@@ -1,0 +1,957 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Happy Birthday Janki! 🎂" description="A special 23rd birthday celebration for Janki Rathod." robots="noindex, nofollow">
+    <Fragment slot="head">
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" is:inline></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+    </Fragment>
+
+    <!-- ==================== SCREEN 1: COUNTDOWN / WELCOME ==================== -->
+    <section id="intro-screen" class="jk-intro">
+        <div class="jk-intro__bg"></div>
+        <div class="jk-intro__content">
+            <div class="jk-intro__badge">🎂 JULY 14, 2026</div>
+            <h1 class="jk-intro__name">JANKI</h1>
+            <div class="jk-intro__age">
+                <span class="jk-intro__age-num" id="age-counter">0</span>
+                <span class="jk-intro__age-label">YEARS YOUNG</span>
+            </div>
+            <p class="jk-intro__sub">Born in the vintage year of 2003</p>
+            <button id="enter-btn" class="jk-intro__enter">
+                <span>🎉 Open Your Surprise</span>
+            </button>
+        </div>
+        <!-- Floating emojis layer -->
+        <div id="intro-emojis" class="jk-intro__emojis"></div>
+    </section>
+
+    <!-- ==================== SCREEN 2: MAIN BIRTHDAY CONTENT ==================== -->
+    <main id="birthday-main" class="jk-main" style="display:none;">
+
+        <!-- SECTION: Big Birthday Hero -->
+        <section class="jk-hero">
+            <div class="jk-hero__inner">
+                <div class="jk-hero__tag">HAPPY BIRTHDAY</div>
+                <h2 class="jk-hero__title">
+                    <span class="jk-hero__line" data-anim="1">Happy</span>
+                    <span class="jk-hero__line jk-hero__line--accent" data-anim="2">23rd</span>
+                    <span class="jk-hero__line" data-anim="3">Birthday</span>
+                    <span class="jk-hero__line jk-hero__line--name" data-anim="4">Janki!</span>
+                </h2>
+                <p class="jk-hero__desc" data-anim="5">
+                    Today is YOUR day. Let's celebrate you — the most wonderful, 
+                    caring, and irreplaceable soul in my life. 💖
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION: Interactive Cake -->
+        <section class="jk-cake-section">
+            <div class="jk-card">
+                <div class="jk-card__label">01 // MAKE A WISH</div>
+                <h3 class="jk-card__title">Blow Out Your Candles 🎂</h3>
+                <p class="jk-card__desc">Tap each candle to blow it out — or hit the button to blow them all at once!</p>
+
+                <div class="jk-cake">
+                    <!-- Candles Row -->
+                    <div class="jk-cake__candles" id="candle-grid">
+                        <!-- 23 candles generated via JS to avoid Astro JSX issues -->
+                    </div>
+
+                    <!-- Cake Body -->
+                    <div class="jk-cake__body">
+                        <div class="jk-cake__layer jk-cake__layer--top">
+                            <div class="jk-cake__drip" style="left:10%;height:14px;"></div>
+                            <div class="jk-cake__drip" style="left:30%;height:20px;"></div>
+                            <div class="jk-cake__drip" style="left:50%;height:12px;"></div>
+                            <div class="jk-cake__drip" style="left:70%;height:18px;"></div>
+                            <div class="jk-cake__drip" style="left:88%;height:15px;"></div>
+                        </div>
+                        <div class="jk-cake__layer jk-cake__layer--mid">
+                            <div class="jk-cake__dots">
+                                <span style="background:#ffe900"></span>
+                                <span style="background:#00f5ff"></span>
+                                <span style="background:#e00062"></span>
+                                <span style="background:#ffe900"></span>
+                                <span style="background:#00f5ff"></span>
+                                <span style="background:#e00062"></span>
+                            </div>
+                        </div>
+                        <div class="jk-cake__layer jk-cake__layer--bottom">
+                            <span class="jk-cake__text">JANKI // 23</span>
+                        </div>
+                        <div class="jk-cake__plate"></div>
+                    </div>
+                </div>
+
+                <div class="jk-cake__actions">
+                    <button id="blow-btn" class="jk-btn jk-btn--pink">🌬️ Blow All Candles</button>
+                    <button id="reset-btn" class="jk-btn jk-btn--dark">🔄 Relight</button>
+                </div>
+
+                <!-- Progress -->
+                <div class="jk-cake__progress">
+                    <div class="jk-cake__progress-bar" id="candle-progress"></div>
+                </div>
+                <p class="jk-cake__counter"><span id="blown-count">0</span> / 23 candles blown</p>
+            </div>
+        </section>
+
+        <!-- SECTION: The Letter -->
+        <section id="letter-section" class="jk-letter-section" style="display:none;">
+            <div class="jk-card jk-card--letter">
+                <div class="jk-card__label">02 // A NOTE FOR YOU</div>
+
+                <div class="jk-letter__seal" id="letter-seal">
+                    <div class="jk-letter__seal-circle">
+                        <span>💌</span>
+                        <p>Tap to Open</p>
+                    </div>
+                </div>
+
+                <div class="jk-letter__content" id="letter-content" style="display:none;">
+                    <div class="jk-letter__paper">
+                        <span class="jk-letter__date">July 14, 2026</span>
+                        <h4 class="jk-letter__greeting">Dearest Janki,</h4>
+                        <div class="jk-letter__body">
+                            <p><strong>Happy 23rd Birthday!</strong> 🎂</p>
+                            <p>
+                                Today is July 14th, and you've officially turned 23 —
+                                born in the legendary, vintage year of 2003!
+                            </p>
+                            <p>
+                                From being my GF to being my BFF, partner-in-crime, and bestie today — 
+                                our bond has evolved into something incredibly strong, 
+                                special, and absolutely irreplaceable.
+                            </p>
+                            <p>
+                                You are one of the most supportive, caring, and beautiful 
+                                souls in my life. Your presence makes everything warmer, 
+                                and I'm endlessly grateful for the laughter, the quiet support, 
+                                and all the memories we've built together.
+                            </p>
+                            <p>
+                                On your special day, I wish you all the happiness, success, 
+                                and love the universe has to offer. May this year bring you 
+                                closer to every single dream you've ever had.
+                            </p>
+                            <p>
+                                Keep smiling, keep shining, and never ever forget how 
+                                incredibly special you are to me. ❤️
+                            </p>
+                        </div>
+                        <div class="jk-letter__sign">
+                            <span class="jk-letter__sign-label">With all my love,</span>
+                            <span class="jk-letter__sign-name">Shivrajsinh</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Why Janki is Special -->
+        <section class="jk-cards-section">
+            <h2 class="jk-section-title">Why You're Irreplaceable ⭐</h2>
+            <div class="jk-cards-grid">
+                <div class="jk-trait-card jk-trait-card--pink">
+                    <div class="jk-trait-card__icon">🤝</div>
+                    <h4 class="jk-trait-card__title">The Ultimate BFF</h4>
+                    <p class="jk-trait-card__text">
+                        Always ready to listen, advise, and laugh at my dumbest jokes. 
+                        You make me feel heard like no one else can.
+                    </p>
+                </div>
+                <div class="jk-trait-card jk-trait-card--yellow">
+                    <div class="jk-trait-card__icon">✨</div>
+                    <h4 class="jk-trait-card__title">Pure Positive Energy</h4>
+                    <p class="jk-trait-card__text">
+                        Your vibe lights up every room. You carry this warmth and 
+                        energy that just makes everything feel better.
+                    </p>
+                </div>
+                <div class="jk-trait-card jk-trait-card--cyan">
+                    <div class="jk-trait-card__icon">💪</div>
+                    <h4 class="jk-trait-card__title">Strongest Soul</h4>
+                    <p class="jk-trait-card__text">
+                        Through every up and down, you stay solid. 
+                        Your strength inspires me more than you know.
+                    </p>
+                </div>
+                <div class="jk-trait-card jk-trait-card--green">
+                    <div class="jk-trait-card__icon">❤️</div>
+                    <h4 class="jk-trait-card__title">Constant Warmth</h4>
+                    <p class="jk-trait-card__text">
+                        No matter how our paths evolve, our bond stays unbreakable. 
+                        You are my constant.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Final Big Message -->
+        <section class="jk-final">
+            <div class="jk-final__inner">
+                <div class="jk-final__emoji">🎈🎂🎉</div>
+                <h2 class="jk-final__title">Here's to 23!</h2>
+                <p class="jk-final__text">
+                    May this year be your best one yet.<br>
+                    Happy birthday, Janki Rathod. You deserve the world.
+                </p>
+                <button id="final-confetti-btn" class="jk-btn jk-btn--pink jk-btn--large">
+                    🎉 One More Celebration!
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== STYLES ==================== -->
+    <style is:inline>
+        /* ===== RESET & BASE ===== */
+        .jk-intro, .jk-main { --pink: #e00062; --yellow: #ffe900; --cyan: #00f5ff; --green: #00ff88; --black: #000; --white: #fff; --cream: #f8f7f4; --paper: #fff9eb; }
+
+        /* ===== INTRO SCREEN ===== */
+        .jk-intro {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--black);
+            overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .jk-intro.hiding {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+        .jk-intro__bg {
+            position: absolute; inset: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, var(--pink) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--cyan) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, var(--yellow) 0%, transparent 60%);
+            opacity: 0.15;
+            animation: bgPulse 4s ease-in-out infinite alternate;
+        }
+        @keyframes bgPulse { 0% { opacity: 0.1; transform: scale(1); } 100% { opacity: 0.2; transform: scale(1.1); } }
+
+        .jk-intro__content {
+            text-align: center; z-index: 2;
+            padding: 24px;
+        }
+        .jk-intro__badge {
+            display: inline-block;
+            background: var(--pink); color: var(--white);
+            font-family: monospace; font-weight: 700; font-size: 12px;
+            padding: 6px 16px;
+            border: 2px solid var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            animation: badgeBounce 2s ease infinite;
+        }
+        @keyframes badgeBounce { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-6px) rotate(1deg); } }
+
+        .jk-intro__name {
+            font-size: clamp(3.5rem, 15vw, 8rem);
+            font-weight: 900; color: var(--white);
+            letter-spacing: -3px; line-height: 0.9;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0 var(--pink), 8px 8px 0 rgba(224,0,98,0.3);
+            margin: 0;
+        }
+        .jk-intro__age {
+            display: flex; align-items: baseline; justify-content: center; gap: 10px;
+            margin-top: 16px;
+        }
+        .jk-intro__age-num {
+            font-size: clamp(4rem, 18vw, 10rem);
+            font-weight: 900; color: var(--yellow);
+            line-height: 1;
+            text-shadow: 3px 3px 0 var(--black);
+            font-family: monospace;
+        }
+        .jk-intro__age-label {
+            font-size: 11px; font-weight: 700;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 3px; text-transform: uppercase;
+            font-family: monospace;
+            writing-mode: vertical-lr;
+        }
+        .jk-intro__sub {
+            font-family: monospace; font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 8px; letter-spacing: 1px;
+        }
+        .jk-intro__enter {
+            margin-top: 40px;
+            background: var(--pink); color: var(--white);
+            border: 3px solid var(--white);
+            padding: 14px 32px;
+            font-weight: 800; font-size: 15px; text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(224,0,98,0.4);
+            transition: all 0.2s;
+            animation: enterPulse 2s ease-in-out infinite;
+        }
+        .jk-intro__enter:active { transform: scale(0.95); }
+        @keyframes enterPulse { 0%,100% { box-shadow: 0 0 20px rgba(224,0,98,0.3); } 50% { box-shadow: 0 0 40px rgba(224,0,98,0.6), 0 0 80px rgba(224,0,98,0.2); } }
+
+        .jk-intro__emojis {
+            position: absolute; inset: 0;
+            pointer-events: none; overflow: hidden; z-index: 1;
+        }
+        .jk-intro__emoji {
+            position: absolute; font-size: 28px;
+            animation: emojiFloat 8s linear infinite;
+            opacity: 0.4;
+        }
+        @keyframes emojiFloat {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .jk-main {
+            background: var(--cream);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* ===== HERO ===== */
+        .jk-hero {
+            padding: 100px 20px 60px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .jk-hero__inner { max-width: 600px; margin: 0 auto; }
+        .jk-hero__tag {
+            display: inline-block;
+            background: var(--yellow); color: var(--black);
+            font-family: monospace; font-weight: 700; font-size: 11px;
+            padding: 5px 14px;
+            border: 2px solid var(--black);
+            box-shadow: 3px 3px 0 var(--black);
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+            transform: rotate(-2deg);
+        }
+        .jk-hero__title {
+            display: flex; flex-direction: column;
+            align-items: center; gap: 0;
+            margin: 0;
+        }
+        .jk-hero__line {
+            font-size: clamp(2.2rem, 10vw, 5rem);
+            font-weight: 900; color: var(--black);
+            text-transform: uppercase;
+            line-height: 1.05; letter-spacing: -2px;
+            opacity: 0; transform: translateY(30px);
+        }
+        .jk-hero__line--accent {
+            font-size: clamp(3.5rem, 16vw, 8rem);
+            color: var(--pink);
+            text-shadow: 3px 3px 0 var(--black);
+            line-height: 1;
+        }
+        .jk-hero__line--name {
+            color: var(--pink);
+            font-size: clamp(2.8rem, 12vw, 6rem);
+        }
+        .jk-hero__desc {
+            font-size: 14px; line-height: 1.7;
+            color: #555; max-width: 400px;
+            margin: 20px auto 0;
+            opacity: 0; transform: translateY(20px);
+        }
+
+        /* ===== CARD CONTAINER ===== */
+        .jk-card {
+            max-width: 480px; margin: 0 auto;
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: 6px 6px 0 var(--black);
+            padding: 28px 20px;
+            position: relative;
+        }
+        .jk-card__label {
+            font-family: monospace; font-size: 10px;
+            color: #aaa; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .jk-card__title {
+            font-size: 22px; font-weight: 900;
+            text-transform: uppercase;
+            margin: 0 0 6px; color: var(--black);
+        }
+        .jk-card__desc {
+            font-size: 13px; color: #777;
+            margin: 0 0 24px; line-height: 1.5;
+        }
+
+        /* ===== CAKE ===== */
+        .jk-cake-section { padding: 20px 16px 40px; }
+
+        .jk-cake {
+            display: flex; flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .jk-cake__candles {
+            display: flex; flex-wrap: wrap;
+            justify-content: center; gap: 4px;
+            max-width: 280px;
+            margin-bottom: 4px;
+            padding: 0 8px;
+        }
+        /* Individual candle */
+        .jk-candle {
+            width: 10px; display: flex; flex-direction: column;
+            align-items: center; cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.15s;
+        }
+        .jk-candle:active { transform: scale(0.8); }
+        .jk-candle__flame {
+            width: 8px; height: 14px;
+            background: radial-gradient(ellipse at bottom, #ffcc00 0%, #ff6600 60%, #ff0000 100%);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 8px #ffaa00, 0 0 16px rgba(255,170,0,0.3);
+            animation: flicker 0.8s ease infinite alternate;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .jk-candle__wick {
+            width: 2px; height: 5px;
+            background: #333;
+        }
+        .jk-candle__wax {
+            width: 10px; height: 28px;
+            border: 2px solid var(--black);
+            border-radius: 2px;
+            background: repeating-linear-gradient(45deg, var(--cyan), var(--cyan) 3px, var(--white) 3px, var(--white) 6px);
+        }
+        .jk-candle.blown .jk-candle__flame {
+            opacity: 0; transform: scale(0) translateY(-4px);
+        }
+        .jk-candle.blown .jk-candle__wax {
+            opacity: 0.5;
+        }
+        @keyframes flicker {
+            0% { transform: scaleY(1) skewX(-2deg); }
+            100% { transform: scaleY(1.15) skewX(2deg); }
+        }
+
+        /* Cake body */
+        .jk-cake__body {
+            width: min(280px, 85vw);
+            position: relative;
+        }
+        .jk-cake__layer {
+            width: 100%; position: relative;
+        }
+        .jk-cake__layer--top {
+            height: 36px;
+            background: var(--pink);
+            border: 3px solid var(--black);
+            border-radius: 60px 60px 0 0;
+            position: relative; z-index: 2;
+        }
+        .jk-cake__drip {
+            position: absolute; bottom: -10px;
+            width: 16px;
+            background: var(--pink);
+            border: 2px solid var(--black);
+            border-top: none;
+            border-radius: 0 0 50% 50%;
+            z-index: 3;
+        }
+        .jk-cake__layer--mid {
+            height: 40px;
+            background: var(--white);
+            border-left: 3px solid var(--black);
+            border-right: 3px solid var(--black);
+            display: flex; align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .jk-cake__dots {
+            display: flex; gap: 10px;
+        }
+        .jk-cake__dots span {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            border: 1.5px solid var(--black);
+        }
+        .jk-cake__layer--bottom {
+            height: 50px;
+            background: var(--yellow);
+            border: 3px solid var(--black);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            display: flex; align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .jk-cake__text {
+            font-weight: 900; font-family: monospace;
+            font-size: 16px; letter-spacing: 3px;
+            color: var(--black);
+        }
+        .jk-cake__plate {
+            width: calc(100% + 24px);
+            height: 10px;
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            margin: -2px auto 0;
+            box-shadow: 0 3px 0 var(--black);
+            position: relative; z-index: 3;
+            left: -12px;
+        }
+
+        /* Cake actions */
+        .jk-cake__actions {
+            display: flex; gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .jk-cake__progress {
+            width: 100%; height: 6px;
+            background: #eee;
+            border: 2px solid var(--black);
+            margin-top: 16px;
+            overflow: hidden;
+        }
+        .jk-cake__progress-bar {
+            height: 100%; width: 0%;
+            background: var(--pink);
+            transition: width 0.3s ease;
+        }
+        .jk-cake__counter {
+            font-family: monospace; font-size: 12px;
+            color: #999; margin-top: 6px; text-align: center;
+        }
+
+        /* ===== BUTTONS ===== */
+        .jk-btn {
+            padding: 12px 22px;
+            font-weight: 800; font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 3px solid var(--black);
+            cursor: pointer;
+            transition: all 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .jk-btn:active { transform: translate(2px, 2px); box-shadow: none !important; }
+        .jk-btn--pink {
+            background: var(--pink); color: var(--white);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+        .jk-btn--dark {
+            background: var(--black); color: var(--white);
+            box-shadow: 4px 4px 0 var(--yellow);
+        }
+        .jk-btn--large { font-size: 16px; padding: 16px 32px; }
+
+        /* ===== LETTER ===== */
+        .jk-letter-section { padding: 20px 16px 40px; }
+        .jk-card--letter { overflow: hidden; }
+
+        .jk-letter__seal {
+            display: flex; justify-content: center;
+            padding: 40px 0;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .jk-letter__seal-circle {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: var(--pink);
+            border: 4px solid var(--black);
+            box-shadow: 4px 4px 0 var(--black);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 4px;
+            transition: all 0.2s;
+            animation: sealPulse 2s ease-in-out infinite;
+        }
+        .jk-letter__seal-circle span { font-size: 36px; }
+        .jk-letter__seal-circle p {
+            font-size: 10px; font-weight: 700;
+            color: var(--white); text-transform: uppercase;
+            letter-spacing: 1px; margin: 0;
+        }
+        .jk-letter__seal-circle:active { transform: scale(0.9); }
+        @keyframes sealPulse { 0%,100% { box-shadow: 4px 4px 0 var(--black); } 50% { box-shadow: 4px 4px 0 var(--black), 0 0 30px rgba(224,0,98,0.3); } }
+
+        .jk-letter__content { padding: 0; }
+
+        .jk-letter__paper {
+            background: var(--paper);
+            border: 3px solid var(--black);
+            padding: 28px 20px;
+            position: relative;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.03);
+        }
+        .jk-letter__paper::before {
+            content: '';
+            position: absolute; left: 20px; right: 20px;
+            top: 60px; bottom: 20px;
+            background: repeating-linear-gradient(
+                transparent, transparent 27px, rgba(0,0,0,0.04) 28px
+            );
+            pointer-events: none;
+        }
+        .jk-letter__date {
+            font-family: monospace; font-size: 11px;
+            color: #bbb; font-weight: 700;
+            position: absolute; top: 14px; right: 16px;
+        }
+        .jk-letter__greeting {
+            font-family: 'Caveat', cursive;
+            font-size: 28px; color: var(--pink);
+            margin: 0 0 16px; font-weight: 700;
+        }
+        .jk-letter__body {
+            font-size: 14px; line-height: 2;
+            color: #444;
+        }
+        .jk-letter__body p { margin: 0 0 14px; }
+        .jk-letter__body strong { color: var(--black); }
+        .jk-letter__sign {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 2px dashed #ddd;
+            text-align: right;
+        }
+        .jk-letter__sign-label {
+            display: block;
+            font-family: monospace; font-size: 10px;
+            color: #aaa; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 4px;
+        }
+        .jk-letter__sign-name {
+            font-family: 'Caveat', cursive;
+            font-size: 36px; font-weight: 700;
+            color: var(--black);
+        }
+
+        /* ===== TRAIT CARDS ===== */
+        .jk-cards-section {
+            padding: 40px 16px;
+        }
+        .jk-section-title {
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            font-weight: 900; text-transform: uppercase;
+            text-align: center;
+            margin: 0 0 24px; color: var(--black);
+        }
+        .jk-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        @media (min-width: 640px) {
+            .jk-cards-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .jk-trait-card {
+            border: 3px solid var(--black);
+            padding: 20px;
+            box-shadow: 4px 4px 0 var(--black);
+            transition: transform 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .jk-trait-card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--black); }
+        .jk-trait-card--pink { background: #fff0f5; }
+        .jk-trait-card--yellow { background: #fffde6; }
+        .jk-trait-card--cyan { background: #e6fffe; }
+        .jk-trait-card--green { background: #e6fff2; }
+        .jk-trait-card__icon {
+            font-size: 28px; margin-bottom: 10px;
+        }
+        .jk-trait-card__title {
+            font-weight: 900; font-size: 15px;
+            text-transform: uppercase;
+            margin: 0 0 8px; color: var(--black);
+        }
+        .jk-trait-card__text {
+            font-size: 13px; color: #666;
+            line-height: 1.6; margin: 0;
+        }
+
+        /* ===== FINAL SECTION ===== */
+        .jk-final {
+            padding: 60px 20px 40px;
+            text-align: center;
+        }
+        .jk-final__inner {
+            max-width: 400px; margin: 0 auto;
+            background: var(--black);
+            border: 4px solid var(--black);
+            box-shadow: 6px 6px 0 var(--pink);
+            padding: 40px 24px;
+        }
+        .jk-final__emoji { font-size: 40px; margin-bottom: 16px; }
+        .jk-final__title {
+            font-size: clamp(2rem, 8vw, 3rem);
+            font-weight: 900; color: var(--yellow);
+            margin: 0 0 12px; text-transform: uppercase;
+        }
+        .jk-final__text {
+            font-size: 14px; line-height: 1.7;
+            color: rgba(255,255,255,0.6);
+            margin: 0 0 28px;
+        }
+
+        /* Hide navbar & footer on this page, restore default cursor */
+        body:has(.jk-intro) nav,
+        body:has(.jk-intro) footer { display: none !important; }
+        body:has(.jk-main) nav,
+        body:has(.jk-main) footer { display: none !important; }
+        body:has(.jk-intro) .paper-texture { display: none !important; }
+        body:has(.jk-main) .paper-texture { display: none !important; }
+        body:has(.jk-intro) .custom-cursor { display: none !important; }
+        body:has(.jk-main) .custom-cursor { display: none !important; }
+        body:has(.jk-intro),
+        body:has(.jk-main),
+        body:has(.jk-intro) *,
+        body:has(.jk-main) * {
+            cursor: auto !important;
+        }
+    </style>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script is:inline>
+    document.addEventListener('astro:page-load', () => {
+        const introScreen = document.getElementById('intro-screen');
+        const birthdayMain = document.getElementById('birthday-main');
+        const enterBtn = document.getElementById('enter-btn');
+        if (!introScreen || !birthdayMain || !enterBtn) return;
+
+        // ===== INTRO: Animate age counter =====
+        const ageCounter = document.getElementById('age-counter');
+        let currentAge = 0;
+        const ageInterval = setInterval(() => {
+            currentAge++;
+            if (ageCounter) ageCounter.textContent = currentAge;
+            if (currentAge >= 23) clearInterval(ageInterval);
+        }, 60);
+
+        // ===== INTRO: Floating emojis =====
+        const introEmojis = document.getElementById('intro-emojis');
+        const emojiList = ['🎂', '🎉', '🎈', '💖', '🎁', '✨', '💝', '🥳', '🌟', '❤️'];
+        function spawnIntroEmoji() {
+            if (!introEmojis || introScreen.classList.contains('hiding')) return;
+            const el = document.createElement('div');
+            el.className = 'jk-intro__emoji';
+            el.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+            el.style.left = Math.random() * 90 + 5 + '%';
+            el.style.animationDuration = (6 + Math.random() * 5) + 's';
+            el.style.fontSize = (20 + Math.random() * 16) + 'px';
+            introEmojis.appendChild(el);
+            setTimeout(() => el.remove(), 12000);
+        }
+        const introEmojiTimer = setInterval(spawnIntroEmoji, 400);
+        // Spawn some immediately
+        for (let i = 0; i < 8; i++) setTimeout(spawnIntroEmoji, i * 100);
+
+        // ===== ENTER BUTTON =====
+        enterBtn.addEventListener('click', () => {
+            clearInterval(introEmojiTimer);
+
+            // Big confetti blast
+            if (typeof confetti !== 'undefined') {
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: ['#e00062','#ffe900','#00f5ff','#00ff88'] });
+                setTimeout(() => {
+                    confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.7 } });
+                    confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.7 } });
+                }, 300);
+            }
+
+            // Hide intro
+            introScreen.classList.add('hiding');
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                birthdayMain.style.display = 'block';
+                window.scrollTo(0, 0);
+
+                // Animate hero lines
+                setTimeout(animateHero, 300);
+            }, 700);
+        });
+
+        // ===== HERO ANIMATION =====
+        function animateHero() {
+            const lines = document.querySelectorAll('.jk-hero__line');
+            const desc = document.querySelector('.jk-hero__desc');
+            lines.forEach((line, i) => {
+                setTimeout(() => {
+                    line.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    line.style.opacity = '1';
+                    line.style.transform = 'translateY(0)';
+                }, i * 200);
+            });
+            if (desc) {
+                setTimeout(() => {
+                    desc.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    desc.style.opacity = '1';
+                    desc.style.transform = 'translateY(0)';
+                }, lines.length * 200 + 200);
+            }
+
+            // Fire small confetti after text appears
+            setTimeout(() => {
+                if (typeof confetti !== 'undefined') {
+                    confetti({ particleCount: 40, spread: 70, origin: { y: 0.3 }, colors: ['#e00062','#ffe900','#00f5ff'] });
+                }
+            }, lines.length * 200 + 600);
+        }
+
+        // ===== CAKE: Generate 23 candles =====
+        const candleGrid = document.getElementById('candle-grid');
+        const candleCount = 23;
+        for (let i = 0; i < candleCount; i++) {
+            const c = document.createElement('div');
+            c.className = 'jk-candle';
+            c.dataset.index = i;
+            c.innerHTML = '<div class="jk-candle__flame"></div><div class="jk-candle__wick"></div><div class="jk-candle__wax"></div>';
+            candleGrid.appendChild(c);
+        }
+
+        const candles = document.querySelectorAll('.jk-candle');
+        const blowBtn = document.getElementById('blow-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const progressBar = document.getElementById('candle-progress');
+        const blownCountEl = document.getElementById('blown-count');
+        const letterSection = document.getElementById('letter-section');
+        const letterSeal = document.getElementById('letter-seal');
+        const letterContent = document.getElementById('letter-content');
+        let blownCount = 0;
+
+        function updateProgress() {
+            blownCountEl.textContent = blownCount;
+            progressBar.style.width = (blownCount / candleCount * 100) + '%';
+        }
+
+        function blowCandle(candle) {
+            if (candle.classList.contains('blown')) return;
+            candle.classList.add('blown');
+            blownCount++;
+            updateProgress();
+
+            // Mini confetti per candle
+            if (typeof confetti !== 'undefined') {
+                const rect = candle.getBoundingClientRect();
+                confetti({
+                    particleCount: 8, startVelocity: 12,
+                    spread: 360, gravity: 0.8, ticks: 40,
+                    origin: { x: rect.left / window.innerWidth, y: rect.top / window.innerHeight },
+                    colors: ['#ffe900','#00f5ff','#e00062']
+                });
+            }
+
+            if (blownCount === candleCount) onAllBlown();
+        }
+
+        function onAllBlown() {
+            // Big celebration
+            if (typeof confetti !== 'undefined') {
+                const dur = 2500, end = Date.now() + dur;
+                (function frame() {
+                    confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#e00062','#ffe900','#00f5ff','#00ff88'] });
+                    confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#e00062','#ffe900','#00f5ff','#00ff88'] });
+                    if (Date.now() < end) requestAnimationFrame(frame);
+                })();
+            }
+
+            // Show letter section
+            setTimeout(() => {
+                letterSection.style.display = 'block';
+                letterSection.style.opacity = '0';
+                letterSection.style.transform = 'translateY(30px)';
+                // Force reflow
+                letterSection.offsetHeight;
+                letterSection.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                letterSection.style.opacity = '1';
+                letterSection.style.transform = 'translateY(0)';
+
+                setTimeout(() => {
+                    letterSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }, 800);
+        }
+
+        // Tap candle
+        candles.forEach(c => c.addEventListener('click', () => blowCandle(c)));
+
+        // Blow all
+        blowBtn.addEventListener('click', () => {
+            let delay = 0;
+            candles.forEach(c => {
+                if (!c.classList.contains('blown')) {
+                    setTimeout(() => blowCandle(c), delay);
+                    delay += 35;
+                }
+            });
+        });
+
+        // Reset
+        resetBtn.addEventListener('click', () => {
+            candles.forEach(c => c.classList.remove('blown'));
+            blownCount = 0;
+            updateProgress();
+            letterSection.style.display = 'none';
+            if (letterSeal) letterSeal.style.display = 'flex';
+            if (letterContent) letterContent.style.display = 'none';
+
+            if (typeof confetti !== 'undefined') {
+                confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 }, colors: ['#ffe900'] });
+            }
+        });
+
+        // ===== LETTER: Seal open =====
+        if (letterSeal) {
+            letterSeal.addEventListener('click', () => {
+                letterSeal.style.display = 'none';
+                letterContent.style.display = 'block';
+                letterContent.style.opacity = '0';
+                letterContent.style.transform = 'translateY(20px)';
+                letterContent.offsetHeight;
+                letterContent.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                letterContent.style.opacity = '1';
+                letterContent.style.transform = 'translateY(0)';
+
+                if (typeof confetti !== 'undefined') {
+                    setTimeout(() => {
+                        confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 }, colors: ['#e00062','#ffe900','#00f5ff'] });
+                    }, 400);
+                }
+            });
+        }
+
+        // ===== FINAL CONFETTI BUTTON =====
+        const finalBtn = document.getElementById('final-confetti-btn');
+        if (finalBtn) {
+            finalBtn.addEventListener('click', () => {
+                if (typeof confetti !== 'undefined') {
+                    const dur = 3000, end = Date.now() + dur;
+                    (function frame() {
+                        confetti({ particleCount: 6, angle: 60, spread: 60, origin: { x: 0, y: Math.random() }, colors: ['#e00062','#ffe900','#00f5ff','#00ff88'] });
+                        confetti({ particleCount: 6, angle: 120, spread: 60, origin: { x: 1, y: Math.random() }, colors: ['#e00062','#ffe900','#00f5ff','#00ff88'] });
+                        confetti({ particleCount: 3, spread: 120, origin: { x: 0.5, y: 0.2 }, colors: ['#e00062','#ffe900','#00f5ff','#00ff88'] });
+                        if (Date.now() < end) requestAnimationFrame(frame);
+                    })();
+                }
+            });
+        }
+    });
+    </script>
+</Layout>

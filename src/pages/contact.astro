@@ -349,17 +349,16 @@ if (!window.__contact_scripts_loaded) {
         const object = Object.fromEntries(formData);
         const json = JSON.stringify(object);
 
-        // Submit asynchronously to Web3Forms API
-        fetch('https://api.web3forms.com/submit', {
+        // Submit asynchronously to the onboarding API
+        fetch('https://app.shivrajsinh.in/api/contact', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: json
         })
         .then(async (response) => {
-            let res = await response.json();
+            let res = response.status === 200 ? { success: true } : {};
             
             // Hide loading overlay
             if (typeof gsap !== 'undefined') {
