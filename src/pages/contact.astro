@@ -349,8 +349,8 @@ if (!window.__contact_scripts_loaded) {
         const object = Object.fromEntries(formData);
         const json = JSON.stringify(object);
 
-        // Submit asynchronously to the onboarding API
-        fetch('https://app.shivrajsinh.in/api/contact', {
+        // Submit asynchronously to Web3Forms
+        fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
