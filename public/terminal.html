@@ -200,6 +200,62 @@
             letter-spacing: 0.5px;
         }
 
+        /* ===== THEME SWITCHER ===== */
+        .titlebar-theme-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--term-border);
+            background: conic-gradient(var(--term-green), var(--term-cyan), var(--term-pink), var(--term-yellow), var(--term-orange), var(--term-green));
+            cursor: pointer;
+            flex-shrink: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            user-select: none;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .titlebar-theme-btn:hover {
+            transform: scale(1.15) rotate(20deg);
+            border-color: var(--term-green);
+        }
+
+        .titlebar-theme-btn:active { transform: scale(0.9); }
+
+        .theme-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-12px);
+            background: var(--term-chrome);
+            border: 2px solid var(--term-green);
+            color: var(--term-green);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            z-index: 100000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .theme-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .theme-flash {
+            position: fixed;
+            inset: 0;
+            background: var(--term-green);
+            z-index: 99998;
+            opacity: 0;
+            pointer-events: none;
+        }
+
         /* ===== TERMINAL BODY ===== */
         .terminal-body {
             flex: 1;
@@ -372,6 +428,7 @@
                     <div class="titlebar-dot dot-green"></div>
                 </div>
                 <div class="titlebar-title">SZ://DEV — TERMINAL</div>
+                <button class="titlebar-theme-btn" id="theme-btn" title="Change theme" aria-label="Change terminal theme"></button>
                 <div class="titlebar-tag">LIVE</div>
             </div>
             <div class="terminal-body" id="terminal-body">
@@ -387,6 +444,10 @@
     <!-- Back Button -->
     <a class="back-btn" id="back-btn" href="/">← PORTFOLIO</a>
 
+    <!-- Theme feedback -->
+    <div class="theme-flash" id="theme-flash"></div>
+    <div class="theme-toast" id="theme-toast"></div>
+
     <script>
         window.addEventListener('DOMContentLoaded', () => {
 
@@ -397,6 +458,69 @@
         const dotClose = document.getElementById('dot-close');
         const transition = document.getElementById('page-transition');
         const wrapper = document.getElementById('terminal-wrapper');
+
+        // ═══ THEMES ═══
+        const THEMES = {
+            matrix:    { label: 'MATRIX',    green: '#00FF88', cyan: '#00F5FF', pink: '#FF006E', yellow: '#FFE900', orange: '#FF5E00', white: '#e0e0e0', bg: '#0a0a0a', chrome: '#1a1a1a', border: '#333' },
+            amber:     { label: 'AMBER',     green: '#FFB000', cyan: '#FFD066', pink: '#FF6B35', yellow: '#FFC94D', orange: '#FF8C00', white: '#f0dcc0', bg: '#0d0904', chrome: '#1f1710', border: '#3a2c1a' },
+            cyberpunk: { label: 'CYBERPUNK', green: '#FF10F0', cyan: '#00FFF0', pink: '#FF00A0', yellow: '#F9F002', orange: '#FF4DFF', white: '#f0e0ff', bg: '#0a0510', chrome: '#1a0f1f', border: '#3a1f3a' },
+            ice:       { label: 'ICE',       green: '#00D9FF', cyan: '#7EE8FA', pink: '#0091FF', yellow: '#B4E7FF', orange: '#4FC3F7', white: '#dff6ff', bg: '#050f14', chrome: '#0f2530', border: '#1a3a4a' },
+            mono:      { label: 'MONOCHROME',green: '#FFFFFF', cyan: '#CCCCCC', pink: '#999999', yellow: '#EEEEEE', orange: '#AAAAAA', white: '#f5f5f5', bg: '#0a0a0a', chrome: '#1a1a1a', border: '#333' }
+        };
+        const THEME_ORDER = ['matrix', 'amber', 'cyberpunk', 'ice', 'mono'];
+        const THEME_STORAGE_KEY = 'sz_terminal_theme';
+
+        function applyTheme(name, { silent } = {}) {
+            const theme = THEMES[name];
+            if (!theme) return false;
+            const root = document.documentElement.style;
+            root.setProperty('--term-green', theme.green);
+            root.setProperty('--term-cyan', theme.cyan);
+            root.setProperty('--term-pink', theme.pink);
+            root.setProperty('--term-yellow', theme.yellow);
+            root.setProperty('--term-orange', theme.orange);
+            root.setProperty('--term-white', theme.white);
+            root.setProperty('--term-bg', theme.bg);
+            root.setProperty('--term-chrome', theme.chrome);
+            root.setProperty('--term-border', theme.border);
+            document.body.style.background = theme.bg;
+            try { localStorage.setItem(THEME_STORAGE_KEY, name); } catch (e) {}
+            if (!silent) flashTheme(theme);
+            return true;
+        }
+
+        function currentThemeName() {
+            try { return localStorage.getItem(THEME_STORAGE_KEY) || 'matrix'; } catch (e) { return 'matrix'; }
+        }
+
+        function flashTheme(theme) {
+            const flash = document.getElementById('theme-flash');
+            const toast = document.getElementById('theme-toast');
+            if (flash && typeof gsap !== 'undefined') {
+                flash.style.background = theme.green;
+                gsap.killTweensOf(flash);
+                gsap.fromTo(flash, { opacity: 0.35 }, { opacity: 0, duration: 0.35, ease: 'power2.out' });
+            }
+            if (toast) {
+                toast.textContent = `THEME: ${theme.label}`;
+                toast.style.color = theme.green;
+                toast.style.borderColor = theme.green;
+                toast.classList.add('show');
+                clearTimeout(toast._hideTimer);
+                toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 1200);
+            }
+        }
+
+        function cycleTheme() {
+            const cur = currentThemeName();
+            const idx = THEME_ORDER.indexOf(cur);
+            const next = THEME_ORDER[(idx + 1) % THEME_ORDER.length];
+            applyTheme(next);
+            return next;
+        }
+
+        // Apply saved theme immediately (before first paint of terminal body)
+        applyTheme(currentThemeName(), { silent: true });
 
         // ═══ STATE ═══
         const cmdHistory = [];
@@ -409,7 +533,7 @@
         // ═══ COMMAND NAMES ═══
         const COMMAND_NAMES = [
             '--help','help','about','skills','experience','education',
-            'projects','contact','social','ascii','whoami','neofetch',
+            'projects','contact','social','ascii','whoami','neofetch','theme',
             'clear','back','exit','quit','history','date','echo','pwd','ls','cat','man','sudo','secrets'
         ];
 
@@ -437,6 +561,7 @@
   <span class="accent-yellow">whoami</span>         <span class="dim">—</span>  Quick identity
   <span class="accent-yellow">neofetch</span>       <span class="dim">—</span>  System info
   <span class="accent-cyan">history</span>        <span class="dim">—</span>  Show command history
+  <span class="accent-cyan">theme</span>          <span class="dim">—</span>  List/switch color themes
   <span class="accent-cyan">clear</span>          <span class="dim">—</span>  Clear the terminal
   <span class="accent-orange">back</span>           <span class="dim">—</span>  Return to portfolio
   <span class="accent-red bold">secrets</span>        <span class="dim">—</span>  <span class="dim" style="filter: blur(2px);">[REDACTED]</span>
@@ -510,37 +635,53 @@
 'projects': () => `
 <span class="accent bold">┌─── SELECTED WORKS ───────────────────────────────┐</span>
 
-  <span class="accent-yellow">[01]</span> <span class="bold">Website Builder Platform</span>
+  <span class="accent-yellow">[01]</span> <span class="bold">LoanFlow</span>
+       <span class="dim">NEXT.JS / PRISMA / RAZORPAY</span>
+       <a href="https://loanflow.shivrajsinh.in" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">loanflow.shivrajsinh.in</a>
+
+  <span class="accent-cyan">[02]</span> <span class="bold">WebCraft Builder</span>
        <span class="dim">REACT / VITE / TAILWIND / NODE.JS</span>
-       <a href="https://github.com/shivrajsinhzala" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala</a>
+       <a href="https://app.shivrajsinh.in" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">app.shivrajsinh.in</a>
 
-  <span class="accent-cyan">[02]</span> <span class="bold">Real-Time Chat App</span>
-       <span class="dim">REACT / TAILWIND / FIREBASE</span>
-       <a href="https://github.com/shivrajsinhzala/gardichatapp" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala/gardichatapp</a>
-
-  <span class="accent-pink">[03]</span> <span class="bold">SaaS Landing Page Clone</span>
-       <span class="dim">REACT / TAILWIND</span>
-       <a href="https://github.com/shivrajsinhzala/ToDesktop_react" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala/ToDesktop_react</a>
-
-  <span class="accent-orange">[04]</span> <span class="bold">ADInfocom Quote Generator</span>
-       <span class="dim">REACT / TAILWIND</span>
-       <a href="https://github.com/shivrajsinhzala" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala</a>
-
-  <span class="accent-yellow">[05]</span> <span class="bold">AI Price Comparator</span>
-       <span class="dim">CHROME EXTENSION / GEMINI AI</span>
-       <span class="dim">private repo</span>
-
-  <span class="accent-cyan">[06]</span> <span class="bold">Somnath Dairy Khatabook</span>
-       <span class="dim">REACT / WEB APP / TAILWIND</span>
-       <a href="https://github.com/shivrajsinhzala/somnath-khata" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala/somnath-khata</a>
-
-  <span class="accent-orange">[07]</span> <span class="bold">Venus Pumps & Motors</span>
+  <span class="accent-orange">[03]</span> <span class="bold">Venus Pumps & Motors</span>
        <span class="dim">WORDPRESS / CLIENT SITE</span>
        <a href="https://venuspumpsandmotors.com" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">venuspumpsandmotors.com</a>
 
-  <span class="accent-pink">[08]</span> <span class="bold">Solar Quartz</span>
+  <span class="accent-pink">[04]</span> <span class="bold">Solar Quartz</span>
        <span class="dim">SHOPIFY / AMAZON / DIGITAL MARKETING</span>
        <a href="https://thedecorartisan.com" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">thedecorartisan.com</a>
+
+  <span class="accent-yellow">[05]</span> <span class="bold">Craft Design Studio</span>
+       <span class="dim">ASTRO / REACT / GSAP / TAILWIND</span>
+       <a href="https://craftdesignstudio.in" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">craftdesignstudio.in</a>
+
+  <span class="accent-cyan">[06]</span> <span class="bold">Shivam RO Water Solution</span>
+       <span class="dim">NEXT.JS / TAILWIND / CLOUDFLARE D1</span>
+       <a href="https://shivamwatersolution.in" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">shivamwatersolution.in</a>
+
+  <span class="accent-orange">[07]</span> <span class="bold">Sahil Enterprise</span>
+       <span class="dim">ASTRO / REACT / GSAP / TAILWIND</span>
+       <a href="https://sahilenterprisemorbi.com" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">sahilenterprisemorbi.com</a>
+
+  <span class="accent-pink">[08]</span> <span class="bold">Gardi Chat App</span>
+       <span class="dim">REACT / TAILWIND / FIREBASE</span>
+       <a href="https://github.com/shivrajsinhzala/gardichatapp" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala/gardichatapp</a>
+
+  <span class="accent-yellow">[09]</span> <span class="bold">ToDesktop Clone</span>
+       <span class="dim">REACT / TAILWIND</span>
+       <a href="https://github.com/shivrajsinhzala/ToDesktop_react" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala/ToDesktop_react</a>
+
+  <span class="accent-cyan">[10]</span> <span class="bold">ADInfocom Quote Generator</span>
+       <span class="dim">REACT / TAILWIND</span>
+       <a href="https://github.com/shivrajsinhzala" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala</a>
+
+  <span class="accent-orange">[11]</span> <span class="bold">AI Price Comparator</span>
+       <span class="dim">CHROME EXTENSION / GEMINI AI</span>
+       <span class="dim">private repo</span>
+
+  <span class="accent-pink">[12]</span> <span class="bold">Somnath Dairy Khatabook</span>
+       <span class="dim">REACT / WEB APP / TAILWIND</span>
+       <a href="https://github.com/shivrajsinhzala/somnath-khata" target="_blank" rel="noopener noreferrer" class="accent-cyan hover:text-white" style="text-decoration:none">github.com/shivrajsinhzala/somnath-khata</a>
 
 <span class="dim">  ─────────────────────────────────────────────────</span>
   <span class="dim">  Click the links to view repositories or live sites.</span>
@@ -832,6 +973,26 @@
                 return;
             }
 
+            // THEME
+            if (base === 'theme') {
+                const arg = args.trim().toLowerCase();
+                if (!arg || arg === 'list') {
+                    const rows = THEME_ORDER.map(key => {
+                        const t = THEMES[key];
+                        const marker = key === currentThemeName() ? '<span class="accent">●</span>' : '<span class="dim">○</span>';
+                        return `  ${marker} <span class="bold" style="color:${t.green}">${key}</span> <span class="dim">— ${t.label}</span>`;
+                    }).join('\n');
+                    appendBlock(`<span class="accent bold">┌─── THEMES ───────────────────────────────────────┐</span>\n\n${rows}\n\n<span class="dim">  ─────────────────────────────────────────────────</span>\n  <span class="dim">Usage: <span class="accent">theme &lt;name&gt;</span> or click the swatch, top-right.</span>\n\n<span class="accent bold">└──────────────────────────────────────────────────┘</span>`);
+                } else if (THEMES[arg]) {
+                    applyTheme(arg);
+                    appendBlock(`<span class="accent">Theme switched to ${esc(THEMES[arg].label)}.</span>`);
+                } else {
+                    appendBlock(`<span class="error">Unknown theme: ${esc(arg)}</span>\n<span class="dim">Type <span class="accent">theme</span> to see available themes.</span>`);
+                }
+                scrollEnd();
+                return;
+            }
+
             // STANDARD COMMANDS
             const handler = COMMANDS[cmd];
             if (handler && typeof handler === 'function') {
@@ -992,6 +1153,10 @@
         // ═══ BACK BUTTON / DOT CLOSE ═══
         backBtn.addEventListener('click', (e) => { e.preventDefault(); navigateBack(); });
         dotClose.addEventListener('click', () => navigateBack());
+
+        // ═══ THEME BUTTON ═══
+        const themeBtn = document.getElementById('theme-btn');
+        if (themeBtn) themeBtn.addEventListener('click', () => cycleTheme());
 
         // ═══ INIT ═══
         playEntranceAnimation();
