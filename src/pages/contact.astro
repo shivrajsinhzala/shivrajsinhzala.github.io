@@ -346,16 +346,14 @@ if (!window.__contact_scripts_loaded) {
 
         // Get form data
         const formData = new FormData(form);
-        const object = Object.fromEntries(formData);
-        const json = JSON.stringify(object);
 
-        // Submit asynchronously to Web3Forms
+        // Submit asynchronously to Web3Forms.
+        // Sent as multipart/form-data (no explicit Content-Type) rather than
+        // JSON — JSON forces a CORS preflight that Web3Forms doesn't answer,
+        // causing every submission to fail with a CORS error.
         fetch('https://api.web3forms.com/submit', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: json
+            body: formData
         })
         .then(async (response) => {
             let res = response.status === 200 ? { success: true } : {};
