@@ -172,8 +172,19 @@ import heroImage from '../assets/images/shivrajsinh-zala-frontend-developer-rajk
                 </div>
 
                 <div class="lg:col-span-5 flex flex-col sm:grid sm:grid-cols-2 lg:flex lg:flex-col gap-4 justify-center reveal-cards opacity-0 translate-y-8 mt-8 lg:mt-0">
-                    <div class="brutal-border brutal-shadow rotate-1 tilt-card sm:col-span-2 mb-4 md:mb-6 overflow-hidden" data-tilt>
-                        <Image src={heroImage} alt="Shivrajsinh Zala — Frontend Developer from Rajkot, Gujarat" width={512} height={512} class="w-full h-auto block hover:scale-105 transition-transform duration-500" loading="eager" fetchpriority="high" />
+                    <div class="hero-sticker-stage sm:col-span-2 mb-4 md:mb-6" id="hero-sticker-stage">
+                        <div class="hero-sticker-float">
+                            <div class="hero-sticker-3d" id="hero-sticker-3d">
+                                <div class="hero-sticker-shadow" aria-hidden="true"></div>
+                                <div class="hero-sticker-photo brutal-border">
+                                    <Image src={heroImage} alt="Shivrajsinh Zala — Frontend Developer from Rajkot, Gujarat" width={512} height={512} class="w-full h-auto block" loading="eager" fetchpriority="high" />
+                                </div>
+                                <div class="hero-sticker-badge badge-1 brutal-border brutal-shadow-sm bg-brutal-black text-white font-mono text-[10px] md:text-xs" aria-hidden="true">REACT / GSAP</div>
+                                <div class="hero-sticker-badge badge-2 brutal-border brutal-shadow-sm bg-brutal-cyan text-black font-mono text-[10px] md:text-xs" aria-hidden="true">☕ ∞ CHAI</div>
+                                <div class="hero-sticker-badge badge-3 brutal-border brutal-shadow-sm bg-brutal-yellow text-black font-mono text-[10px] md:text-xs" aria-hidden="true">★★★★★</div>
+                                <div class="hero-sticker-badge badge-4 brutal-border brutal-shadow-sm bg-brutal-pink text-white font-mono text-[10px] md:text-xs" aria-hidden="true">AVAILABLE</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="bg-white brutal-border brutal-shadow p-4 md:p-5 rotate-[-1deg] tilt-card" data-tilt>
@@ -1307,6 +1318,30 @@ import heroImage from '../assets/images/shivrajsinh-zala-frontend-developer-rajk
             });
         }
 
+        // ===== HERO 3D STICKER =====
+        const heroStickerStage = document.getElementById('hero-sticker-stage');
+        const heroSticker3d = document.getElementById('hero-sticker-3d');
+        if (heroStickerStage && heroSticker3d && navigator.maxTouchPoints === 0) {
+            heroStickerStage.addEventListener('mousemove', (e) => {
+                const rect = heroStickerStage.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const rotateX = ((y - rect.height / 2) / rect.height) * -18;
+                const rotateY = ((x - rect.width / 2) / rect.width) * 18;
+
+                gsap.to(heroSticker3d, {
+                    rotateX,
+                    rotateY,
+                    duration: 0.5,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
+            });
+            heroStickerStage.addEventListener('mouseleave', () => {
+                gsap.to(heroSticker3d, { rotateX: 0, rotateY: 0, duration: 0.7, ease: 'elastic.out(1, 0.6)' });
+            });
+        }
+
         // Global scripts (Lenis, Cursor, GSAP ScrollTrigger) have been moved to GlobalScripts.astro
 
         // ===== PRELOADER =====
@@ -1537,6 +1572,14 @@ import heroImage from '../assets/images/shivrajsinh-zala-frontend-developer-rajk
             gsap.to('.reveal-card', { opacity: 1, y: 0, duration: 1, delay: 0.8, ease: 'power4.out' });
             gsap.to('.reveal-buttons', { opacity: 1, y: 0, duration: 1, delay: 1, ease: 'power4.out' });
             gsap.to('.reveal-cards', { opacity: 1, y: 0, duration: 1, stagger: 0.1, delay: 1.2, ease: 'power4.out' });
+
+            const heroSticker3dEl = document.getElementById('hero-sticker-3d');
+            if (heroSticker3dEl) {
+                gsap.fromTo(heroSticker3dEl,
+                    { rotateX: 30, rotateY: -35, scale: 0.75 },
+                    { rotateX: 0, rotateY: 0, scale: 1, duration: 1.4, delay: 1.2, ease: 'power4.out' }
+                );
+            }
 
             document.querySelectorAll('[data-scramble]').forEach(el => {
                 if (el.closest('#preloader')) return;
