@@ -348,6 +348,116 @@ h1, h2, h3 {
             }
         }
 
+        /* Hero Ghost Wordmark */
+        .hero-ghost-text {
+            position: absolute;
+            top: 4%;
+            left: -3%;
+            font-size: clamp(5rem, 16vw, 13rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            white-space: nowrap;
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(10, 10, 10, 0.07);
+            transform: rotate(-6deg);
+            pointer-events: none;
+            -webkit-user-select: none;
+            user-select: none;
+            z-index: 0;
+        }
+
+        /* Hero Halftone Dot Clusters */
+        .hero-halftone {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            background-size: 11px 11px;
+            background-repeat: repeat;
+            -webkit-mask-image: radial-gradient(circle, #000 0%, #000 35%, transparent 72%);
+            mask-image: radial-gradient(circle, #000 0%, #000 35%, transparent 72%);
+            animation: float 24s infinite ease-in-out;
+        }
+
+        .hero-halftone-1 {
+            width: 380px;
+            height: 380px;
+            top: 2%;
+            right: 4%;
+            background-image: radial-gradient(circle, #FF006E 2px, transparent 2.2px);
+            opacity: 0.4;
+        }
+
+        .hero-halftone-2 {
+            width: 280px;
+            height: 280px;
+            bottom: 4%;
+            left: 2%;
+            background-image: radial-gradient(circle, #00F5FF 2px, transparent 2.2px);
+            opacity: 0.35;
+            animation-direction: reverse;
+        }
+
+        /* Hero Film Grain */
+        .hero-grain {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            animation: heroGrainShift 1.1s steps(4) infinite;
+        }
+
+        @keyframes heroGrainShift {
+
+            0% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(-2%, 1%);
+            }
+
+            50% {
+                transform: translate(1%, -2%);
+            }
+
+            75% {
+                transform: translate(-1%, 2%);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .hero-ghost-text {
+                font-size: clamp(3.5rem, 22vw, 6rem);
+                top: 2%;
+            }
+
+            .hero-halftone-1 {
+                width: 220px;
+                height: 220px;
+            }
+
+            .hero-halftone-2 {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .hero-halftone,
+            .hero-grain {
+                animation: none;
+            }
+        }
+
         /* Hero 3D Sticker */
         .hero-sticker-stage {
             position: relative;
