@@ -1,0 +1,27 @@
+# Cloudflare Pages response headers.
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+
+# Astro emits content-hashed filenames into /_astro/, so these can be cached
+# forever — a new build produces a new filename rather than a stale hit.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts are preloaded in Layout.astro and sit on the critical render path.
+# Filenames are stable, so cache for a year but keep it revalidatable.
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000
+  Access-Control-Allow-Origin: *
+
+# Vendored libraries (GSAP, Lenis, Lucide) — stable filenames, long cache.
+/assets/vendor/*
+  Cache-Control: public, max-age=2592000
+
+/assets/images/*
+  Cache-Control: public, max-age=2592000
+
+# Baseline security headers for every response.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=()

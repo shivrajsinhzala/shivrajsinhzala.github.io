@@ -1,0 +1,46 @@
+# Cloudflare Pages edge redirects — real HTTP 301s.
+#
+# These used to live in astro.config.mjs, but Astro's static `redirects` can
+# only emit a meta-refresh HTML page carrying <meta name="robots" content="noindex">.
+# Google may act on the noindex before following the refresh and drop the URL
+# instead of consolidating its ranking signals into the target. A 301 at the
+# edge consolidates properly.
+#
+# Format: <from> <to> <status>
+# Docs: https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# NOTE: astro.config.mjs uses build.format: 'file', so pages exist as
+# /path.html and are also served extensionless. Both forms are covered below.
+
+# --- Consolidated blog posts -> pillar guide -------------------------------
+/blog/best-frontend-developer-rajkot-gujarat-2026        /blog/modern-web-development-guide  301
+/blog/best-frontend-developer-rajkot-gujarat-2026.html   /blog/modern-web-development-guide  301
+/blog/hire-shivrajsinh-zala-frontend-developer-rajkot    /blog/modern-web-development-guide  301
+/blog/hire-shivrajsinh-zala-frontend-developer-rajkot.html /blog/modern-web-development-guide  301
+/blog/shivrajsinh-zala-tech-stack-react-gsap-tailwind    /blog/modern-web-development-guide  301
+/blog/shivrajsinh-zala-tech-stack-react-gsap-tailwind.html /blog/modern-web-development-guide  301
+/blog/gsap-scrolltrigger-animations-portfolio-2026       /blog/modern-web-development-guide  301
+/blog/gsap-scrolltrigger-animations-portfolio-2026.html  /blog/modern-web-development-guide  301
+/blog/custom-wordpress-development-2026                  /blog/modern-web-development-guide  301
+/blog/custom-wordpress-development-2026.html             /blog/modern-web-development-guide  301
+/blog/shopify-vs-webflow-ecommerce                       /blog/modern-web-development-guide  301
+/blog/shopify-vs-webflow-ecommerce.html                  /blog/modern-web-development-guide  301
+/blog/shivrajsinh-zala-ecommerce-developer-shopify-webflow /blog/modern-web-development-guide  301
+/blog/shivrajsinh-zala-ecommerce-developer-shopify-webflow.html /blog/modern-web-development-guide  301
+/blog/brutalist-web-design-frontend                      /blog/modern-web-development-guide  301
+/blog/brutalist-web-design-frontend.html                 /blog/modern-web-development-guide  301
+
+# --- Name / bio posts -> the new profile article ---------------------------
+# These ranked for name queries, so they consolidate into the profile post
+# rather than into the technical pillar guide.
+/blog/about-shivrajsinh-zala-frontend-developer          /blog/shivrajsinh-zala-frontend-developer-rajkot  301
+/blog/about-shivrajsinh-zala-frontend-developer.html     /blog/shivrajsinh-zala-frontend-developer-rajkot  301
+/blog/shivrajsinh-zala-developer-journey-rajkot-gujarat  /blog/shivrajsinh-zala-frontend-developer-rajkot  301
+/blog/shivrajsinh-zala-developer-journey-rajkot-gujarat.html /blog/shivrajsinh-zala-frontend-developer-rajkot  301
+/blog/interview-shivrajsinh-zala-rajkot-web-design       /blog/shivrajsinh-zala-frontend-developer-rajkot  301
+/blog/interview-shivrajsinh-zala-rajkot-web-design.html  /blog/shivrajsinh-zala-frontend-developer-rajkot  301
+
+# --- WordPress post -> the WordPress service page --------------------------
+# Commercial intent, so it belongs on the service page, not the blog.
+/blog/shivrajsinh-zala-wordpress-developer-custom-themes /wordpress-developer-rajkot  301
+/blog/shivrajsinh-zala-wordpress-developer-custom-themes.html /wordpress-developer-rajkot  301
