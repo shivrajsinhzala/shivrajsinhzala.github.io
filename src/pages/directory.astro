@@ -1,6 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { blogPosts } from '../data/blog-posts';
+import { servicePages } from '../data/services';
+import { getCollection } from 'astro:content';
+
+const collectionPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
 
 <Layout title="Site Directory & HTML Sitemap | Shivrajsinh Zala" description="Browse the site directory and HTML sitemap for Shivrajsinh Zala's portfolio, listing core pages, resume, image gallery, and development blogs.">
@@ -104,12 +110,34 @@ import { blogPosts } from '../data/blog-posts';
         </section>
         
         <section class="mb-12">
+            <h2 class="text-2xl font-bold font-mono mb-4 uppercase border-b-2 border-black pb-2 inline-block">Services — Rajkot & Morbi</h2>
+            <div class="grid grid-cols-1 gap-4 mt-4">
+                <a href="/services" class="block bg-white border-2 border-black p-4 hover:bg-brutal-yellow transition-colors font-bold text-lg flex items-center justify-between">
+                    <span>All Web Development Services</span>
+                    <span class="font-mono text-sm border border-black px-2 py-1 bg-black text-white">/services</span>
+                </a>
+                {servicePages.map((s) => (
+                    <a href={`/${s.slug}`} class="block bg-white border-2 border-black p-4 hover:bg-brutal-cyan transition-colors font-bold text-lg flex flex-col md:flex-row md:items-center justify-between gap-2">
+                        <span>{s.platform} Developer in {s.city}</span>
+                        <span class="font-mono text-xs md:text-sm text-gray-500 break-all">/{s.slug}</span>
+                    </a>
+                ))}
+            </div>
+        </section>
+
+        <section class="mb-12">
             <h2 class="text-2xl font-bold font-mono mb-4 uppercase border-b-2 border-black pb-2 inline-block">SEO Blogs & Articles</h2>
             <div class="grid grid-cols-1 gap-4 mt-4">
                 {blogPosts.map((post) => (
                     <a href={`/blog/${post.slug}`} class="block bg-white border-2 border-black p-4 hover:bg-[#00FF88] transition-colors font-bold text-lg flex flex-col md:flex-row md:items-center justify-between gap-2">
                         <span>{post.title}</span>
                         <span class="font-mono text-xs md:text-sm text-gray-500 break-all">/blog/{post.slug}</span>
+                    </a>
+                ))}
+                {collectionPosts.map((post) => (
+                    <a href={`/blog/${post.id}`} class="block bg-white border-2 border-black p-4 hover:bg-[#00FF88] transition-colors font-bold text-lg flex flex-col md:flex-row md:items-center justify-between gap-2">
+                        <span>{post.data.title}</span>
+                        <span class="font-mono text-xs md:text-sm text-gray-500 break-all">/blog/{post.id}</span>
                     </a>
                 ))}
             </div>

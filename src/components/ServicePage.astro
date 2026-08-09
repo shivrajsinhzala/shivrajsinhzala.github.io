@@ -1,0 +1,263 @@
+---
+/**
+ * ServicePage.astro
+ *
+ * Renders a local service landing page (/wordpress-developer-rajkot etc.)
+ * from a ServicePage record in src/data/services.ts.
+ *
+ * Deliberately does NOT include <HumanRedirect />: these pages need to rank
+ * and convert, so humans and crawlers must see the same content.
+ */
+import Layout from '../layouts/Layout.astro';
+import { pageUrl, LINKEDIN_URL } from '../utils/seo';
+import type { ServicePage } from '../data/services';
+
+interface Props {
+	service: ServicePage;
+}
+
+const { service } = Astro.props;
+const url = pageUrl(`/${service.slug}`);
+const ogImage = 'https://shivrajsinh.in/assets/images/shivrajsinh-zala-frontend-developer-rajkot.webp';
+
+const serviceSchema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'ProfessionalService',
+			'@id': `${url}#service`,
+			name: `${service.platform} Development in ${service.city} — Shivrajsinh Zala`,
+			description: service.metaDescription,
+			url,
+			image: ogImage,
+			email: 'hello@shivrajsinh.in',
+			priceRange: '₹₹',
+			provider: {
+				'@type': 'Person',
+				'@id': 'https://shivrajsinh.in/#person',
+				name: 'Shivrajsinh Zala',
+				url: 'https://shivrajsinh.in/',
+				sameAs: ['https://github.com/shivrajsinhzala', LINKEDIN_URL],
+			},
+			areaServed: [
+				{ '@type': 'City', name: service.city, containedInPlace: { '@type': 'AdministrativeArea', name: 'Gujarat, India' } },
+				{ '@type': 'City', name: service.city === 'Rajkot' ? 'Morbi' : 'Rajkot' },
+				{ '@type': 'AdministrativeArea', name: 'Gujarat' },
+			],
+			address: {
+				'@type': 'PostalAddress',
+				addressLocality: 'Rajkot',
+				addressRegion: 'Gujarat',
+				addressCountry: 'IN',
+			},
+			serviceType: `${service.platform} Development`,
+			knowsAbout: [service.platform, 'Web Development', 'SEO', 'Web Design'],
+			hasOfferCatalog: {
+				'@type': 'OfferCatalog',
+				name: `${service.platform} services in ${service.city}`,
+				itemListElement: service.deliverables.map((d) => ({
+					'@type': 'Offer',
+					itemOffered: { '@type': 'Service', name: d },
+				})),
+			},
+		},
+		{
+			'@type': 'BreadcrumbList',
+			'@id': `${url}#breadcrumb`,
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://shivrajsinh.in/' },
+				{ '@type': 'ListItem', position: 2, name: 'Services', item: pageUrl('/services') },
+				{ '@type': 'ListItem', position: 3, name: `${service.platform} Developer in ${service.city}`, item: url },
+			],
+		},
+		{
+			'@type': 'FAQPage',
+			'@id': `${url}#faq`,
+			mainEntity: service.faqs.map((f) => ({
+				'@type': 'Question',
+				name: f.question,
+				acceptedAnswer: { '@type': 'Answer', text: f.answer },
+			})),
+		},
+	],
+};
+---
+
+<Layout title={service.title} description={service.metaDescription}>
+	<Fragment slot="head">
+		<meta name="author" content="Shivrajsinh Zala" />
+		<meta name="geo.region" content="IN-GJ" />
+		<meta name="geo.placename" content={service.city} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={url} />
+		<meta property="og:title" content={service.title} />
+		<meta property="og:description" content={service.metaDescription} />
+		<meta property="og:image" content={ogImage} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={service.title} />
+		<meta name="twitter:description" content={service.metaDescription} />
+		<meta name="twitter:image" content={ogImage} />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+	</Fragment>
+
+	<main id="main-content" class="relative z-10 pt-24 pb-20 px-4">
+		<div class="max-w-4xl mx-auto mt-6">
+			<!-- Breadcrumb -->
+			<nav class="mb-8 font-mono text-xs uppercase" aria-label="Breadcrumb">
+				<a href="/" class="hover:text-brutal-pink underline">Home</a>
+				<span class="text-gray-400">/</span>
+				<a href="/services" class="hover:text-brutal-pink underline">Services</a>
+				<span class="text-gray-400">/</span>
+				<span class="text-gray-500">{service.platform} Developer in {service.city}</span>
+			</nav>
+
+			<!-- Hero -->
+			<header class="brutal-border bg-white p-6 md:p-10 shadow-[10px_10px_0_0_#000] mb-12">
+				<div
+					class="inline-block font-mono text-[10px] md:text-xs tracking-widest border-2 border-black px-3 py-1 mb-5"
+					style={`background:${service.accent}`}
+				>
+					{service.city.toUpperCase()} · GUJARAT · FREELANCE
+				</div>
+				<h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-[0.95] mb-5">
+					{service.h1}
+				</h1>
+				<p class="text-lg md:text-xl font-medium text-gray-800 mb-8 max-w-2xl">{service.tagline}</p>
+				<div class="flex flex-wrap gap-3">
+					<a
+						href="/contact"
+						class="brutal-border bg-brutal-black text-white px-6 py-3 font-mono font-bold text-sm hover:bg-brutal-pink transition-colors shadow-[5px_5px_0_0_#000]"
+					>
+						GET A FIXED QUOTE →
+					</a>
+					<a
+						href="mailto:hello@shivrajsinh.in"
+						class="brutal-border bg-white px-6 py-3 font-mono font-bold text-sm hover:bg-brutal-yellow transition-colors shadow-[5px_5px_0_0_#000]"
+					>
+						hello@shivrajsinh.in
+					</a>
+				</div>
+			</header>
+
+			<!-- Intro / answer-first block -->
+			<section class="mb-14 space-y-5">
+				{service.intro.map((p) => <p class="text-base md:text-lg leading-relaxed text-gray-800">{p}</p>)}
+			</section>
+
+			<!-- Deliverables -->
+			<section class="mb-14">
+				<h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-6">What you get</h2>
+				<ul class="space-y-3">
+					{
+						service.deliverables.map((d) => (
+							<li class="brutal-border bg-white p-4 flex gap-3 items-start shadow-[4px_4px_0_0_#000]">
+								<span class="font-mono font-bold flex-shrink-0" style={`color:${service.accent === '#00F5FF' ? '#0891a5' : service.accent}`}>
+									▸
+								</span>
+								<span class="text-sm md:text-base">{d}</span>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<!-- Long-form sections -->
+			{
+				service.sections.map((s) => (
+					<section class="mb-14">
+						<h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-5">{s.heading}</h2>
+						<div class="space-y-4">
+							{s.body.map((p) => (
+								<p class="text-base md:text-lg leading-relaxed text-gray-800">{p}</p>
+							))}
+						</div>
+					</section>
+				))
+			}
+
+			<!-- Proof -->
+			<section class="mb-14">
+				<h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-6">Related work</h2>
+				<div class="grid md:grid-cols-3 gap-4">
+					{
+						service.proof.map((p) => (
+							<div class="brutal-border bg-white p-5 shadow-[5px_5px_0_0_#000]">
+								<h3 class="font-black text-lg uppercase tracking-tight mb-2">
+									{p.url ? (
+										<a href={p.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-brutal-pink">
+											{p.name}
+										</a>
+									) : (
+										p.name
+									)}
+								</h3>
+								<p class="text-sm text-gray-700 leading-relaxed">{p.note}</p>
+							</div>
+						))
+					}
+				</div>
+				<p class="mt-5 font-mono text-sm">
+					<a href="/#projects" class="underline hover:text-brutal-pink">See the full project list →</a>
+				</p>
+			</section>
+
+			<!-- FAQ -->
+			<section class="mb-14">
+				<h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-6">
+					{service.platform} in {service.city} — FAQ
+				</h2>
+				<div class="space-y-4">
+					{
+						service.faqs.map((f) => (
+							<details class="brutal-border bg-white shadow-[5px_5px_0_0_#000] group">
+								<summary class="cursor-pointer p-5 font-bold text-base md:text-lg list-none flex justify-between gap-4 items-start">
+									<span>{f.question}</span>
+									<span class="font-mono flex-shrink-0 group-open:rotate-45 transition-transform">+</span>
+								</summary>
+								<div class="px-5 pb-5 -mt-1">
+									<p class="text-sm md:text-base leading-relaxed text-gray-700">{f.answer}</p>
+								</div>
+							</details>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- CTA -->
+			<section class="brutal-border bg-brutal-black text-white p-6 md:p-10 shadow-[10px_10px_0_0_#e00062] mb-14">
+				<h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-4">
+					Need a {service.platform} developer in {service.city}?
+				</h2>
+				<p class="text-gray-300 mb-6 max-w-2xl">
+					Tell me what the site needs to do commercially. You get a written scope, a fixed price and a delivery
+					date — usually within two working days.
+				</p>
+				<a
+					href="/contact"
+					class="inline-block border-2 border-white bg-brutal-yellow text-black px-6 py-3 font-mono font-bold text-sm hover:bg-white transition-colors"
+				>
+					START A PROJECT →
+				</a>
+			</section>
+
+			<!-- Related internal links -->
+			<nav class="mb-6" aria-label="Related pages">
+				<h2 class="font-mono text-xs uppercase tracking-widest text-gray-500 mb-4">Related</h2>
+				<ul class="grid sm:grid-cols-2 gap-3">
+					{
+						service.related.map((r) => (
+							<li>
+								<a
+									href={r.href}
+									class="block brutal-border bg-white p-4 font-bold text-sm hover:bg-brutal-yellow transition-colors shadow-[4px_4px_0_0_#000]"
+								>
+									{r.label} →
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+		</div>
+	</main>
+</Layout>

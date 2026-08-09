@@ -1,0 +1,8 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import { getService } from '../data/services';
+
+const service = getService('squarespace-developer-rajkot');
+---
+
+<ServicePage service={service} />

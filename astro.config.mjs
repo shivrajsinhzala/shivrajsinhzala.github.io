@@ -11,7 +11,17 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      // Never list a noindex page in the sitemap — Search Console flags the
+      // conflicting signal and it wastes crawl budget.
+      filter: (page) =>
+        !['/resume-pdf', '/janki'].includes(new URL(page).pathname.replace(/\/$/, '')),
+      changefreq: 'weekly',
+      lastmod: new Date(),
+    }),
+  ],
   site: 'https://shivrajsinh.in',
   build: {
     format: 'file'

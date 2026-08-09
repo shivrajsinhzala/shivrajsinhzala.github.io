@@ -43,6 +43,9 @@ const isActive = (path: string) => {
                         <a href="#projects"
                             class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-orange hover:text-white magnetic-btn"
                             data-magnetic>PROJECTS</a>
+                        <a href="/services"
+                            class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-[#00FF88] magnetic-btn"
+                            data-magnetic>SERVICES</a>
                         <a href="/resume"
                             class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-purple hover:text-white magnetic-btn"
                             data-magnetic>RESUME</a>
@@ -55,6 +58,9 @@ const isActive = (path: string) => {
                         <a href="/"
                             class="brutal-border bg-white px-4 py-2 brutal-shadow-sm font-mono text-sm hover:bg-brutal-yellow magnetic-btn"
                             data-magnetic>HOME</a>
+                        <a href="/services"
+                            class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/services') ? 'bg-[#00FF88] font-bold' : 'bg-white hover:bg-[#00FF88]'}`}
+                            data-magnetic>SERVICES</a>
                         <a href="/resume"
                             class={`brutal-border px-4 py-2 brutal-shadow-sm font-mono text-sm magnetic-btn transition-colors duration-200 ${isActive('/resume') ? 'bg-brutal-purple text-white font-bold' : 'bg-white hover:bg-brutal-purple hover:text-white'}`}
                             data-magnetic>RESUME</a>
@@ -87,12 +93,14 @@ const isActive = (path: string) => {
                 <a href="#experience" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">WORK</a>
                 <a href="#skills" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">SKILLS</a>
                 <a href="#projects" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">PROJECTS</a>
+                <a href="/services" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">SERVICES</a>
                 <a href="/resume" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">RESUME</a>
                 <a href="/contact" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">CONTACT</a>
             </>
         ) : (
             <>
                 <a href="/" class="text-4xl font-bold font-mono mobile-link hover:text-white transition-colors">HOME</a>
+                <a href="/services" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/services') ? 'text-white' : 'hover:text-white'}`}>SERVICES</a>
                 <a href="/resume" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/resume') ? 'text-brutal-purple' : 'hover:text-white'}`}>RESUME</a>
                 <a href="/contact" class={`text-4xl font-bold font-mono mobile-link transition-colors ${isActive('/contact') ? 'text-brutal-black' : 'hover:text-white'}`}>CONTACT</a>
             </>

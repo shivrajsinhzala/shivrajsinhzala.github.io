@@ -1,0 +1,8 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import { getService } from '../data/services';
+
+const service = getService('wordpress-developer-morbi');
+---
+
+<ServicePage service={service} />

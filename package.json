@@ -9,7 +9,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "blog:generate": "node scripts/generate-blog.mjs",
+    "blog:dry": "node scripts/generate-blog.mjs --dry-run",
+    "blog:list": "node scripts/generate-blog.mjs --list"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.6",

@@ -2,8 +2,17 @@
 import Layout from '../../layouts/Layout.astro';
 import HumanRedirect from '../../components/HumanRedirect.astro';
 import { pageUrl } from '../../utils/seo';
+import { getCollection } from 'astro:content';
 
 const blogIndexUrl = pageUrl('/blog');
+
+// Markdown posts (hand-written + weekly generated). Newest first.
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const fmt = (d: string) =>
+	new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 
 <Layout
@@ -110,6 +119,57 @@ const blogIndexUrl = pageUrl('/blog');
 					</a>
 				</div>
 			</div>
+
+			<!-- Latest Articles -->
+			{
+				posts.length > 0 && (
+					<section class="mt-16">
+						<h2 class="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-8">Latest articles</h2>
+						<div class="grid md:grid-cols-2 gap-5">
+							{posts.map((post) => (
+								<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 transition-transform flex flex-col">
+									<div class="flex flex-wrap items-center gap-3 mb-3 font-mono text-[10px] md:text-xs">
+										<span class="bg-brutal-yellow border-2 border-black px-2 py-0.5 tracking-widest font-bold">
+											{post.data.tag}
+										</span>
+										<time datetime={post.data.date} class="text-gray-500">
+											{fmt(post.data.date)}
+										</time>
+									</div>
+									<h3 class="text-xl md:text-2xl font-black uppercase tracking-tight mb-3 leading-tight">
+										<a href={`/blog/${post.id}`} class="hover:text-brutal-pink transition-colors">
+											{post.data.title}
+										</a>
+									</h3>
+									<p class="font-mono text-sm text-gray-700 mb-5 flex-grow leading-relaxed">
+										{post.data.description}
+									</p>
+									<a
+										href={`/blog/${post.id}`}
+										class="font-mono text-sm font-bold underline hover:text-brutal-pink self-start"
+									>
+										READ ARTICLE →
+									</a>
+								</article>
+							))}
+						</div>
+					</section>
+				)
+			}
+
+			<!-- Services cross-link -->
+			<section class="mt-16 brutal-border bg-brutal-gray p-6 md:p-8">
+				<h2 class="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-4">Hire me</h2>
+				<p class="font-mono text-sm mb-5 max-w-2xl">
+					Freelance WordPress and Squarespace development for businesses in Rajkot, Morbi and across Gujarat.
+				</p>
+				<div class="flex flex-wrap gap-3">
+					<a href="/wordpress-developer-rajkot" class="brutal-border bg-white px-4 py-2 font-mono text-xs font-bold hover:bg-brutal-yellow transition-colors">WORDPRESS · RAJKOT</a>
+					<a href="/squarespace-developer-rajkot" class="brutal-border bg-white px-4 py-2 font-mono text-xs font-bold hover:bg-brutal-yellow transition-colors">SQUARESPACE · RAJKOT</a>
+					<a href="/wordpress-developer-morbi" class="brutal-border bg-white px-4 py-2 font-mono text-xs font-bold hover:bg-brutal-yellow transition-colors">WORDPRESS · MORBI</a>
+					<a href="/squarespace-developer-morbi" class="brutal-border bg-white px-4 py-2 font-mono text-xs font-bold hover:bg-brutal-yellow transition-colors">SQUARESPACE · MORBI</a>
+				</div>
+			</section>
 
 			<!-- Portfolio Back Button -->
 			<p class="mt-16 text-center font-mono text-sm">

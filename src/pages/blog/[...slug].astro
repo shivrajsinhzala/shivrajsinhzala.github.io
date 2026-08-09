@@ -1,0 +1,307 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { pageUrl, LINKEDIN_URL } from '../../utils/seo';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => !data.draft);
+	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const url = pageUrl(`/blog/${post.id}`);
+const image = post.data.image.startsWith('http')
+	? post.data.image
+	: `https://shivrajsinh.in${post.data.image}`;
+
+const readingMinutes = Math.max(3, Math.round((post.body?.split(/\s+/).length ?? 600) / 200));
+
+const graph: Record<string, unknown>[] = [
+	{
+		'@type': 'BlogPosting',
+		'@id': `${url}#article`,
+		headline: post.data.title,
+		description: post.data.description,
+		image,
+		datePublished: post.data.date,
+		dateModified: post.data.updated ?? post.data.date,
+		inLanguage: 'en-US',
+		keywords: post.data.keywords.join(', '),
+		wordCount: post.body?.split(/\s+/).length,
+		mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+		author: {
+			'@type': 'Person',
+			'@id': 'https://shivrajsinh.in/#person',
+			name: 'Shivrajsinh Zala',
+			url: 'https://shivrajsinh.in/',
+			sameAs: ['https://github.com/shivrajsinhzala', LINKEDIN_URL],
+		},
+		publisher: {
+			'@type': 'Person',
+			'@id': 'https://shivrajsinh.in/#person',
+			name: 'Shivrajsinh Zala',
+			url: 'https://shivrajsinh.in/',
+		},
+	},
+	{
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://shivrajsinh.in/' },
+			{ '@type': 'ListItem', position: 2, name: 'Blog', item: pageUrl('/blog') },
+			{ '@type': 'ListItem', position: 3, name: post.data.title, item: url },
+		],
+	},
+];
+
+if (post.data.faqs.length > 0) {
+	graph.push({
+		'@type': 'FAQPage',
+		'@id': `${url}#faq`,
+		mainEntity: post.data.faqs.map((f) => ({
+			'@type': 'Question',
+			name: f.question,
+			acceptedAnswer: { '@type': 'Answer', text: f.answer },
+		})),
+	});
+}
+
+const schema = { '@context': 'https://schema.org', '@graph': graph };
+
+const displayDate = new Date(post.data.date).toLocaleDateString('en-GB', {
+	day: 'numeric',
+	month: 'long',
+	year: 'numeric',
+});
+
+const tocHeadings = headings.filter((h) => h.depth === 2);
+---
+
+<Layout title={`${post.data.title} | Shivrajsinh Zala`} description={post.data.description}>
+	<Fragment slot="head">
+		<meta name="author" content="Shivrajsinh Zala" />
+		<meta property="article:published_time" content={post.data.date} />
+		<meta property="article:author" content="Shivrajsinh Zala" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content={url} />
+		<meta property="og:title" content={post.data.title} />
+		<meta property="og:description" content={post.data.description} />
+		<meta property="og:image" content={image} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={post.data.title} />
+		<meta name="twitter:description" content={post.data.description} />
+		<meta name="twitter:image" content={image} />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+	</Fragment>
+
+	<main id="main-content" class="relative z-10 pt-24 pb-20 px-4">
+		<div class="max-w-3xl mx-auto mt-6">
+			<nav class="mb-8 font-mono text-xs uppercase" aria-label="Breadcrumb">
+				<a href="/" class="hover:text-brutal-pink underline">Home</a>
+				<span class="text-gray-400">/</span>
+				<a href="/blog" class="hover:text-brutal-pink underline">Blog</a>
+				<span class="text-gray-400">/</span>
+				<span class="text-gray-500">{post.data.tag}</span>
+			</nav>
+
+			<header class="mb-10">
+				<div class="flex flex-wrap gap-3 items-center font-mono text-[10px] md:text-xs mb-5">
+					<span class="bg-brutal-yellow border-2 border-black px-2 py-1 tracking-widest">{post.data.tag}</span>
+					<time datetime={post.data.date} class="text-gray-600">{displayDate}</time>
+					<span class="text-gray-400">·</span>
+					<span class="text-gray-600">{readingMinutes} min read</span>
+				</div>
+				<h1 class="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-[1.0] mb-5">
+					{post.data.title}
+				</h1>
+				<p class="text-lg text-gray-700 leading-relaxed">{post.data.description}</p>
+				<p class="mt-5 font-mono text-xs text-gray-500">
+					By <a href="/" class="underline hover:text-brutal-pink">Shivrajsinh Zala</a> — Frontend Developer,
+					Rajkot
+				</p>
+			</header>
+
+			{
+				tocHeadings.length > 2 && (
+					<nav class="brutal-border bg-brutal-gray p-5 mb-10" aria-label="Table of contents">
+						<h2 class="font-mono text-xs uppercase tracking-widest mb-3">On this page</h2>
+						<ol class="space-y-1.5 list-decimal list-inside">
+							{tocHeadings.map((h) => (
+								<li class="text-sm">
+									<a href={`#${h.slug}`} class="underline hover:text-brutal-pink">
+										{h.text}
+									</a>
+								</li>
+							))}
+						</ol>
+					</nav>
+				)
+			}
+
+			<article class="post-body">
+				<Content />
+			</article>
+
+			{
+				post.data.faqs.length > 0 && (
+					<section class="mt-14">
+						<h2 class="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-6">
+							Frequently asked questions
+						</h2>
+						<div class="space-y-4">
+							{post.data.faqs.map((f) => (
+								<details class="brutal-border bg-white shadow-[5px_5px_0_0_#000] group">
+									<summary class="cursor-pointer p-5 font-bold list-none flex justify-between gap-4 items-start">
+										<span>{f.question}</span>
+										<span class="font-mono flex-shrink-0 group-open:rotate-45 transition-transform">
+											+
+										</span>
+									</summary>
+									<div class="px-5 pb-5 -mt-1">
+										<p class="text-sm md:text-base leading-relaxed text-gray-700">{f.answer}</p>
+									</div>
+								</details>
+							))}
+						</div>
+					</section>
+				)
+			}
+
+			<section class="brutal-border bg-brutal-black text-white p-6 md:p-10 shadow-[10px_10px_0_0_#e00062] mt-14">
+				<h2 class="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-4">
+					Need this built properly?
+				</h2>
+				<p class="text-gray-300 mb-6">
+					I'm a freelance WordPress and Squarespace developer in Rajkot, working with businesses across
+					Rajkot, Morbi and the rest of Gujarat. Fixed scope, fixed price, no agency layer.
+				</p>
+				<div class="flex flex-wrap gap-3">
+					<a
+						href="/services"
+						class="inline-block border-2 border-white bg-brutal-yellow text-black px-6 py-3 font-mono font-bold text-sm hover:bg-white transition-colors"
+					>
+						SEE SERVICES →
+					</a>
+					<a
+						href="/contact"
+						class="inline-block border-2 border-white px-6 py-3 font-mono font-bold text-sm hover:bg-white hover:text-black transition-colors"
+					>
+						GET A QUOTE
+					</a>
+				</div>
+			</section>
+
+			<nav class="mt-10 font-mono text-sm" aria-label="Blog navigation">
+				<a href="/blog" class="underline hover:text-brutal-pink">← Back to all articles</a>
+			</nav>
+		</div>
+	</main>
+</Layout>
+
+<style is:global>
+	/* Markdown body styling — scoped to generated/hand-written posts. */
+	.post-body {
+		font-size: 1.0625rem;
+		line-height: 1.75;
+		color: #1f2937;
+	}
+	.post-body > * + * {
+		margin-top: 1.25rem;
+	}
+	.post-body h2 {
+		font-size: clamp(1.5rem, 4vw, 2.25rem);
+		font-weight: 900;
+		text-transform: uppercase;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		margin-top: 3rem;
+		margin-bottom: 1rem;
+		color: #0a0a0a;
+		scroll-margin-top: 6rem;
+	}
+	.post-body h3 {
+		font-size: clamp(1.15rem, 3vw, 1.5rem);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		margin-top: 2rem;
+		margin-bottom: 0.75rem;
+		color: #0a0a0a;
+		scroll-margin-top: 6rem;
+	}
+	.post-body a {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		font-weight: 600;
+	}
+	.post-body a:hover {
+		color: #e00062;
+	}
+	.post-body ul,
+	.post-body ol {
+		padding-left: 1.5rem;
+	}
+	.post-body ul {
+		list-style: disc;
+	}
+	.post-body ol {
+		list-style: decimal;
+	}
+	.post-body li + li {
+		margin-top: 0.5rem;
+	}
+	.post-body strong {
+		font-weight: 700;
+		color: #0a0a0a;
+	}
+	.post-body blockquote {
+		border-left: 4px solid #0a0a0a;
+		background: #f0f0f0;
+		padding: 1rem 1.25rem;
+		font-style: italic;
+	}
+	.post-body code {
+		font-family: ui-monospace, monospace;
+		font-size: 0.9em;
+		background: #f0f0f0;
+		border: 1px solid #d4d4d4;
+		padding: 0.1em 0.35em;
+	}
+	.post-body pre {
+		border: 2px solid #0a0a0a;
+		padding: 1rem;
+		overflow-x: auto;
+	}
+	.post-body pre code {
+		background: none;
+		border: none;
+		padding: 0;
+	}
+	.post-body table {
+		width: 100%;
+		border-collapse: collapse;
+		display: block;
+		overflow-x: auto;
+	}
+	.post-body th,
+	.post-body td {
+		border: 2px solid #0a0a0a;
+		padding: 0.6rem 0.8rem;
+		text-align: left;
+		font-size: 0.95rem;
+	}
+	.post-body th {
+		background: #ffe900;
+		font-weight: 800;
+	}
+	.post-body img {
+		max-width: 100%;
+		height: auto;
+		border: 2px solid #0a0a0a;
+	}
+	.post-body hr {
+		border: none;
+		border-top: 2px solid #0a0a0a;
+		margin: 2.5rem 0;
+	}
+</style>

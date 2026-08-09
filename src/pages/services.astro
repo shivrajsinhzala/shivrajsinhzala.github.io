@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { pageUrl } from '../utils/seo';
+import { servicePages } from '../data/services';
+
+const url = pageUrl('/services');
+const title = 'Web Development Services in Rajkot & Morbi | Shivrajsinh Zala';
+const description =
+	'Freelance WordPress and Squarespace development for businesses in Rajkot and Morbi, Gujarat. Custom themes, WooCommerce, Squarespace 7.1, speed optimisation and SEO.';
+
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'CollectionPage',
+			'@id': `${url}#page`,
+			name: title,
+			description,
+			url,
+			isPartOf: { '@id': 'https://shivrajsinh.in/#website' },
+			about: { '@id': 'https://shivrajsinh.in/#person' },
+		},
+		{
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://shivrajsinh.in/' },
+				{ '@type': 'ListItem', position: 2, name: 'Services', item: url },
+			],
+		},
+		{
+			'@type': 'ItemList',
+			name: 'Services',
+			itemListElement: servicePages.map((s, i) => ({
+				'@type': 'ListItem',
+				position: i + 1,
+				name: `${s.platform} Developer in ${s.city}`,
+				url: pageUrl(`/${s.slug}`),
+			})),
+		},
+	],
+};
+---
+
+<Layout title={title} description={description}>
+	<Fragment slot="head">
+		<meta name="geo.region" content="IN-GJ" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="https://shivrajsinh.in/assets/images/og-image.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content="https://shivrajsinh.in/assets/images/og-image.png" />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+	</Fragment>
+
+	<main id="main-content" class="relative z-10 pt-24 pb-20 px-4">
+		<div class="max-w-5xl mx-auto mt-6">
+			<nav class="mb-8 font-mono text-xs uppercase" aria-label="Breadcrumb">
+				<a href="/" class="hover:text-brutal-pink underline">Home</a>
+				<span class="text-gray-400">/</span>
+				<span class="text-gray-500">Services</span>
+			</nav>
+
+			<header class="mb-12">
+				<h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-[0.95] mb-5">
+					Web development services<br />in Rajkot & Morbi
+				</h1>
+				<p class="text-lg md:text-xl text-gray-800 max-w-3xl">
+					I build and fix websites for businesses across Saurashtra — mostly WordPress and Squarespace, mostly
+					for manufacturers, exporters and service businesses who need the site to actually bring in enquiries.
+					You work with me directly, on a fixed scope and a fixed price.
+				</p>
+			</header>
+
+			<section class="grid md:grid-cols-2 gap-5 mb-16">
+				{
+					servicePages.map((s) => (
+						<a
+							href={`/${s.slug}`}
+							class="block brutal-border bg-white p-6 shadow-[8px_8px_0_0_#000] hover:translate-x-0.5 hover:translate-y-0.5 transition-transform"
+						>
+							<div
+								class="inline-block font-mono text-[10px] tracking-widest border-2 border-black px-2 py-0.5 mb-4"
+								style={`background:${s.accent}`}
+							>
+								{s.city.toUpperCase()}
+							</div>
+							<h2 class="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-3">
+								{s.platform} Developer in {s.city}
+							</h2>
+							<p class="text-sm md:text-base text-gray-700 leading-relaxed mb-4">{s.tagline}</p>
+							<span class="font-mono text-sm font-bold underline">Read more →</span>
+						</a>
+					))
+				}
+			</section>
+
+			<section class="brutal-border bg-brutal-gray p-6 md:p-10 mb-14">
+				<h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-5">Also available</h2>
+				<p class="text-base md:text-lg text-gray-800 mb-4">
+					Beyond WordPress and Squarespace I take on Shopify and Webflow builds, React and Astro frontends,
+					GSAP animation work, and Core Web Vitals rescue projects on sites built by someone else.
+				</p>
+				<p class="text-base md:text-lg text-gray-800">
+					If you are not sure which platform your project needs, that is a good first conversation to have —
+					I build on all of them, so I have no reason to push you toward one.
+				</p>
+			</section>
+
+			<section class="brutal-border bg-brutal-black text-white p-6 md:p-10 shadow-[10px_10px_0_0_#e00062]">
+				<h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-4">Start a project</h2>
+				<p class="text-gray-300 mb-6 max-w-2xl">
+					Tell me what the site needs to do. You get a written scope, a fixed price and a delivery date,
+					usually within two working days.
+				</p>
+				<div class="flex flex-wrap gap-3">
+					<a
+						href="/contact"
+						class="inline-block border-2 border-white bg-brutal-yellow text-black px-6 py-3 font-mono font-bold text-sm hover:bg-white transition-colors"
+					>
+						CONTACT →
+					</a>
+					<a
+						href="/resume"
+						class="inline-block border-2 border-white px-6 py-3 font-mono font-bold text-sm hover:bg-white hover:text-black transition-colors"
+					>
+						SEE RESUME
+					</a>
+				</div>
+			</section>
+		</div>
+	</main>
+</Layout>
