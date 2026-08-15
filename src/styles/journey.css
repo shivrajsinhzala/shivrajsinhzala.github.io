@@ -1,0 +1,621 @@
+/**
+ * Journey overlay — the DOM layer that sits above the WebGL canvas.
+ *
+ * Every word the visitor reads lives here, not in the canvas: real text, real
+ * links, real focus states, indexable and selectable. The canvas behind it is
+ * decoration.
+ */
+
+/**
+ * The void's background belongs to the page, not to the canvas.
+ *
+ * Overlay text is white-on-black by design, so if the backdrop came only from
+ * WebGL the copy would be invisible before the first frame paints, on a lost
+ * context, or with WebGL unavailable entirely. Painting it here makes the
+ * contrast guarantee independent of whether the 3D ever runs.
+ */
+body:has(.journey-scroll) {
+	background-color: #0a0a0a;
+}
+
+.journey-canvas {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background-color: #0a0a0a;
+}
+
+/**
+ * The wrapper stays transparent to the pointer, but the canvas itself accepts
+ * events so the 3D objects can be hovered and clicked. The DOM overlay sits
+ * above it in the stacking order, so text, links and buttons still win any
+ * hit they share with the world behind them.
+ */
+.journey-canvas canvas {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	pointer-events: auto;
+}
+
+/* The scroll runway. Its height is what the camera spline is mapped onto. */
+.journey-scroll {
+	position: relative;
+	z-index: 1;
+}
+
+/**
+ * Heights use svh, not vh.
+ *
+ * On mobile browsers vh is tied to the largest viewport and dvh changes as the
+ * URL bar hides, which would resize every section mid-scroll and shift the
+ * anchors the camera is following. svh is stable for the whole scroll, so the
+ * mapping measured on load stays valid.
+ */
+.journey-panel {
+	min-height: 100vh;
+	min-height: 100svh;
+	display: flex;
+	align-items: center;
+	padding: 6rem 1.25rem;
+	position: relative;
+}
+
+.journey-panel--tall {
+	min-height: 130vh;
+	min-height: 130svh;
+}
+
+/* Projects gets its own runway — the corridor's real height comes from its
+   steps, so no min-height is declared here that could disagree with them. */
+.journey-panel--corridor {
+	align-items: flex-start;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.journey-inner {
+	width: 100%;
+	max-width: 72rem;
+	margin-inline: auto;
+}
+
+/* ------------------------------------------------------------------ */
+/* Reveal states — driven by --panel-visible from the scroll controller */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Reveal is driven directly from --panel-visible every frame — deliberately
+ * with no CSS transition. A transition on a value the controller rewrites each
+ * frame restarts continuously and never reaches its target (and any
+ * transition-delay makes it never start at all). Smoothing belongs to the
+ * scroll easing, which also keeps text locked to the camera rather than
+ * lagging behind it.
+ */
+[data-panel] .reveal {
+	--d: 0;
+	--v: clamp(0, calc((var(--panel-visible, 0) - var(--d)) * 1.7), 1);
+	opacity: var(--v);
+	transform: translateY(calc((1 - var(--v)) * 2.25rem));
+	/* Deliberately no will-change: it applies to 30+ elements at once here, and
+	   promoting that many permanent compositor layers on a very tall page costs
+	   far more than the paint it saves. */
+}
+
+/* Stagger as a threshold offset rather than a time delay. */
+[data-panel] .reveal:nth-child(2) {
+	--d: 0.05;
+}
+[data-panel] .reveal:nth-child(3) {
+	--d: 0.1;
+}
+[data-panel] .reveal:nth-child(4) {
+	--d: 0.15;
+}
+
+/* ------------------------------------------------------------------ */
+/* Brutalist surfaces over the void                                     */
+/* ------------------------------------------------------------------ */
+
+.j-card {
+	background: #fff;
+	border: 3px solid var(--color-brutal-black, #0a0a0a);
+	box-shadow: 8px 8px 0 0 var(--color-brutal-black, #0a0a0a);
+	padding: 1.75rem;
+}
+
+.j-card--dark {
+	background: var(--color-brutal-black, #0a0a0a);
+	color: #fff;
+	box-shadow: 8px 8px 0 0 var(--color-brutal-cyan, #00f5ff);
+}
+
+.j-label {
+	font-family: var(--font-mono, monospace);
+	font-size: 0.7rem;
+	letter-spacing: 0.18em;
+	background: var(--color-brutal-black, #0a0a0a);
+	color: #fff;
+	display: inline-block;
+	padding: 0.3rem 0.75rem;
+}
+
+.j-heading {
+	font-family: var(--font-display, sans-serif);
+	font-size: clamp(2.5rem, 8vw, 6rem);
+	line-height: 0.88;
+	letter-spacing: 0.01em;
+	text-transform: uppercase;
+}
+
+/* Headings sit directly on the void, so they need their own contrast floor
+   rather than relying on whatever geometry happens to be behind them. */
+.j-heading--onvoid {
+	color: #fff;
+	text-shadow: 4px 4px 0 var(--color-brutal-black, #0a0a0a);
+}
+
+/* ------------------------------------------------------------------ */
+/* Projects corridor — one sticky caption per monolith                  */
+/* ------------------------------------------------------------------ */
+
+.corridor-step {
+	min-height: 70vh;
+	min-height: 70svh;
+	display: flex;
+	align-items: center;
+}
+
+/**
+ * `data-side` is the side the CAPTION sits on, and it is deliberately the
+ * opposite of its monolith.
+ *
+ * Putting the card on the same side as the slab buries the screenshot it is
+ * describing underneath it. Across the corridor, the card is always legible,
+ * the slab is always visible, and the connector below points from one to the
+ * other. Written from the same index that places the slab, so the two can
+ * never drift out of sync the way the old :nth-child rule did.
+ */
+.corridor-step[data-side='left'] {
+	justify-content: flex-start;
+}
+
+.corridor-step[data-side='right'] {
+	justify-content: flex-end;
+}
+
+/* Connector tick on the inboard edge, pointing across at the slab it labels. */
+.corridor-caption {
+	position: relative;
+}
+
+.corridor-caption::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	width: 2.5rem;
+	height: 3px;
+	background: var(--color-brutal-cyan, #00f5ff);
+	opacity: calc(var(--v, 0) * 0.9);
+}
+
+.corridor-step[data-side='left'] .corridor-caption::after {
+	left: 100%;
+}
+
+.corridor-step[data-side='right'] .corridor-caption::after {
+	right: 100%;
+}
+
+.corridor-caption {
+	max-width: 24rem;
+	background: #fff;
+	border: 3px solid #0a0a0a;
+	box-shadow: 8px 8px 0 0 #0a0a0a;
+	padding: 1.25rem 1.5rem;
+	--v: clamp(0, calc(var(--panel-visible, 0) * 1.7), 1);
+	opacity: var(--v);
+	transform: translateY(calc((1 - var(--v)) * 1.5rem));
+}
+
+.corridor-num {
+	font-family: var(--font-display, sans-serif);
+	font-size: 3rem;
+	line-height: 1;
+}
+
+/* ------------------------------------------------------------------ */
+/* AI marquee band                                                      */
+/* ------------------------------------------------------------------ */
+
+.journey-marquee {
+	overflow: hidden;
+	background: var(--color-brutal-black, #0a0a0a);
+	color: #fff;
+	border-block: 3px solid var(--color-brutal-cyan, #00f5ff);
+	padding-block: 0.75rem;
+	white-space: nowrap;
+}
+
+.journey-marquee-track {
+	display: inline-flex;
+	gap: 0;
+	font-family: var(--font-mono, monospace);
+	font-size: 0.75rem;
+	letter-spacing: 0.18em;
+	animation: journey-marquee 38s linear infinite;
+}
+
+@keyframes journey-marquee {
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.journey-marquee-track {
+		animation: none;
+	}
+}
+
+/* ------------------------------------------------------------------ */
+/* Progress rail                                                        */
+/* ------------------------------------------------------------------ */
+
+.journey-rail {
+	position: fixed;
+	right: 1.25rem;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 40;
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	align-items: flex-end;
+}
+
+.journey-rail a {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	text-decoration: none;
+	color: #fff;
+}
+
+.journey-rail-dot {
+	width: 10px;
+	height: 10px;
+	border: 2px solid rgba(255, 255, 255, 0.45);
+	background: transparent;
+	transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.journey-rail-label {
+	font-family: var(--font-mono, monospace);
+	font-size: 0.6rem;
+	letter-spacing: 0.16em;
+	opacity: 0;
+	transform: translateX(0.4rem);
+	transition: opacity 0.2s, transform 0.2s;
+	pointer-events: none;
+	white-space: nowrap;
+	order: -1;
+}
+
+.journey-rail a:hover .journey-rail-label,
+.journey-rail a:focus-visible .journey-rail-label,
+.journey-rail a.is-active .journey-rail-label {
+	opacity: 0.85;
+	transform: translateX(0);
+}
+
+.journey-rail a:hover .journey-rail-dot,
+.journey-rail a:focus-visible .journey-rail-dot {
+	border-color: var(--color-brutal-cyan, #00f5ff);
+	transform: scale(1.25);
+}
+
+.journey-rail a.is-active .journey-rail-dot {
+	background: var(--color-brutal-cyan, #00f5ff);
+	border-color: var(--color-brutal-cyan, #00f5ff);
+	transform: scale(1.25);
+}
+
+@media (max-width: 900px) {
+	.journey-rail {
+		display: none;
+	}
+}
+
+/* Focus must survive the canvas stacking context. */
+.journey-scroll a:focus-visible,
+.journey-scroll button:focus-visible {
+	outline: 3px solid var(--color-brutal-yellow, #ffe900);
+	outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Phones — the corridor's left/right alternation has no room to read   */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 767px) {
+	.journey-panel {
+		padding: 4.5rem 1rem;
+	}
+
+	.journey-panel--tall {
+		min-height: 115vh;
+		min-height: 115svh;
+	}
+
+	/* Alternating sides needs width to be legible; on a phone every caption
+	   is full-bleed instead, and the monoliths narrow to match (see useTier). */
+	.corridor-step,
+	.corridor-step:nth-child(odd),
+	.corridor-step:nth-child(even) {
+		justify-content: center;
+		min-height: 62vh;
+		min-height: 62svh;
+		padding-inline: 1rem;
+	}
+
+	.corridor-caption {
+		max-width: 100%;
+		width: 100%;
+		box-shadow: 6px 6px 0 0 #0a0a0a;
+	}
+
+	.j-card {
+		padding: 1.25rem;
+		box-shadow: 6px 6px 0 0 var(--color-brutal-black, #0a0a0a);
+	}
+
+	/* The hero sculpture drops below the copy on portrait, so the text needs
+	   to sit in the upper half rather than dead centre. */
+	#hero.journey-panel {
+		align-items: flex-start;
+		padding-top: 7rem;
+	}
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion — the camera stops flying, panels simply stack        */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+	[data-panel] .reveal,
+	.corridor-caption {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+
+	.journey-panel--corridor {
+		min-height: 0;
+	}
+
+	.corridor-step {
+		min-height: 0;
+		padding: 2rem 0;
+		justify-content: flex-start !important;
+	}
+}
+
+/**
+ * No WebGL (unsupported, blocked, or context lost): there are no monoliths to
+ * fly past, so the corridor's 780vh of scroll would be empty dead space.
+ * Collapse it to a normal stacked list — still every project, just read rather
+ * than travelled.
+ */
+html.no-webgl .journey-panel--corridor {
+	min-height: 0;
+}
+
+html.no-webgl .corridor-step {
+	min-height: 0;
+	padding-block: 1rem;
+	justify-content: flex-start !important;
+}
+
+html.no-webgl .corridor-caption,
+html.no-webgl [data-panel] .reveal {
+	opacity: 1;
+	transform: none;
+}
+
+html.no-webgl .journey-panel,
+html.no-webgl .journey-panel--tall {
+	min-height: 0;
+	padding-block: 4rem;
+}
+
+/* No-JS: the overlay is a complete, readable page on its own. */
+html:not(.journey-ready) [data-panel] .reveal,
+html:not(.journey-ready) .corridor-caption {
+	opacity: 1;
+	transform: none;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Entry moment                                                         */
+/* ------------------------------------------------------------------ */
+
+.journey-intro {
+	position: fixed;
+	inset: 0;
+	z-index: 999998;
+	background: #0a0a0a;
+	display: grid;
+	place-items: center;
+	transition: opacity 0.6s ease, visibility 0.6s;
+}
+
+.journey-intro.is-done {
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.journey-intro-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem;
+}
+
+.journey-intro-mark {
+	font-family: var(--font-mono, monospace);
+	font-size: clamp(1.5rem, 5vw, 2.5rem);
+	letter-spacing: 0.3em;
+	color: #fff;
+}
+
+.journey-intro-bar {
+	width: min(240px, 60vw);
+	height: 4px;
+	background: rgba(255, 255, 255, 0.15);
+	overflow: hidden;
+}
+
+.journey-intro-bar span {
+	display: block;
+	height: 100%;
+	width: 0;
+	background: var(--color-brutal-cyan, #00f5ff);
+	transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.journey-intro.is-loading .journey-intro-bar span {
+	width: 100%;
+}
+
+.journey-intro-skip {
+	font-family: var(--font-mono, monospace);
+	font-size: 0.65rem;
+	letter-spacing: 0.2em;
+	color: rgba(255, 255, 255, 0.5);
+	background: none;
+	border: 2px solid rgba(255, 255, 255, 0.2);
+	padding: 0.4rem 1rem;
+	cursor: pointer;
+}
+
+.journey-intro-skip:hover,
+.journey-intro-skip:focus-visible {
+	color: #fff;
+	border-color: var(--color-brutal-cyan, #00f5ff);
+}
+
+/* No JS, or reduced motion: never trap the visitor behind a splash. */
+html:not(.journey-ready) .journey-intro {
+	opacity: 0;
+	visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.journey-intro {
+		display: none;
+	}
+}
+
+/* ------------------------------------------------------------------ */
+/* Sound toggle                                                         */
+/* ------------------------------------------------------------------ */
+
+.journey-audio {
+	position: fixed;
+	left: 1.25rem;
+	bottom: 1.25rem;
+	z-index: 60;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.5rem 0.75rem;
+	background: rgba(10, 10, 10, 0.75);
+	border: 2px solid rgba(255, 255, 255, 0.25);
+	color: #fff;
+	font-family: var(--font-mono, monospace);
+	font-size: 0.6rem;
+	letter-spacing: 0.16em;
+	cursor: pointer;
+}
+
+.journey-audio:hover,
+.journey-audio:focus-visible {
+	border-color: var(--color-brutal-cyan, #00f5ff);
+}
+
+.journey-audio-bars {
+	display: flex;
+	align-items: flex-end;
+	gap: 2px;
+	height: 12px;
+}
+
+.journey-audio-bars i {
+	width: 2px;
+	height: 3px;
+	background: currentColor;
+}
+
+.journey-audio[aria-pressed='true'] {
+	color: var(--color-brutal-cyan, #00f5ff);
+	border-color: var(--color-brutal-cyan, #00f5ff);
+}
+
+.journey-audio[aria-pressed='true'] .journey-audio-bars i {
+	animation: journey-eq 0.9s ease-in-out infinite;
+}
+
+.journey-audio[aria-pressed='true'] .journey-audio-bars i:nth-child(2) {
+	animation-delay: 0.15s;
+}
+
+.journey-audio[aria-pressed='true'] .journey-audio-bars i:nth-child(3) {
+	animation-delay: 0.3s;
+}
+
+@keyframes journey-eq {
+	0%, 100% { height: 3px; }
+	50% { height: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.journey-audio-bars i {
+		animation: none !important;
+	}
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Return tunnel + loop warp                                            */
+/* ------------------------------------------------------------------ */
+
+/* Pure runway: tall enough for the camera to accelerate through the gates. */
+.journey-panel--outro {
+	min-height: 260vh;
+	min-height: 260svh;
+	align-items: flex-start;
+	padding-top: 12vh;
+}
+
+.journey-outro-hint {
+	color: rgba(255, 255, 255, 0.35);
+	letter-spacing: 0.32em;
+}
+
+/* Reduced motion: the loop does not engage at all, so the tunnel collapses. */
+@media (prefers-reduced-motion: reduce) {
+	.journey-panel--outro {
+		min-height: 0;
+		padding: 3rem 1.25rem;
+	}
+}
+
+/* The loop clone is a duplicate of the hero, parked after the footer purely so
+   the DOM is periodic. It must never be interactive or selectable. */
+[data-loop-clone] {
+	user-select: none;
+}

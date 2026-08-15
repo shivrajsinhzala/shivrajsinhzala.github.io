@@ -286,7 +286,10 @@
 
         if (path === '/resume' || path.startsWith('/resume/')) {
             // A. Resume Page Animations
-            gsap.fromTo("main > div.print:hidden", 
+            // The colon in the Tailwind class `print:hidden` has to be escaped,
+            // or the browser parses `:hidden` as a pseudo-class and
+            // querySelectorAll throws — which aborted every animation below.
+            gsap.fromTo("main > div.print\\:hidden",
                 { y: -30, opacity: 0 }, 
                 { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }
             );
