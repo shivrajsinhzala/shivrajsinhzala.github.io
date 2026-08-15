@@ -13,7 +13,22 @@ interface Props {
 	robots?: string;
 }
 
-const { title, description = "Portfolio of Shivrajsinh Zala", robots = "index, follow" } = Astro.props;
+/**
+ * Indexing is opt-in per deployment.
+ *
+ * While v2 is staged on its own subdomain it serves nearly the same content as
+ * the live site, and two indexable copies of the same portfolio compete with
+ * each other in search — the established domain generally loses. So a build is
+ * noindex unless PUBLIC_INDEXABLE is explicitly "true", which is the single
+ * switch to flip at cutover.
+ */
+const INDEXABLE = import.meta.env.PUBLIC_INDEXABLE === 'true';
+
+const {
+	title,
+	description = "Portfolio of Shivrajsinh Zala",
+	robots = INDEXABLE ? "index, follow" : "noindex, nofollow",
+} = Astro.props;
 const canonicalURL = pageUrl(Astro.url.pathname);
 ---
 

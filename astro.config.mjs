@@ -12,7 +12,15 @@ export default defineConfig({
   },
 
   integrations: [react(), sitemap()],
-  site: 'https://shivrajsinh.in',
+  /**
+   * The canonical host this build is served from.
+   *
+   * Set SITE_URL in the deploy environment. It drives canonical links and the
+   * generated sitemap, so a build served from a different host than this value
+   * will advertise the wrong URLs. Defaults to the live site so an unconfigured
+   * build behaves exactly as it always has.
+   */
+  site: process.env.SITE_URL || 'https://shivrajsinh.in',
   build: {
     format: 'file'
   },
