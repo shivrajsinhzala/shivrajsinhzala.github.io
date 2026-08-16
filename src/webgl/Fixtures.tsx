@@ -7,10 +7,12 @@
  * one place rather than a sequence of unrelated set pieces.
  */
 
-import { useMemo, useRef } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import {
+	AWARD,
 	EDUCATION,
 	EXPERIENCE,
 	PALETTE,
@@ -104,6 +106,61 @@ function Gate({
 	);
 }
 
+/**
+ * A run of evenly spaced gates. Used all along the journey now rather than
+ * only at the two ends — they are what gives the corridor rhythm and makes the
+ * zigzag legible, since a bend is only visible if there is structure to see it
+ * against.
+ */
+export function GateRun({
+	from,
+	to,
+	count,
+	width = 26,
+	height = 20,
+	taper = 0,
+	colorOffset = 0,
+	thickness = 1.1,
+}: {
+	from: number;
+	to: number;
+	count: number;
+	width?: number;
+	height?: number;
+	/** Fraction the opening narrows by across the run. */
+	taper?: number;
+	colorOffset?: number;
+	thickness?: number;
+}) {
+	const { spread } = useTier();
+
+	const gates = Array.from({ length: count }, (_, i) => {
+		const t = count === 1 ? 0 : i / (count - 1);
+		const shrink = 1 - taper * t;
+		return {
+			z: from + (to - from) * t,
+			width: width * spread * shrink,
+			height: height * shrink,
+			color: GATE_COLORS[(i + colorOffset) % GATE_COLORS.length],
+		};
+	});
+
+	return (
+		<group>
+			{gates.map((g, i) => (
+				<Gate
+					key={i}
+					z={g.z}
+					width={g.width}
+					height={g.height}
+					color={g.color}
+					thickness={thickness}
+				/>
+			))}
+		</group>
+	);
+}
+
 export function ExperienceTimeline({ z = -140 }: { z?: number }) {
 	const { spread } = useTier();
 
@@ -187,52 +244,174 @@ function SkillColumn({
 }
 
 /* ------------------------------------------------------------------ */
-/* Award — a plinth, lit by nothing, standing alone                    */
+/* Award — the real Rising Star trophy on a plinth                      */
 /* ------------------------------------------------------------------ */
 
+/**
+ * The actual award model, replacing the extruded star that stood here before.
+ *
+ * Two things this needs that nothing else in the scene does:
+ *
+ *  - Lights. Every other object is MeshBasicMaterial, which ignores lighting,
+ *    so the scene ships with none. A GLB carrying PBR materials would render
+ *    pure black. The lights added here are harmless to everything else for
+ *    exactly the same reason.
+ *  - Lazy loading. The file is ~1.6 MB, which is far too much to spend on
+ *    first paint for something 960 units down the corridor, so it is only
+ *    fetched once the camera is near.
+ */
+function AwardModel() {
+	const { scene } = useGLTF(AWARD.model);
+	const ref = useRef<THREE.Group>(null);
+
+	/**
+	 * Clone so repeated mounts never share (and mutate) one cached graph, and
+	 * tame the material while we are here.
+	 *
+	 * The exported material carries no pbrMetallicRoughness block at all, so
+	 * the glTF defaults apply — and the default metallicFactor is 1.0. A fully
+	 * metallic surface with no environment map has nothing to reflect, so it
+	 * renders pure black. That is why the trophy was invisible even though the
+	 * file downloaded and decoded correctly.
+	 */
+	const model = useMemo(() => {
+		const root = scene.clone(true);
+
+		const tame = (m: THREE.Material) => {
+			const mat = m.clone() as THREE.MeshStandardMaterial;
+			if ('metalness' in mat) {
+				mat.metalness = 0.15;
+				mat.roughness = 0.55;
+			}
+			// A touch of self-illumination keeps it readable against a black
+			// void without standing up an IBL rig for a single object.
+			if ('emissive' in mat) {
+				mat.emissive = new THREE.Color(PALETTE.warmYellow);
+				mat.emissiveIntensity = 0.08;
+			}
+			mat.needsUpdate = true;
+			return mat;
+		};
+
+		root.traverse((child) => {
+			const mesh = child as THREE.Mesh;
+			if (!mesh.isMesh) return;
+			mesh.material = Array.isArray(mesh.material)
+				? mesh.material.map(tame)
+				: tame(mesh.material);
+		});
+
+		return root;
+	}, [scene]);
+
+	// Normalise: the exported model has its own scale and origin, so fit it to
+	// a known height and sit it on the plinth rather than trusting the file.
+	const fitted = useMemo(() => {
+		const box = new THREE.Box3().setFromObject(model);
+		const size = new THREE.Vector3();
+		const centre = new THREE.Vector3();
+		box.getSize(size);
+		box.getCenter(centre);
+
+		const targetHeight = 9;
+		const scale = size.y > 0 ? targetHeight / size.y : 1;
+
+		return {
+			scale,
+			offset: new THREE.Vector3(-centre.x * scale, -box.min.y * scale, -centre.z * scale),
+		};
+	}, [model]);
+
+	useFrame((_, delta) => {
+		if (!ref.current || scrollState.reducedMotion) return;
+		ref.current.rotation.y += delta * 0.35;
+		// A slow bob, so it reads as presented rather than parked.
+		ref.current.position.y = fitted.offset.y + Math.sin(performance.now() * 0.0012) * 0.35;
+	});
+
+	return (
+		<group ref={ref} position={[fitted.offset.x, fitted.offset.y, fitted.offset.z]}>
+			<primitive object={model} scale={fitted.scale} />
+		</group>
+	);
+}
+
 export function AwardPlinth({ z = -960 }: { z?: number }) {
-	const starRef = useRef<THREE.Mesh>(null);
+	const [near, setNear] = useState(false);
+	const haloRef = useRef<THREE.Mesh>(null);
 
 	const plinthGeo = useMemo(() => new THREE.BoxGeometry(8, 12, 8), []);
 	const plinthMat = useMemo(
-		() => new THREE.MeshBasicMaterial({ color: new THREE.Color(PALETTE.violet).multiplyScalar(0.5) }),
-		[]
-	);
-	// An extruded star — the award, rendered in the same flat language rather
-	// than as a realistic trophy.
-	const starGeo = useMemo(() => {
-		const shape = new THREE.Shape();
-		const spikes = 5;
-		const outer = 3.4;
-		const inner = 1.5;
-		for (let i = 0; i < spikes * 2; i++) {
-			const r = i % 2 === 0 ? outer : inner;
-			const a = (i / (spikes * 2)) * Math.PI * 2 - Math.PI / 2;
-			const px = Math.cos(a) * r;
-			const py = Math.sin(a) * r;
-			if (i === 0) shape.moveTo(px, py);
-			else shape.lineTo(px, py);
-		}
-		shape.closePath();
-		return new THREE.ExtrudeGeometry(shape, { depth: 1.2, bevelEnabled: false });
-	}, []);
-	const starMat = useMemo(
-		() => new THREE.MeshBasicMaterial({ color: new THREE.Color(PALETTE.warmYellow) }),
+		() =>
+			new THREE.MeshBasicMaterial({
+				color: new THREE.Color(PALETTE.violet).multiplyScalar(0.5),
+			}),
 		[]
 	);
 
-	useFrame((_, delta) => {
-		if (!starRef.current || scrollState.reducedMotion) return;
-		starRef.current.rotation.y += delta * 0.5;
+	// A flat disc behind the trophy. The model is the one lit, detailed object
+	// in a flat-shaded world, and without something behind it, it reads as
+	// floating debris rather than an exhibit.
+	const haloMat = useMemo(
+		() =>
+			new THREE.MeshBasicMaterial({
+				color: new THREE.Color(PALETTE.warmYellow),
+				transparent: true,
+				opacity: 0.09,
+				side: THREE.DoubleSide,
+			}),
+		[]
+	);
+
+	useFrame(({ camera }, delta) => {
+		const dist = Math.abs(camera.position.z - z);
+		if (dist < 220 && !near) setNear(true);
+		else if (dist > 300 && near) setNear(false);
+
+		if (haloRef.current && !scrollState.reducedMotion) {
+			haloRef.current.rotation.z += delta * 0.08;
+		}
 	});
 
 	return (
 		<group position={[pathX(z), -3 + pathY(z), z]}>
 			<mesh geometry={plinthGeo} material={plinthMat} position={[0, -6, 0]} />
-			<EdgeOutline geometry={plinthGeo} color={PALETTE.cyan} />
-			<mesh ref={starRef} geometry={starGeo} material={starMat} position={[0, 4, 0]}>
-				<EdgeOutline geometry={starGeo} color={PALETTE.black} />
+			<EdgeOutline geometry={plinthGeo} color={PALETTE.warmYellow} />
+
+			<mesh ref={haloRef} position={[0, 5, -5]} material={haloMat}>
+				<circleGeometry args={[9, 64]} />
 			</mesh>
+
+			{/*
+			  Lights exist solely for the GLB; unlit materials ignore them.
+			  Point lights on purpose: a directional light aims at its target
+			  object, which defaults to the world origin — meaningless for a
+			  fixture 960 units down the corridor.
+			*/}
+			<ambientLight intensity={1.6} />
+			<pointLight position={[7, 12, 10]} intensity={420} distance={60} decay={2} />
+			<pointLight
+				position={[-8, 4, 8]}
+				intensity={220}
+				distance={50}
+				decay={2}
+				color={PALETTE.softCyan}
+			/>
+			<pointLight
+				position={[0, -2, 9]}
+				intensity={160}
+				distance={40}
+				decay={2}
+				color={PALETTE.warmYellow}
+			/>
+
+			{/* Mounted only when near. Gating on a prop would still run the
+			    loader on mount and pull the whole 1.6 MB at first paint. */}
+			{near && (
+				<Suspense fallback={null}>
+					<AwardModel />
+				</Suspense>
+			)}
 		</group>
 	);
 }

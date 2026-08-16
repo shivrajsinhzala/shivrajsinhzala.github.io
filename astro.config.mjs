@@ -17,10 +17,11 @@ export default defineConfig({
    *
    * Set SITE_URL in the deploy environment. It drives canonical links and the
    * generated sitemap, so a build served from a different host than this value
-   * will advertise the wrong URLs. Defaults to the live site so an unconfigured
-   * build behaves exactly as it always has.
+   * will advertise the wrong URLs. The default is the host this site actually
+   * runs on, so an unconfigured build is correct rather than pointing at the
+   * old domain.
    */
-  site: process.env.SITE_URL || 'https://shivrajsinh.in',
+  site: process.env.SITE_URL || 'https://portfolio.shivrajsinh.in',
   build: {
     format: 'file'
   },

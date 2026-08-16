@@ -14,15 +14,17 @@ interface Props {
 }
 
 /**
- * Indexing is opt-in per deployment.
+ * Indexing is opt-OUT per deployment.
  *
- * While v2 is staged on its own subdomain it serves nearly the same content as
- * the live site, and two indexable copies of the same portfolio compete with
- * each other in search — the established domain generally loses. So a build is
- * noindex unless PUBLIC_INDEXABLE is explicitly "true", which is the single
- * switch to flip at cutover.
+ * This defaults to indexable on purpose. The opposite default silently
+ * noindexed the live site because the env var was never set in the host, and a
+ * production site quietly telling Google to go away is a far worse failure
+ * than a staging copy briefly being crawlable.
+ *
+ * Set PUBLIC_INDEXABLE="false" on preview/staging deployments to hold them
+ * back.
  */
-const INDEXABLE = import.meta.env.PUBLIC_INDEXABLE === 'true';
+const INDEXABLE = import.meta.env.PUBLIC_INDEXABLE !== 'false';
 
 const {
 	title,

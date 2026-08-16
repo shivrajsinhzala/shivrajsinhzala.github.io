@@ -20,13 +20,14 @@ import {
 	AwardPlinth,
 	EducationMarkers,
 	ExperienceTimeline,
+	GateRun,
 	ReturnTunnel,
 	SkillLattice,
 	TerminalObject,
 } from './Fixtures';
 import { scrollState } from './scrollStore';
 import { useTier } from './useTier';
-import { pathDDX, pathX, pathY } from './path';
+import { pathDX, pathX, pathY } from './path';
 import { Dust } from './Dust';
 import { updateAudio } from './audio';
 
@@ -152,21 +153,26 @@ function CameraRig() {
 		// cue that the visitor is moving rather than the scene changing.
 		const speed = Math.min(Math.abs(scrollState.velocity), 2) / 2;
 
-		// Bank into the bend.
+		// Lean into the direction of lateral travel.
 		//
-		// The gain is set so peak curvature lands near 3 degrees, comfortably
-		// inside the clamp. It matters: with the gain left over from the old
-		// (much gentler) path frequencies the roll sat pinned at its limit for
-		// 92% of a lap and simply flipped sign, which reads as a snap rather
-		// than a bank.
+		// Banking on curvature is the physically obvious choice, but a zigzag
+		// concentrates all its curvature into brief spikes at the turns, which
+		// the damper then averages away to almost nothing. Slope gives a
+		// sustained lean through each leg that reverses at the turn, which is
+		// what actually reads as following a zigzag.
 		//
-		// It is then critically damped, which also does the work of keeping
-		// fast scrolling calm: the target reverses several times a lap, and at
-		// speed the filter cannot chase it, so the roll naturally settles into
-		// a gentle sway instead of whipping.
+		// The gain is set so the peak never reaches the clamp — measured, not
+		// guessed. A saturating roll degenerates into a square wave that flips
+		// sign, which is what made this snap in earlier versions, and it has to
+		// be re-derived every time the path changes.
+		//
+		// The damper then keeps fast scrolling calm on its own: the target
+		// reverses 12 times a lap, and at speed the filter cannot chase it, so
+		// the roll settles into a gentle sway (~0.1 degrees) rather than
+		// whipping.
 		const bankTarget =
-			THREE.MathUtils.clamp(-pathDDX(z) * 38, -0.06, 0.06) * (1 - speed * 0.3);
-		bank.current = smoothDamp(bank.current, bankTarget, bankVel.current, 0.6, dt);
+			THREE.MathUtils.clamp(-pathDX(z) * 0.4, -0.085, 0.085) * (1 - speed * 0.3);
+		bank.current = smoothDamp(bank.current, bankTarget, bankVel.current, 0.8, dt);
 
 		// lookAt zeroes roll, so this has to come after it.
 		cam.rotateZ(bank.current);
@@ -275,8 +281,27 @@ function Scene() {
 				scale={heroScale}
 			/>
 
+			{/* Approach into the about section. */}
+			<GateRun from={-30} to={-95} count={3} width={30} height={23} colorOffset={3} />
+
 			<ExperienceTimeline />
+
+			{/* Threaded through the projects corridor, one every three slabs, so
+			    the long run has structure and the zigzag has something to read
+			    against. Offset off the slab positions so they frame rather than
+			    collide. */}
+			<GateRun from={-282} to={-786} count={5} width={40} height={28} thickness={0.9} colorOffset={1} />
+
 			<Monoliths />
+
+			{/* Into the skills lattice. */}
+			<GateRun from={-800} to={-846} count={3} width={30} height={24} colorOffset={2} />
+
+			{/* Into the terminal. */}
+			<GateRun from={-1120} to={-1196} count={4} width={28} height={22} colorOffset={4} />
+
+			{/* Final approach to contact. */}
+			<GateRun from={-1236} to={-1308} count={3} width={32} height={25} taper={0.2} colorOffset={0} />
 			<SkillLattice />
 			<AwardPlinth />
 			<EducationMarkers />

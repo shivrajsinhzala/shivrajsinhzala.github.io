@@ -16,6 +16,9 @@
  */
 body:has(.journey-scroll) {
 	background-color: #0a0a0a;
+	/* The marquee and the fixed canvas can each push a few pixels past the
+	   viewport on narrow screens. Nothing here scrolls sideways by design. */
+	overflow-x: hidden;
 }
 
 .journey-canvas {
@@ -352,8 +355,8 @@ body:has(.journey-scroll) {
 	/* Alternating sides needs width to be legible; on a phone every caption
 	   is full-bleed instead, and the monoliths narrow to match (see useTier). */
 	.corridor-step,
-	.corridor-step:nth-child(odd),
-	.corridor-step:nth-child(even) {
+	.corridor-step[data-side='left'],
+	.corridor-step[data-side='right'] {
 		justify-content: center;
 		min-height: 62vh;
 		min-height: 62svh;
@@ -366,6 +369,12 @@ body:has(.journey-scroll) {
 		box-shadow: 6px 6px 0 0 #0a0a0a;
 	}
 
+	/* The connector tick points across at a slab that is off-screen on a
+	   phone, so it has nothing to connect to. */
+	.corridor-caption::after {
+		display: none;
+	}
+
 	.j-card {
 		padding: 1.25rem;
 		box-shadow: 6px 6px 0 0 var(--color-brutal-black, #0a0a0a);
@@ -376,6 +385,81 @@ body:has(.journey-scroll) {
 	#hero.journey-panel {
 		align-items: flex-start;
 		padding-top: 7rem;
+	}
+
+	/* Stacked and full-width. Side by side they ran to both screen edges with
+	   no margin, and each was under the comfortable tap size. */
+	#hero .reveal > a,
+	#hero .reveal > .brutal-border {
+		width: 100%;
+		text-align: center;
+	}
+
+	/**
+	 * Contact rows go vertical.
+	 *
+	 * Side by side, the label/value column was left with ~145px next to a
+	 * fixed CTA badge, which broke "hello@shivrajsinh.in" across lines and
+	 * still overflowed. Stacked, the value gets the full width.
+	 */
+	#contact a,
+	#contact .brutal-border {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.75rem;
+	}
+
+	#contact a > span:last-child,
+	#contact .brutal-border > span:last-child {
+		text-align: center;
+	}
+
+	#contact .text-sm,
+	#contact .md\:text-base {
+		word-break: break-word;
+	}
+
+	/* Every in-page control clears a comfortable touch size. */
+	.journey-scroll a,
+	.journey-scroll button {
+		min-height: 44px;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.journey-scroll .corridor-caption a {
+		justify-content: center;
+	}
+}
+
+/* Very small phones: 360px and below. */
+@media (max-width: 380px) {
+	.journey-panel {
+		padding: 4rem 0.75rem;
+	}
+
+	.j-heading {
+		font-size: clamp(2rem, 11vw, 2.75rem);
+	}
+
+	.j-card {
+		padding: 1rem;
+		box-shadow: 5px 5px 0 0 var(--color-brutal-black, #0a0a0a);
+	}
+
+	.j-label {
+		font-size: 0.6rem;
+		letter-spacing: 0.12em;
+	}
+
+	.corridor-num {
+		font-size: 2.25rem;
+	}
+
+	/* Four stat tiles at 2-up leave ~150px each; the numbers were fine but the
+	   labels were clipping. */
+	#about .grid {
+		gap: 0.5rem;
 	}
 }
 

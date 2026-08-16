@@ -13,17 +13,19 @@ import type { APIRoute } from 'astro';
  *    subdomain it serves nearly the same content as the live site, and two
  *    crawlable copies compete with each other in search.
  *
- * Flip PUBLIC_INDEXABLE to "true" at cutover and this opens up on its own.
+ * Defaults to crawlable. Set PUBLIC_INDEXABLE="false" on a staging build to
+ * hold it back; a production host with no env vars configured must not end up
+ * accidentally disallowing everything.
  */
 export const GET: APIRoute = ({ site }) => {
-	const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true';
-	const origin = (site?.origin ?? 'https://shivrajsinh.in').replace(/\/$/, '');
+	const indexable = import.meta.env.PUBLIC_INDEXABLE !== 'false';
+	const origin = (site?.origin ?? 'https://portfolio.shivrajsinh.in').replace(/\/$/, '');
 
 	if (!indexable) {
 		return new Response(
 			[
 				'# Staging deployment — not for indexing.',
-				'# Set PUBLIC_INDEXABLE=true on the production build to open this up.',
+				'# Unset PUBLIC_INDEXABLE (or set it to "true") to open this up.',
 				'User-agent: *',
 				'Disallow: /',
 				'',

@@ -76,10 +76,12 @@ function Monolith({
 	project,
 	index,
 	spread,
+	slabScale,
 }: {
 	project: Project;
 	index: number;
 	spread: number;
+	slabScale: number;
 }) {
 	const base = projectTransform(index, spread);
 	const { rotationY, side } = base;
@@ -98,7 +100,10 @@ function Monolith({
 	/** Only projects with a destination are clickable; the private one is not. */
 	const interactive = project.href !== null;
 
-	const slabGeo = useMemo(() => new THREE.BoxGeometry(SLAB_W, SLAB_H, SLAB_D), []);
+	const w = SLAB_W * slabScale;
+	const h = SLAB_H * slabScale;
+	const dpt = SLAB_D * slabScale;
+	const slabGeo = useMemo(() => new THREE.BoxGeometry(w, h, dpt), [w, h, dpt]);
 	const backingMat = useMemo(
 		() => new THREE.MeshBasicMaterial({ color: new THREE.Color(project.accent) }),
 		[project.accent]
@@ -190,8 +195,8 @@ function Monolith({
 			<mesh geometry={slabGeo} material={backingMat} />
 
 			{/* Screenshot face, inset like a matted print. */}
-			<mesh position={[0, 0.6, SLAB_D / 2 + 0.02]} material={screenMat}>
-				<planeGeometry args={[SLAB_W - 2.2, SLAB_H - 4]} />
+			<mesh position={[0, 0.6 * slabScale, dpt / 2 + 0.02]} material={screenMat}>
+				<planeGeometry args={[w - 2.2 * slabScale, h - 4 * slabScale]} />
 			</mesh>
 
 			<EdgeOutline geometry={slabGeo} color={PALETTE.black} />
@@ -200,11 +205,11 @@ function Monolith({
 }
 
 export function Monoliths() {
-	const { spread } = useTier();
+	const { spread, slabScale } = useTier();
 	return (
 		<group>
 			{PROJECTS.map((p, i) => (
-				<Monolith key={p.num} project={p} index={i} spread={spread} />
+				<Monolith key={p.num} project={p} index={i} spread={spread} slabScale={slabScale} />
 			))}
 		</group>
 	);

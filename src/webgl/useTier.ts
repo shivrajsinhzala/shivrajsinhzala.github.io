@@ -14,6 +14,15 @@ export type Tier = {
 	mobile: boolean;
 	/** Multiplier on every lateral (X) offset in the world. */
 	spread: number;
+	/**
+	 * Multiplier on the *size* of corridor furniture.
+	 *
+	 * Narrowing the corridor without also shrinking what stands in it is a
+	 * trap: at 360px the walls came in to ±9.7 while the slabs stayed 20 wide,
+	 * so the camera flew straight through them. Position and size have to
+	 * scale together.
+	 */
+	slabScale: number;
 	fov: number;
 	/** How far in front of a section's anchor the camera sits. */
 	camOffset: number;
@@ -28,11 +37,15 @@ export function useTier(): Tier {
 	const mobile = width < 768 || aspect < 0.95;
 
 	// Narrow frames pull the walls inward; wide frames keep the authored width.
-	const spread = Math.min(1, Math.max(0.42, aspect / 1.6));
+	// The floor is 0.5 rather than 0.42 so the corridor keeps real clearance
+	// once the furniture is scaled down too.
+	const spread = Math.min(1, Math.max(0.5, aspect / 1.6));
+	const slabScale = mobile ? 0.6 : 1;
 
 	return {
 		mobile,
 		spread,
+		slabScale,
 		// A wider lens on portrait recovers some of the peripheral world that
 		// the narrow frame would otherwise crop away.
 		fov: mobile ? 78 : 62,
