@@ -1,9 +1,18 @@
 ---
-/** Send alternate deploy hostnames (github.io, pages.dev) to the primary domain. */
+/**
+ * Send alternate deploy hostnames (github.io, pages.dev) to the primary domain.
+ *
+ * The target comes from the site config. Hardcoded, it sent Cloudflare's
+ * *.pages.dev preview builds to the old site, so opening a preview link looked
+ * like the deployment had silently failed.
+ */
+import { SITE_URL } from '../utils/seo';
 ---
-<script is:inline define:vars={{ siteUrl: 'https://shivrajsinh.in' }}>
+<script is:inline define:vars={{ siteUrl: SITE_URL }}>
 (function () {
 	var host = location.hostname;
+	// Never redirect the primary host to itself.
+	if (siteUrl.indexOf('//' + host) !== -1) return;
 	if (host === 'shivrajsinh.in' || host === 'www.shivrajsinh.in') return;
 	var isAltHost =
 		host === 'github.io' ||

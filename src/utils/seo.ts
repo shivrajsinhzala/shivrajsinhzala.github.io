@@ -1,4 +1,16 @@
-export const SITE_URL = 'https://shivrajsinh.in';
+/**
+ * Canonical origin for this build.
+ *
+ * Derived from Astro's `site` config (exposed as import.meta.env.SITE) rather
+ * than hardcoded. It used to be a literal, which meant every page's canonical
+ * pointed at the old domain no matter what the deployment was — telling search
+ * engines the real copy lived somewhere else and guaranteeing this host would
+ * never rank for its own content.
+ */
+export const SITE_URL = (import.meta.env.SITE ?? 'https://portfolio.shivrajsinh.in').replace(
+	/\/$/,
+	''
+);
 
 /** Canonical LinkedIn profile — use everywhere (schema, contact, sameAs). */
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/shivrajsinh-zala/';
