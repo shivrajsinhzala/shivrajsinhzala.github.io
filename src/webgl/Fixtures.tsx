@@ -269,7 +269,7 @@ function SkillColumn({
  * Yaw that turns the trophy's engraved face toward the camera. Determined by
  * inspection: at 0 the star sits edge-on and the plaque points away.
  */
-const AWARD_FACE_YAW = Math.PI / 2;
+const AWARD_FACE_YAW = -Math.PI / 2;
 
 function AwardModel() {
 	const { scene } = useGLTF(AWARD.model);

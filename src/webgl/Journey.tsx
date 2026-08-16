@@ -29,7 +29,6 @@ import { scrollState } from './scrollStore';
 import { useTier } from './useTier';
 import { pathDX, pathX, pathY } from './path';
 import { Dust } from './Dust';
-import { updateAudio } from './audio';
 
 /**
  * Critically damped smoothing (the classic SmoothDamp formulation).
@@ -239,8 +238,6 @@ function Atmosphere() {
 		// Multiplied down hard: this is coloured air, not a coloured background.
 		target.copy(a.color).lerp(b.color, t).multiplyScalar(0.075);
 		fog.color.lerp(target, Math.min(1, delta * 1.5));
-
-		updateAudio(scrollState.progress, scrollState.velocity, scrollState.cameraZ);
 	});
 
 	return null;

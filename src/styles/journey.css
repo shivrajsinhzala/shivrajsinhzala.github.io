@@ -686,16 +686,30 @@ html:not(.journey-ready) .journey-intro {
 }
 
 /**
- * The hint sticks through the whole tunnel.
+ * Sticky needs a tall containing block to travel inside.
  *
- * It used to scroll away in the first screen, leaving more than two viewports
- * of completely empty runway with nothing on it — which read as the page
- * having simply ended. Sticky, it stays with the visitor for the whole
- * descent and tells them the scroll is going somewhere.
+ * The panel is a flex container aligned to flex-start, so this wrapper
+ * collapsed to the height of the hint itself (41px) and the "sticky" element
+ * simply scrolled away with it — it was never sticking at all.
+ */
+.journey-panel--outro .journey-inner {
+	align-self: stretch;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+/**
+ * The hint rides near the bottom of the viewport for the whole tunnel.
+ *
+ * Pinned to the middle it sat square in the centre of the screen with nothing
+ * else on it, which read as the page having ended on a stray label. Low and
+ * out of the way, it behaves like a scroll affordance instead.
  */
 .journey-outro-hint {
 	position: sticky;
-	top: 45svh;
+	top: calc(100svh - 7rem);
+	align-self: center;
 	color: rgba(255, 255, 255, 0.75);
 	letter-spacing: 0.3em;
 	font-size: 0.7rem;
@@ -733,7 +747,7 @@ html:not(.journey-ready) .journey-intro {
 	}
 
 	.journey-outro-hint {
-		top: 42svh;
+		top: calc(100svh - 6rem);
 		font-size: 0.65rem;
 		letter-spacing: 0.22em;
 	}
