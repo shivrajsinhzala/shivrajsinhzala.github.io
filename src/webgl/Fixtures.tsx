@@ -25,7 +25,7 @@ import { EdgeOutline } from './World';
 import { scrollState } from './scrollStore';
 import { useTier } from './useTier';
 import { pathX, pathY } from './path';
-import { playImpact } from './audio';
+import { playGate } from './audio';
 
 /* ------------------------------------------------------------------ */
 /* Experience — markers receding in depth, chronology as distance      */
@@ -56,12 +56,15 @@ function Gate({
 	height,
 	color,
 	thickness = 1.1,
+	note = 0,
 }: {
 	z: number;
 	width: number;
 	height: number;
 	color: string;
 	thickness?: number;
+	/** Scale degree this gate sounds when crossed. */
+	note?: number;
 }) {
 	const mat = useMemo(() => new THREE.MeshBasicMaterial({ color: new THREE.Color(color) }), [color]);
 	// A deeper tint of the same hue for the horizontals, so the frame has some
@@ -74,14 +77,15 @@ function Gate({
 	const halfW = width / 2;
 	const halfH = height / 2;
 
-	// Fire an impact the moment the camera crosses this gate's plane. Tracking
-	// the sign of the crossing rather than proximity means it sounds exactly
-	// once per pass, in either direction, at any scroll speed.
+	// Sound the gate the moment the camera crosses its plane. Tracking the sign
+	// of the crossing rather than proximity means it fires exactly once per
+	// pass, in either direction, at any scroll speed — so flying a run of
+	// gates plays them as a phrase rather than a smear.
 	const wasAhead = useRef<boolean | null>(null);
 	useFrame(({ camera }) => {
 		const ahead = camera.position.z > z;
 		if (wasAhead.current !== null && wasAhead.current !== ahead) {
-			playImpact(0.9);
+			playGate(note);
 		}
 		wasAhead.current = ahead;
 	});
@@ -155,6 +159,7 @@ export function GateRun({
 					height={g.height}
 					color={g.color}
 					thickness={thickness}
+					note={colorOffset + i}
 				/>
 			))}
 		</group>
@@ -177,7 +182,7 @@ export function ExperienceTimeline({ z = -140 }: { z?: number }) {
 	return (
 		<group>
 			{gates.map((g, i) => (
-				<Gate key={i} z={g.z} width={g.width} height={g.height} color={g.color} />
+				<Gate key={i} z={g.z} width={g.width} height={g.height} color={g.color} note={i} />
 			))}
 		</group>
 	);
@@ -260,6 +265,12 @@ function SkillColumn({
  *    first paint for something 960 units down the corridor, so it is only
  *    fetched once the camera is near.
  */
+/**
+ * Yaw that turns the trophy's engraved face toward the camera. Determined by
+ * inspection: at 0 the star sits edge-on and the plaque points away.
+ */
+const AWARD_FACE_YAW = Math.PI / 2;
+
 function AwardModel() {
 	const { scene } = useGLTF(AWARD.model);
 	const ref = useRef<THREE.Group>(null);
@@ -322,11 +333,16 @@ function AwardModel() {
 		};
 	}, [model]);
 
-	useFrame((_, delta) => {
+	useFrame(() => {
 		if (!ref.current || scrollState.reducedMotion) return;
-		ref.current.rotation.y += delta * 0.35;
+		// The model's front faces +X, so it needs a quarter turn to face the
+		// camera. It used to spin continuously, which meant the visitor was
+		// looking at the back of the trophy — and the engraved plaque — for
+		// half of every revolution. It now presents its face and only sways.
+		const t = performance.now() * 0.0009;
+		ref.current.rotation.y = AWARD_FACE_YAW + Math.sin(t) * 0.32;
 		// A slow bob, so it reads as presented rather than parked.
-		ref.current.position.y = fitted.offset.y + Math.sin(performance.now() * 0.0012) * 0.35;
+		ref.current.position.y = fitted.offset.y + Math.sin(t * 1.35) * 0.35;
 	});
 
 	return (
@@ -544,6 +560,7 @@ export function ReturnTunnel() {
 					height={g.height}
 					color={g.color}
 					thickness={g.thickness}
+					note={i}
 				/>
 			))}
 		</group>

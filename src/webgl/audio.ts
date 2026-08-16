@@ -372,7 +372,7 @@ export function updateAudio(progress: number, velocity: number, z: number) {
 	const base = SCALE[degree % SCALE.length] + shift + octave;
 	const freq = ROOT * 4 * semitone(base);
 
-	voice(freq, 0.1 + energy * 0.06);
+	voice(freq, 0.075 + energy * 0.05);
 
 	// Energy layers the arrangement up: a harmony a fifth above, then an
 	// octave shimmer on top of that.
@@ -385,13 +385,26 @@ export function updateAudio(progress: number, velocity: number, z: number) {
 }
 
 /**
- * The camera passing through a gate. A struck tonal hit rather than a noise
- * burst — it lands in the same key as everything else.
+ * The camera passing through a gate.
+ *
+ * This is the most legible event in the whole soundtrack, so it gets a real
+ * chord rather than a thud: a struck note at the gate's own scale degree, a
+ * fifth above it for body, and a low root underneath for weight. Because each
+ * gate in a run carries a rising degree, flying a colonnade plays it as an
+ * arpeggio rather than a row of identical clicks.
+ *
+ * It stays in the current key, so it can never clash with the pad or with the
+ * distance-triggered notes.
  */
-export function playImpact(intensity = 1) {
+export function playGate(step = 0, intensity = 1) {
 	if (!enabled || !nodes) return;
+
 	const shift = PROGRESSION[Math.max(0, currentChord)];
-	voice(ROOT * 2 * semitone(shift), 0.16 * intensity, 2.2);
+	const degree = SCALE[Math.abs(step) % SCALE.length] + shift;
+
+	voice(ROOT * 4 * semitone(degree), 0.17 * intensity, 1.9);
+	voice(ROOT * 4 * semitone(degree + 7), 0.07 * intensity, 1.5);
+	voice(ROOT * semitone(shift), 0.14 * intensity, 2.6);
 }
 
 /** Tiny blip for hover feedback. */

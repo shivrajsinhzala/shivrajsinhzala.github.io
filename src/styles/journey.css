@@ -679,16 +679,66 @@ html:not(.journey-ready) .journey-intro {
 
 /* Pure runway: tall enough for the camera to accelerate through the gates. */
 .journey-panel--outro {
-	min-height: 260vh;
-	min-height: 260svh;
+	min-height: 240vh;
+	min-height: 240svh;
 	align-items: flex-start;
-	padding-top: 12vh;
+	padding-top: 0;
 }
 
+/**
+ * The hint sticks through the whole tunnel.
+ *
+ * It used to scroll away in the first screen, leaving more than two viewports
+ * of completely empty runway with nothing on it — which read as the page
+ * having simply ended. Sticky, it stays with the visitor for the whole
+ * descent and tells them the scroll is going somewhere.
+ */
 .journey-outro-hint {
-	color: rgba(255, 255, 255, 0.35);
-	letter-spacing: 0.32em;
+	position: sticky;
+	top: 45svh;
+	color: rgba(255, 255, 255, 0.75);
+	letter-spacing: 0.3em;
+	font-size: 0.7rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.6rem 1.1rem;
+	border: 2px solid rgba(255, 255, 255, 0.25);
+	background: rgba(10, 10, 10, 0.5);
 }
+
+.journey-outro-hint::after {
+	content: '↓';
+	font-size: 0.85rem;
+	animation: journey-hint-bob 1.6s ease-in-out infinite;
+}
+
+@keyframes journey-hint-bob {
+	0%, 100% { transform: translateY(-2px); }
+	50% { transform: translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.journey-outro-hint::after {
+		animation: none;
+	}
+}
+
+/* The tunnel needs far less runway on a phone: the same 240svh reads as an
+   interminable empty stretch on a small screen. */
+@media (max-width: 767px) {
+	.journey-panel--outro {
+		min-height: 140vh;
+		min-height: 140svh;
+	}
+
+	.journey-outro-hint {
+		top: 42svh;
+		font-size: 0.65rem;
+		letter-spacing: 0.22em;
+	}
+}
+
 
 /* Reduced motion: the loop does not engage at all, so the tunnel collapses. */
 @media (prefers-reduced-motion: reduce) {
