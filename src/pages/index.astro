@@ -5,6 +5,7 @@ import '../styles/journey.css';
 import {
 	AI_TAGS,
 	AWARD,
+	COMPANY,
 	MARQUEE_TEXT,
 	CONTACT_LINKS,
 	EDUCATION,
@@ -43,6 +44,40 @@ const navSections = SECTIONS.filter((s) => s.navLabel);
 			content="WordPress • Squarespace • Webflow • Shopify • Digital Marketing — Frontend Developer with 30+ websites. Based in Rajkot, Gujarat."
 		/>
 		<meta name="twitter:image" content="https://portfolio.shivrajsinh.in/assets/images/og-image.png" />
+
+		{/*
+		  Person schema. The v1 homepage carried this and the WebGL rewrite
+		  dropped it; worksFor.url is what ties the employer entity to their
+		  actual site rather than leaving it a bare name string.
+		*/}
+		<script type="application/ld+json" is:inline set:html={JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'Person',
+			'@id': 'https://portfolio.shivrajsinh.in/#person',
+			name: 'Shivrajsinh Zala',
+			jobTitle: 'Frontend Developer',
+			url: 'https://portfolio.shivrajsinh.in/',
+			email: 'hello@shivrajsinh.in',
+			description:
+				'Frontend Developer specializing in WordPress, Squarespace, Webflow, Shopify, and Digital Marketing. 30+ websites built and maintained. Based in Rajkot, Gujarat, India.',
+			sameAs: [
+				'https://github.com/shivrajsinhzala',
+				'https://www.linkedin.com/in/shivrajsinh-zala/',
+				'https://www.instagram.com/shivrajsinh.sh',
+				'https://t.me/ShivrajsinhZala',
+			],
+			worksFor: {
+				'@type': 'Organization',
+				name: COMPANY.name,
+				url: COMPANY.url,
+			},
+			address: {
+				'@type': 'PostalAddress',
+				addressLocality: 'Rajkot',
+				addressRegion: 'Gujarat',
+				addressCountry: 'IN',
+			},
+		})} />
 	</Fragment>
 
 	{/*
@@ -103,7 +138,11 @@ const navSections = SECTIONS.filter((s) => s.navLabel);
 					</h1>
 					<div class="j-card reveal mt-8 max-w-xl">
 						<p class="text-lg md:text-xl font-medium leading-tight mb-3">
-							Frontend Developer at <span class="bg-brutal-yellow px-1">Just Digital Gurus</span>.
+							Frontend Developer at <a
+								href={COMPANY.url}
+								target="_blank"
+								rel="noopener"
+								class="bg-brutal-yellow px-1 underline decoration-2 underline-offset-2">{COMPANY.name}</a>.
 							Based in <span class="bg-brutal-cyan px-1">Rajkot, Gujarat, India</span>.
 						</p>
 						<p class="font-mono text-sm text-gray-600 border-l-4 border-black pl-4">
@@ -192,7 +231,13 @@ const navSections = SECTIONS.filter((s) => s.navLabel);
 					<div class="j-card">
 						<div class="j-label mb-3">PRESENT</div>
 						<h3 class="text-2xl md:text-3xl font-bold mb-1">{EXPERIENCE.role}</h3>
-						<div class="text-lg md:text-xl font-bold mb-2">{EXPERIENCE.company}</div>
+						<div class="text-lg md:text-xl font-bold mb-2">
+							<a
+								href={EXPERIENCE.companyUrl}
+								target="_blank"
+								rel="noopener"
+								class="underline decoration-2 underline-offset-2 hover:bg-brutal-yellow">{EXPERIENCE.company}</a>
+						</div>
 						<p class="font-mono text-sm mb-4 text-gray-700">{EXPERIENCE.location}</p>
 						<div class="brutal-border bg-brutal-yellow p-3 font-mono text-xs inline-block">
 							{EXPERIENCE.period}
@@ -331,7 +376,13 @@ const navSections = SECTIONS.filter((s) => s.navLabel);
 					{AWARD.heading}<br /><span class="text-brutal-cyan">{AWARD.highlight}</span>
 				</h2>
 				<div class="j-card j-card--dark reveal mt-8 max-w-2xl">
-					<p class="text-lg md:text-xl font-mono mb-6 leading-relaxed">{AWARD.body}</p>
+					<p class="text-lg md:text-xl font-mono mb-6 leading-relaxed">
+						{AWARD.bodyBefore}<a
+							href={COMPANY.url}
+							target="_blank"
+							rel="noopener"
+							class="underline decoration-2 underline-offset-2 hover:text-brutal-cyan">{COMPANY.name}</a>{AWARD.bodyAfter}
+					</p>
 					<p class="text-sm md:text-base font-mono text-gray-400 border-l-2 border-brutal-cyan pl-4">
 						{AWARD.quote}
 					</p>

@@ -370,9 +370,16 @@ export const SKILLS: Skill[] = [
 // EXPERIENCE / EDUCATION / STATS
 // ---------------------------------------------------------------------------
 
+/** Employer, linked wherever the name appears so the company earns the backlink. */
+export const COMPANY = {
+	name: 'Just Digital Gurus',
+	url: 'https://justdigitalgurus.com',
+} as const;
+
 export const EXPERIENCE = {
 	role: 'Frontend Developer',
-	company: 'Just Digital Gurus',
+	company: COMPANY.name,
+	companyUrl: COMPANY.url,
 	location: 'Rajkot, Gujarat',
 	period: 'FEB 2025 — PRESENT',
 	tasks: [
@@ -413,7 +420,9 @@ export const EDUCATION = [
 export const AWARD = {
 	heading: 'RISING',
 	highlight: 'STAR 2025',
-	body: 'I was honored with the Rising Star Award in 2025 from Just Digital Gurus, recognizing outstanding performance, dedication, and potential in frontend development.',
+	bodyBefore: 'I was honored with the Rising Star Award in 2025 from ',
+	bodyAfter:
+		', recognizing outstanding performance, dedication, and potential in frontend development.',
 	quote: '"For demonstrating remarkable potential, dedication, and a strong commitment to excellence."',
 	model: '/assets/models/rising-star-award.glb',
 };
