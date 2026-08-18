@@ -1,18 +1,19 @@
 # Skill logos
 
-Drop official brand SVGs here and the 3D scene picks them up automatically —
-they are extruded into real geometry alongside the other marks. A missing file
-is a supported state: the skill falls back to its inline path, or to a plain
-block if it has neither.
+SVG marks used by the 3D scene. Each is parsed and extruded into real geometry
+at runtime, so they need to be plain single-path marks on a square viewBox —
+the loader normalises scale and centring, so source dimensions do not matter.
 
-Currently expected:
+Present:
 
-- `openai.svg`  — https://openai.com/brand/
-- `claude.svg`  — https://www.anthropic.com/  (Claude brand assets)
+- `openai.svg` — OpenAI
+- `claude.svg` — Claude
 
-Save the plain monochrome mark (not the wordmark/lockup) so it reads at small
-sizes. A single `<path>` on a square viewBox works best; the loader normalises
-scale and centring, so the source dimensions do not matter.
+Both are the monochrome brand marks, sourced from the Simple Icons collection
+(https://simpleicons.org). The collection itself is CC0; the marks remain the
+trademarks of their respective owners and are used here nominatively, to
+identify the tools in the stack.
 
-These two are deliberately absent rather than approximated: an invented
-version of someone else's logo looks wrong and misrepresents their brand.
+A missing file is still a supported state: the skill falls back to its inline
+path, or to a plain block if it has neither, so removing one of these will not
+break the build.

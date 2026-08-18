@@ -324,10 +324,9 @@ export type Skill = {
 	/** True for the real brand marks (solid shapes); false for stroked glyphs. */
 	solidLogo?: boolean;
 	/**
-	 * Optional SVG files under /assets/logos/. Used in preference to `logo`
-	 * when present, and silently ignored when the file is missing — which is
-	 * how OpenAI and Claude get their real marks without shipping an
-	 * approximation of someone else's brand in the meantime.
+	 * SVG files under /assets/logos/, extruded into real geometry. Used in
+	 * preference to `logo`, and silently ignored when a file is missing, so a
+	 * removed asset degrades rather than breaking the build.
 	 */
 	logoFiles?: string[];
 	/** Shown when no mark can be drawn at all. */
