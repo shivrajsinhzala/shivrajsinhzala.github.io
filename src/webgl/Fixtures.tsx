@@ -17,6 +17,8 @@ import {
 	EXPERIENCE,
 	PALETTE,
 	SKILLS,
+	SKILL_SIDE_X,
+	skillSide,
 	skillZ,
 	type Skill,
 	TUNNEL_END_Z,
@@ -220,8 +222,14 @@ function makeStatTexture(skill: Skill): THREE.CanvasTexture {
 	ctx.strokeRect(5, 5, W - 10, H - 10);
 
 	ctx.fillStyle = '#ffffff';
-	ctx.font = 'bold 58px "JetBrains Mono", monospace';
 	ctx.textAlign = 'center';
+	// Shrink to fit. At a fixed size "DIGITAL MARKETING" overran the canvas
+	// and was silently clipped to "IGITAL MARKETIN".
+	let nameSize = 58;
+	do {
+		ctx.font = `bold ${nameSize}px "JetBrains Mono", monospace`;
+		nameSize -= 2;
+	} while (ctx.measureText(skill.name).width > W - 56 && nameSize > 18);
 	ctx.fillText(skill.name, W / 2, 92);
 
 	ctx.fillStyle = skill.accent;
@@ -247,7 +255,7 @@ function useLogoGeometry(skill: Skill) {
 				const res = await fetch(url);
 				if (!res.ok) throw new Error('missing');
 				const text = await res.text();
-				return extrudeSvgDocument(text, 5, 1.1);
+				return extrudeSvgDocument(text, 4, 1.8);
 			})
 		)
 			.then((geos) => {
@@ -264,7 +272,9 @@ function useLogoGeometry(skill: Skill) {
 	}, [skill.logoFiles]);
 
 	const inline = useMemo(
-		() => (skill.logo ? extrudeSvgPath(skill.logo, 6, 1.2) : null),
+		// Deeper relative to its height than before: a shallow extrusion reads
+		// as a flat sticker no matter how it is lit.
+		() => (skill.logo ? extrudeSvgPath(skill.logo, 4.6, 1.8) : null),
 		[skill.logo]
 	);
 
@@ -290,10 +300,16 @@ function SkillMark({ skill, index, scale }: { skill: Skill; index: number; scale
 		() =>
 			new THREE.MeshStandardMaterial({
 				color: new THREE.Color(skill.accent),
-				metalness: 0.1,
-				roughness: 0.45,
+				metalness: 0.25,
+				roughness: 0.35,
 			}),
 		[skill.accent]
+	);
+	// Hard offset shadow behind the mark — the same trick the 2D design uses,
+	// and the quickest way to read solid rather than printed-on.
+	const shadowMat = useMemo(
+		() => new THREE.MeshBasicMaterial({ color: new THREE.Color('#050505') }),
+		[]
 	);
 	const statMat = useMemo(
 		() => new THREE.MeshBasicMaterial({ map: statTex, transparent: true }),
@@ -315,26 +331,33 @@ function SkillMark({ skill, index, scale }: { skill: Skill; index: number; scale
 
 	const geos = fileGeos ?? (inline ? [inline] : []);
 
-    return (
-		<group ref={groupRef} position={[pathX(z), pathY(z), z]} scale={scale}>
-			{geos.map((geo, i) => (
-				<mesh
-					key={i}
-					geometry={geo}
-					material={logoMat}
-					position={[geos.length > 1 ? (i - (geos.length - 1) / 2) * 7 : 0, 3.4, 0]}
-				/>
-			))}
+	const side = skillSide(index);
+
+	return (
+		<group
+			ref={groupRef}
+			position={[pathX(z) + side * SKILL_SIDE_X * scale, pathY(z), z]}
+			scale={scale}
+		>
+			{geos.map((geo, i) => {
+				const x = geos.length > 1 ? (i - (geos.length - 1) / 2) * 5.6 : 0;
+				return (
+					<group key={i} position={[x, 3.2, 0]}>
+						<mesh geometry={geo} material={shadowMat} position={[0.35, -0.35, -1.4]} />
+						<mesh geometry={geo} material={logoMat} />
+					</group>
+				);
+			})}
 
 			{geos.length === 0 && skill.fallbackLabel && (
-				<mesh position={[0, 3.4, 0]}>
-					<boxGeometry args={[5, 5, 1]} />
-					<meshStandardMaterial color={skill.accent} metalness={0.1} roughness={0.5} />
+				<mesh position={[0, 3.2, 0]}>
+					<boxGeometry args={[4, 4, 1.6]} />
+					<meshStandardMaterial color={skill.accent} metalness={0.25} roughness={0.4} />
 				</mesh>
 			)}
 
-			<mesh position={[0, -3.6, 0]} material={statMat}>
-				<planeGeometry args={[11, 5.5]} />
+			<mesh position={[0, -3.4, 0]} material={statMat}>
+				<planeGeometry args={[9, 4.5]} />
 			</mesh>
 		</group>
 	);
@@ -345,15 +368,14 @@ export function SkillLattice() {
 	return (
 		<group>
 			{/* Lights for the extruded marks; unlit materials ignore them. */}
-			<ambientLight intensity={1.4} />
-			<pointLight position={[10, 14, 20]} intensity={520} distance={90} decay={2} />
-			<pointLight
-				position={[-12, -6, 16]}
-				intensity={260}
-				distance={80}
-				decay={2}
-				color={PALETTE.softCyan}
-			/>
+			{/*
+			  Low ambient with a strong raking key: even light flattens an
+			  extrusion completely, and the whole point of these being solids is
+			  that their sides catch light differently from their faces.
+			*/}
+			<ambientLight intensity={0.55} />
+			<directionalLight position={[8, 12, 14]} intensity={2.6} />
+			<directionalLight position={[-10, -4, 6]} intensity={0.9} color={PALETTE.softCyan} />
 			{SKILLS.map((skill, i) => (
 				<SkillMark key={skill.num} skill={skill} index={i} scale={slabScale} />
 			))}
@@ -385,7 +407,7 @@ export function SkillLattice() {
 const AWARD_FACE_YAW = -Math.PI / 2;
 
 /** Depth the trophy stands at; the approach animation is measured against it. */
-const AWARD_Z = -1040;
+const AWARD_Z = -1180;
 
 function AwardModel() {
 	const { scene } = useGLTF(AWARD.model);
@@ -410,11 +432,12 @@ function AwardModel() {
 				mat.metalness = 0.15;
 				mat.roughness = 0.55;
 			}
-			// A touch of self-illumination keeps it readable against a black
-			// void without standing up an IBL rig for a single object.
+			// No emissive tint. A warm-yellow glow across every surface is what
+			// turned the whole trophy olive — it swamped the model's own
+			// colours instead of lifting them.
 			if ('emissive' in mat) {
-				mat.emissive = new THREE.Color(PALETTE.warmYellow);
-				mat.emissiveIntensity = 0.08;
+				mat.emissive = new THREE.Color('#000000');
+				mat.emissiveIntensity = 0;
 			}
 			mat.needsUpdate = true;
 			return mat;
@@ -472,7 +495,7 @@ function AwardModel() {
 	);
 }
 
-export function AwardPlinth({ z = -1040 }: { z?: number }) {
+export function AwardPlinth({ z = -1180 }: { z?: number }) {
 	const [near, setNear] = useState(false);
 	const { mobile, spread } = useTier();
 	// The copy card occupies the left half on desktop, so the trophy stands to
@@ -498,7 +521,9 @@ export function AwardPlinth({ z = -1040 }: { z?: number }) {
 	return (
 		<group position={[pathX(z) + offsetX, -2 + pathY(z), z]}>
 			<mesh geometry={plinthGeo} material={plinthMat} position={[0, -6, 0]} />
-			<EdgeOutline geometry={plinthGeo} color={PALETTE.warmYellow} />
+			<group position={[0, -6, 0]}>
+				<EdgeOutline geometry={plinthGeo} color={PALETTE.violet} />
+			</group>
 
 			{/*
 			  Lights exist solely for the GLB; unlit materials ignore them.
@@ -506,8 +531,8 @@ export function AwardPlinth({ z = -1040 }: { z?: number }) {
 			  object, which defaults to the world origin — meaningless for a
 			  fixture 960 units down the corridor.
 			*/}
-			<ambientLight intensity={1.6} />
-			<pointLight position={[7, 12, 10]} intensity={420} distance={60} decay={2} />
+			<ambientLight intensity={1.15} />
+			<pointLight position={[7, 12, 10]} intensity={460} distance={60} decay={2} />
 			<pointLight
 				position={[-8, 4, 8]}
 				intensity={220}
@@ -515,13 +540,7 @@ export function AwardPlinth({ z = -1040 }: { z?: number }) {
 				decay={2}
 				color={PALETTE.softCyan}
 			/>
-			<pointLight
-				position={[0, -2, 9]}
-				intensity={160}
-				distance={40}
-				decay={2}
-				color={PALETTE.warmYellow}
-			/>
+			<pointLight position={[0, -2, 9]} intensity={150} distance={40} decay={2} />
 
 			{/* Mounted only when near. Gating on a prop would still run the
 			    loader on mount and pull the whole 1.6 MB at first paint. */}
@@ -538,7 +557,7 @@ export function AwardPlinth({ z = -1040 }: { z?: number }) {
 /* Education — two markers flanking the path                           */
 /* ------------------------------------------------------------------ */
 
-export function EducationMarkers({ z = -1120 }: { z?: number }) {
+export function EducationMarkers({ z = -1260 }: { z?: number }) {
 	const { spread } = useTier();
 	const geo = useMemo(() => new THREE.BoxGeometry(7, 7, 7), []);
 	return (
@@ -562,7 +581,7 @@ export function EducationMarkers({ z = -1120 }: { z?: number }) {
 /* Terminal — a physical object with a scanline screen                 */
 /* ------------------------------------------------------------------ */
 
-export function TerminalObject({ z = -1200 }: { z?: number }) {
+export function TerminalObject({ z = -1340 }: { z?: number }) {
 	const screenMat = useMemo(() => {
 		return new THREE.ShaderMaterial({
 			transparent: true,

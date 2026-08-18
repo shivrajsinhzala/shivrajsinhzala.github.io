@@ -74,16 +74,16 @@ export const SECTIONS: Section[] = [
 	{ id: 'experience', label: 'WHERE I WORK', z: -140, navLabel: 'EXPERIENCE' },
 	{ id: 'projects', label: 'SELECTED WORKS', z: -260, navLabel: 'WORK' },
 	{ id: 'skills', label: 'MY STACK', z: -840, navLabel: 'STACK' },
-	{ id: 'awards', label: 'RISING STAR 2025', z: -1040, navLabel: 'AWARDS' },
-	{ id: 'education', label: 'WHERE I STUDIED', z: -1120 },
-	{ id: 'terminal', label: 'TRY THE TERMINAL', z: -1200, navLabel: 'TERMINAL' },
-	{ id: 'contact', label: "LET'S MAKE SOMETHING", z: -1300, navLabel: 'CONTACT' },
+	{ id: 'awards', label: 'RISING STAR 2025', z: -1180, navLabel: 'AWARDS' },
+	{ id: 'education', label: 'WHERE I STUDIED', z: -1260 },
+	{ id: 'terminal', label: 'TRY THE TERMINAL', z: -1340, navLabel: 'TERMINAL' },
+	{ id: 'contact', label: "LET'S MAKE SOMETHING", z: -1440, navLabel: 'CONTACT' },
 	// The loop tunnel. No nav entry — it is a transition, not a destination.
-	{ id: 'outro', label: 'RETURN', z: -1660 },
+	{ id: 'outro', label: 'RETURN', z: -1700 },
 ];
 
-export const CONTACT_Z = -1300;
-export const OUTRO_Z = -1660;
+export const CONTACT_Z = -1440;
+export const OUTRO_Z = -1700;
 
 /**
  * Length of one lap, in world units.
@@ -109,7 +109,7 @@ export const LOOP_LENGTH = 1764;
  * running out.
  */
 export const TUNNEL_GATES = 16;
-export const TUNNEL_START_Z = -1330;
+export const TUNNEL_START_Z = -1470;
 export const TUNNEL_END_Z = -1806;
 export const HERO_Z = 0;
 
@@ -127,10 +127,10 @@ export const FOG_STOPS: Array<{ z: number; color: string }> = [
 	{ z: -300, color: PALETTE.softPink },
 	{ z: -560, color: PALETTE.warmYellow },
 	{ z: -840, color: PALETTE.mint },
-	{ z: -1040, color: PALETTE.warmYellow },
-	{ z: -1200, color: '#00ff88' },
-	{ z: -1300, color: PALETTE.violet },
-	{ z: -1660, color: PALETTE.softCyan },
+	{ z: -1180, color: PALETTE.warmYellow },
+	{ z: -1340, color: '#00ff88' },
+	{ z: -1440, color: PALETTE.violet },
+	{ z: -1700, color: PALETTE.softCyan },
 	// Must match the z = 0 stop exactly, or the wrap shows a colour shift.
 	{ z: -1764, color: PALETTE.violet },
 ];
@@ -141,7 +141,21 @@ export const FOG_STOPS: Array<{ z: number; color: string }> = [
  * proficiency, which is legible in a way six simultaneous boxes were not.
  */
 export const SKILL_START_Z = -870;
-export const SKILL_SPACING = 24;
+export const SKILL_SPACING = 46;
+
+/**
+ * Lateral offset for each mark, alternating sides.
+ *
+ * Dead centre meant the camera flew straight through every logo: with marks
+ * 24 apart and the camera riding 34 in front, it passed within about 2 units
+ * of the previous one, which is why they filled the whole screen. They now
+ * stand beside the path, opposite their card.
+ */
+export const SKILL_SIDE_X = 15;
+
+export function skillSide(index: number): number {
+	return index % 2 === 0 ? -1 : 1;
+}
 
 export function skillZ(index: number): number {
 	return SKILL_START_Z - index * SKILL_SPACING;
