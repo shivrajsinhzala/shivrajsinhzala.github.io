@@ -101,7 +101,11 @@ function buildAnchors() {
 	// camera arrives at the duplicate sculpture exactly as the clone centres.
 	const clone = document.getElementById('hero-loop');
 	if (clone) {
-		list.push({ y: centredScrollY(clone, vh, maxScroll), z: -LOOP_LENGTH, id: 'hero' });
+		// Anchored to the clone's top rather than its centre: at scroll 0 the
+		// real hero sits with its top at the viewport top, so the seam has to
+		// reproduce that exact framing for the cut to be invisible.
+		const top = clone.getBoundingClientRect().top + window.scrollY;
+		list.push({ y: clamp(top, 0, maxScroll), z: -LOOP_LENGTH, id: 'hero' });
 	}
 
 	list.sort((a, b) => a.y - b.y);
@@ -173,6 +177,20 @@ function buildLoopClone() {
 	});
 
 	footer.insertAdjacentElement('afterend', clone);
+
+	// Runway past the seam.
+	//
+	// With the clone as the last element its centred offset equals maxScroll,
+	// so the wrap could only fire once scrolling had already hit the bottom and
+	// stopped dead — which is exactly why the loop read as a jump instead of a
+	// continuation. This spacer puts a full viewport beyond the seam so the
+	// wrap happens mid-scroll, with momentum still carrying.
+	const runway = document.createElement('div');
+	runway.setAttribute('aria-hidden', 'true');
+	runway.dataset.loopRunway = '';
+	runway.style.height = '100svh';
+	runway.style.pointerEvents = 'none';
+	clone.insertAdjacentElement('afterend', runway);
 }
 
 export function initJourney() {
@@ -287,6 +305,9 @@ function wrapToStart(heroY: number) {
 	scrollState.targetZ = 0;
 	scrollState.cameraZ = 0;
 	scrollState.snap = true;
+	// Silence the gates across the jump; otherwise every one of them fires in
+	// the single frame the camera teleports a full lap.
+	scrollState.muteGatesUntil = performance.now() + 350;
 
 	// Re-arm on the next frame; by then scroll is nowhere near the seam.
 	requestAnimationFrame(() => {
@@ -352,6 +373,8 @@ export function flyTo(id: SectionId, immediate = false) {
 	const lenis = getLenis();
 
 	scrollState.flying = true;
+	// A nav flight covers hundreds of units fast enough to trip many gates.
+	scrollState.muteGatesUntil = performance.now() + FLIGHT_MS + 120;
 
 	if (scrollState.reducedMotion || immediate) {
 		window.scrollTo({ top: targetY, behavior: 'auto' });

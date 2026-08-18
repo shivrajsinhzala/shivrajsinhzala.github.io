@@ -6,14 +6,12 @@
  * with scroll progress, which is exactly why it read as a motor spinning up.
  * That is gone, along with the distance-triggered notes that layered over it.
  *
- * What remains is a chiptune flourish that fires when the camera passes
- * through a gate: two fast rising square-wave notes, the arcade "reward"
- * shape. Each gate in a run steps up a MAJOR pentatonic — major because minor
- * scales sound moody and the brief is fun — so flying a colonnade plays a
- * cheerful little riff and sitting still is completely silent.
+ * What remains is a soft bell that sounds when the camera passes through a
+ * gate. Sine tones with a gentle attack and a long tail, into a generous
+ * room — the melody comes from the gates themselves, each stepping a major
+ * pentatonic, so a run plays as a calm phrase rather than a game cue.
  *
- * The motif is original. The chiptune *idiom* is not ownable, but specific
- * game soundtracks very much are, so nothing here quotes one.
+ * The motif is original; nothing here quotes an existing soundtrack.
  *
  * Two hard rules, unchanged:
  *  - Muted by default. Sound that starts on its own is hostile, and browsers
@@ -73,7 +71,7 @@ const semitone = (n: number) => Math.pow(2, n / 12);
  * A small room. The blips sound thin and clicky completely dry, and a short
  * tail is the difference between "toy" and "cheap".
  */
-function makeImpulse(ctx: AudioContext, seconds = 1.1, decay = 3.2): AudioBuffer {
+function makeImpulse(ctx: AudioContext, seconds = 2.8, decay = 2.4): AudioBuffer {
 	const len = Math.floor(ctx.sampleRate * seconds);
 	const buf = ctx.createBuffer(2, len, ctx.sampleRate);
 	for (let ch = 0; ch < 2; ch++) {
@@ -113,7 +111,7 @@ function build(): Nodes {
 	const convolver = ctx.createConvolver();
 	convolver.buffer = makeImpulse(ctx);
 	const wet = ctx.createGain();
-	wet.gain.value = 0.3;
+	wet.gain.value = 0.5;
 	wet.connect(convolver);
 	convolver.connect(master);
 
@@ -187,7 +185,7 @@ export async function setAudioEnabled(on: boolean) {
 		}
 		if (nodes.ctx.state === 'suspended') await nodes.ctx.resume();
 		nodes.master.gain.cancelScheduledValues(nodes.ctx.currentTime);
-		nodes.master.gain.setTargetAtTime(0.9, nodes.ctx.currentTime, 0.15);
+		nodes.master.gain.setTargetAtTime(0.32, nodes.ctx.currentTime, 0.25);
 	} else if (nodes) {
 		nodes.master.gain.cancelScheduledValues(nodes.ctx.currentTime);
 		nodes.master.gain.linearRampToValueAtTime(0, nodes.ctx.currentTime + 0.2);
@@ -195,61 +193,60 @@ export async function setAudioEnabled(on: boolean) {
 }
 
 /**
- * One chiptune tone: a square with a hard attack and a short decay.
+ * One soft bell tone.
  *
- * `bend` slides the pitch during the attack, which is what separates an
- * arcade blip from a plain beep.
+ * Sine fundamental with a quiet partial a twelfth above, a gentle attack and a
+ * long decay. This replaces the square-wave arcade blip: a square is all odd
+ * harmonics and a hard edge, which is bright and toy-like — pleasant for two
+ * notes and grating for thirty. Sines carry almost no harmonic content, so the
+ * same melody lands soft.
  */
-function tone(freq: number, gain: number, at: number, dur: number, bend = 1) {
+function tone(freq: number, gain: number, at: number, dur: number) {
 	if (!nodes) return;
 	const { ctx, dry, wet } = nodes;
 	const t = ctx.currentTime + at;
 
 	const osc = ctx.createOscillator();
-	osc.type = 'square';
-	osc.frequency.setValueAtTime(freq * bend, t);
-	if (bend !== 1) osc.frequency.exponentialRampToValueAtTime(freq, t + 0.035);
+	osc.type = 'sine';
+	osc.frequency.value = freq;
 
-	// A little vibrato. Pure square is stiff; this gives it some wobble.
-	const lfo = ctx.createOscillator();
-	lfo.frequency.value = 7;
-	const lfoAmt = ctx.createGain();
-	lfoAmt.gain.value = freq * 0.006;
-	lfo.connect(lfoAmt);
-	lfoAmt.connect(osc.frequency);
-
-	// Rounds off the square's harshest harmonics without dulling the attack.
-	const filter = ctx.createBiquadFilter();
-	filter.type = 'lowpass';
-	filter.frequency.value = Math.min(9000, freq * 7);
+	// A twelfth up, barely audible — enough to give the note a bell's shimmer
+	// without any of a square's bite.
+	const partial = ctx.createOscillator();
+	partial.type = 'sine';
+	partial.frequency.value = freq * 3;
+	const partialAmp = ctx.createGain();
+	partialAmp.gain.value = 0.06;
 
 	const amp = ctx.createGain();
 	amp.gain.setValueAtTime(0.0001, t);
-	amp.gain.exponentialRampToValueAtTime(gain, t + 0.006);
-	amp.gain.setValueAtTime(gain, t + dur * 0.55);
+	// 25ms attack rather than 6ms. The sharp attack was most of what made the
+	// old sound read as a beep.
+	amp.gain.exponentialRampToValueAtTime(gain, t + 0.025);
 	amp.gain.exponentialRampToValueAtTime(0.0001, t + dur);
 
-	osc.connect(filter);
-	filter.connect(amp);
+	osc.connect(amp);
+	partial.connect(partialAmp);
+	partialAmp.connect(amp);
 	amp.connect(dry);
 	amp.connect(wet);
 
 	osc.start(t);
-	lfo.start(t);
+	partial.start(t);
 	osc.stop(t + dur + 0.05);
-	lfo.stop(t + dur + 0.05);
+	partial.stop(t + dur + 0.05);
 }
 
 /**
- * The arcade flourish: two fast rising notes.
+ * A single soft chime, with a quiet octave below for warmth.
  *
- * A single tone reads as a UI beep; two notes a fourth apart, 55ms apart,
- * read as a reward. This is an original motif in the chiptune idiom — the
- * style is fair game, specific game soundtracks are not.
+ * Deliberately one note, not a two-note flourish: a rising pair reads as a
+ * game reward, and the brief is now a melody rather than an arcade cue. One
+ * note per gate lets the run itself carry the tune.
  */
 function blip(freq: number, gain: number) {
-	tone(freq, gain, 0, 0.1, 0.75);
-	tone(freq * semitone(5), gain * 0.95, 0.055, 0.26);
+	tone(freq, gain, 0, 1.9);
+	tone(freq / 2, gain * 0.3, 0.01, 2.4);
 }
 
 /**
@@ -259,11 +256,11 @@ function blip(freq: number, gain: number) {
 export function playGate(step = 0, intensity = 1) {
 	if (!enabled || !nodes) return;
 	const degree = SCALE[Math.abs(step) % SCALE.length];
-	blip(ROOT * semitone(degree), 0.22 * intensity);
+	blip(ROOT * semitone(degree), 0.1 * intensity);
 }
 
 /** Hover feedback: the same blip, higher and much quieter. */
 export function playTick() {
 	if (!enabled || !nodes) return;
-	blip(ROOT * semitone(SCALE[4] + 12), 0.06);
+	blip(ROOT * semitone(SCALE[4] + 12), 0.03);
 }

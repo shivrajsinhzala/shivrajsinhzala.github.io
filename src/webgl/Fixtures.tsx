@@ -7,7 +7,7 @@
  * one place rather than a sequence of unrelated set pieces.
  */
 
-import { Suspense, useMemo, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
@@ -17,6 +17,7 @@ import {
 	EXPERIENCE,
 	PALETTE,
 	SKILLS,
+	type Skill,
 	TUNNEL_END_Z,
 	TUNNEL_GATES,
 	TUNNEL_START_Z,
@@ -84,7 +85,11 @@ function Gate({
 	const wasAhead = useRef<boolean | null>(null);
 	useFrame(({ camera }) => {
 		const ahead = camera.position.z > z;
-		if (wasAhead.current !== null && wasAhead.current !== ahead) {
+		if (
+			wasAhead.current !== null &&
+			wasAhead.current !== ahead &&
+			performance.now() > scrollState.muteGatesUntil
+		) {
 			playGate(note);
 		}
 		wasAhead.current = ahead;
@@ -192,32 +197,86 @@ export function ExperienceTimeline({ z = -140 }: { z?: number }) {
 /* Skills — a lattice of blocks, height driven by proficiency          */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Renders a skill's brand mark to a canvas for use as a texture.
+ *
+ * Path2D takes the same 24x24 `d` string the DOM icons use, so the mark in the
+ * 3D scene is the real logo rather than a redrawn approximation. Drawn once
+ * per skill and cached — this is a texture, not a per-frame paint.
+ */
+function makeLogoTexture(skill: Skill): THREE.CanvasTexture {
+	const SIZE = 512;
+	const canvas = document.createElement('canvas');
+	canvas.width = SIZE;
+	canvas.height = SIZE;
+	const ctx = canvas.getContext('2d')!;
+
+	// Card: the same white slab with a hard black border as the 2D design.
+	ctx.fillStyle = '#ffffff';
+	ctx.fillRect(0, 0, SIZE, SIZE);
+	ctx.strokeStyle = '#0a0a0a';
+	ctx.lineWidth = 26;
+	ctx.strokeRect(13, 13, SIZE - 26, SIZE - 26);
+
+	// Accent band across the bottom, so each slab still reads by colour at
+	// distance once the mark itself is too small to make out.
+	ctx.fillStyle = skill.accent;
+	ctx.fillRect(26, SIZE - 122, SIZE - 52, 96);
+
+	// The mark, centred in the upper area. 24x24 viewBox scaled to 280px.
+	const scale = 280 / 24;
+	ctx.save();
+	ctx.translate((SIZE - 280) / 2, 96);
+	ctx.scale(scale, scale);
+	ctx.fillStyle = '#0a0a0a';
+	ctx.strokeStyle = '#0a0a0a';
+	ctx.lineWidth = 1.6;
+	ctx.lineJoin = 'round';
+	ctx.lineCap = 'round';
+	const mark = new Path2D(skill.logo);
+	// The four brand marks are solid shapes; the two authored glyphs are
+	// strokes, and filling those would turn them into blobs.
+	if (skill.solidLogo) ctx.fill(mark);
+	else ctx.stroke(mark);
+	ctx.restore();
+
+	// Proficiency, over the accent band.
+	ctx.fillStyle = '#0a0a0a';
+	ctx.font = 'bold 62px "JetBrains Mono", monospace';
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'middle';
+	ctx.fillText(`${skill.level}%`, SIZE / 2, SIZE - 74);
+
+	const tex = new THREE.CanvasTexture(canvas);
+	tex.colorSpace = THREE.SRGBColorSpace;
+	tex.anisotropy = 4;
+	return tex;
+}
+
 export function SkillLattice({ z = -820 }: { z?: number }) {
 	const groupRef = useRef<THREE.Group>(null);
-	const { spread } = useTier();
+	const { spread, slabScale } = useTier();
 
 	useFrame(({ camera }) => {
 		if (!groupRef.current || scrollState.reducedMotion) return;
-		// The lattice counter-rotates slowly as the camera passes through it,
-		// so the visitor perceives real parallax depth between the columns.
-		const t = (camera.position.z - z) * 0.004;
-		groupRef.current.rotation.y = t;
+		// The ring counter-rotates slowly as the camera passes through it, so
+		// the visitor perceives real parallax depth between the slabs.
+		groupRef.current.rotation.y = (camera.position.z - z) * 0.004;
 	});
 
 	return (
 		<group ref={groupRef} position={[pathX(z), pathY(z), z]}>
 			{SKILLS.map((skill, i) => {
 				const angle = (i / SKILLS.length) * Math.PI * 2;
-				const radius = 17 * spread;
-				const height = (skill.level / 100) * 18;
+				const radius = 19 * spread;
 				return (
-					<SkillColumn
+					<SkillSlab
 						key={skill.num}
+						skill={skill}
 						x={Math.cos(angle) * radius}
 						zPos={Math.sin(angle) * radius}
-						height={height}
-						color={skill.accent}
 						rotation={-angle + Math.PI / 2}
+						scale={slabScale}
 					/>
 				);
 			})}
@@ -225,24 +284,49 @@ export function SkillLattice({ z = -820 }: { z?: number }) {
 	);
 }
 
-function SkillColumn({
+/**
+ * One skill, as a slab carrying its logo.
+ *
+ * Replaces the plain coloured boxes that stood here before: six unlabelled
+ * blocks said nothing about the stack, which is the whole point of the
+ * section.
+ */
+function SkillSlab({
+	skill,
 	x,
 	zPos,
-	height,
-	color,
 	rotation,
+	scale,
 }: {
+	skill: Skill;
 	x: number;
 	zPos: number;
-	height: number;
-	color: string;
 	rotation: number;
+	scale: number;
 }) {
-	const geo = useMemo(() => new THREE.BoxGeometry(5.5, height, 5.5), [height]);
-	const mat = useMemo(() => new THREE.MeshBasicMaterial({ color: new THREE.Color(color) }), [color]);
+	const texture = useMemo(() => makeLogoTexture(skill), [skill]);
+	useEffect(() => () => texture.dispose(), [texture]);
+
+	const size = 9 * scale;
+	const depth = 0.9 * scale;
+
+	const geo = useMemo(() => new THREE.BoxGeometry(size, size, depth), [size, depth]);
+	const edgeMat = useMemo(
+		() => new THREE.MeshBasicMaterial({ color: new THREE.Color(skill.accent) }),
+		[skill.accent]
+	);
+	const faceMat = useMemo(() => new THREE.MeshBasicMaterial({ map: texture }), [texture]);
+
 	return (
-		<group position={[x, height / 2 - 9, zPos]} rotation-y={rotation}>
-			<mesh geometry={geo} material={mat} />
+		<group position={[x, 0, zPos]} rotation-y={rotation}>
+			<mesh geometry={geo} material={edgeMat} />
+			{/* Logo on both faces, so the ring reads from either side. */}
+			<mesh position={[0, 0, depth / 2 + 0.02]} material={faceMat}>
+				<planeGeometry args={[size * 0.94, size * 0.94]} />
+			</mesh>
+			<mesh position={[0, 0, -depth / 2 - 0.02]} rotation-y={Math.PI} material={faceMat}>
+				<planeGeometry args={[size * 0.94, size * 0.94]} />
+			</mesh>
 			<EdgeOutline geometry={geo} color={PALETTE.black} />
 		</group>
 	);

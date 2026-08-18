@@ -23,6 +23,14 @@ export type ScrollState = {
 	flying: boolean;
 	/** Set by the loop warp: the camera must jump, not spring, to the new Z. */
 	snap: boolean;
+	/**
+	 * Timestamp until which gates stay silent.
+	 *
+	 * Any instant camera jump — the loop wrap, a teleport nav — crosses every
+	 * gate in the scene in one frame. Without this they all fire at once, which
+	 * is a wall of sound rather than a flourish.
+	 */
+	muteGatesUntil: number;
 	ready: boolean;
 	reducedMotion: boolean;
 };
@@ -35,6 +43,7 @@ export const scrollState: ScrollState = {
 	active: 'hero',
 	flying: false,
 	snap: false,
+	muteGatesUntil: 0,
 	ready: false,
 	reducedMotion: false,
 };
