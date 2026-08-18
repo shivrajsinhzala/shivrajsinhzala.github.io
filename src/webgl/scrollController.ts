@@ -446,8 +446,18 @@ function syncReveals(vh: number) {
 	panels.forEach((panel) => {
 		const rect = panel.getBoundingClientRect();
 		const centre = rect.top + rect.height / 2;
-		// 1 at viewport centre, 0 at the edges.
-		const d = Math.abs(centre - vh / 2) / (vh * 0.85);
+
+		/**
+		 * Sequence steps fade over a much tighter window than ordinary panels.
+		 *
+		 * Corridor and skill steps are only ~0.65vh tall, so with the default
+		 * ±0.85vh falloff a neighbouring card was always still on screen —
+		 * which is why two project captions, and two skill cards, were visible
+		 * at once. Half a viewport of falloff means the card being passed is
+		 * gone before the next one arrives.
+		 */
+		const tight = panel.hasAttribute('data-project-index') || panel.hasAttribute('data-skill-index');
+		const d = Math.abs(centre - vh / 2) / (vh * (tight ? 0.4 : 0.85));
 		const visible = Math.max(0, 1 - d);
 
 		panel.style.setProperty('--panel-visible', visible.toFixed(3));

@@ -501,9 +501,9 @@ export function AwardPlinth({ z = -1180 }: { z?: number }) {
 	// The copy card occupies the left half on desktop, so the trophy stands to
 	// the right of it rather than behind it. It used to be dead centre, which
 	// put the card straight over the model.
-	const offsetX = mobile ? 0 : 15 * spread;
+	const offsetX = mobile ? 0 : 9 * spread;
 
-	const plinthGeo = useMemo(() => new THREE.BoxGeometry(8, 12, 8), []);
+	const plinthGeo = useMemo(() => new THREE.BoxGeometry(6.5, 9, 6.5), []);
 	const plinthMat = useMemo(
 		() =>
 			new THREE.MeshBasicMaterial({
@@ -514,14 +514,17 @@ export function AwardPlinth({ z = -1180 }: { z?: number }) {
 
 	useFrame(({ camera }) => {
 		const dist = Math.abs(camera.position.z - z);
-		if (dist < 220 && !near) setNear(true);
-		else if (dist > 300 && near) setNear(false);
+		// Generous radius: the model is 1.6 MB, and starting the fetch only
+		// once the visitor is nearly on top of it meant arriving at an empty
+		// plinth while it decoded.
+		if (dist < 420 && !near) setNear(true);
+		else if (dist > 540 && near) setNear(false);
 	});
 
 	return (
 		<group position={[pathX(z) + offsetX, -2 + pathY(z), z]}>
-			<mesh geometry={plinthGeo} material={plinthMat} position={[0, -6, 0]} />
-			<group position={[0, -6, 0]}>
+			<mesh geometry={plinthGeo} material={plinthMat} position={[0, -4.5, 0]} />
+			<group position={[0, -4.5, 0]}>
 				<EdgeOutline geometry={plinthGeo} color={PALETTE.violet} />
 			</group>
 
