@@ -73,16 +73,16 @@ export const SECTIONS: Section[] = [
 	{ id: 'about', label: 'HOW I WORK', z: -60, navLabel: 'ABOUT' },
 	{ id: 'experience', label: 'WHERE I WORK', z: -140, navLabel: 'EXPERIENCE' },
 	{ id: 'projects', label: 'SELECTED WORKS', z: -260, navLabel: 'WORK' },
-	{ id: 'skills', label: 'MY STACK', z: -820, navLabel: 'STACK' },
-	{ id: 'awards', label: 'RISING STAR 2025', z: -960, navLabel: 'AWARDS' },
-	{ id: 'education', label: 'WHERE I STUDIED', z: -1060 },
-	{ id: 'terminal', label: 'TRY THE TERMINAL', z: -1160, navLabel: 'TERMINAL' },
-	{ id: 'contact', label: "LET'S MAKE SOMETHING", z: -1280, navLabel: 'CONTACT' },
+	{ id: 'skills', label: 'MY STACK', z: -840, navLabel: 'STACK' },
+	{ id: 'awards', label: 'RISING STAR 2025', z: -1040, navLabel: 'AWARDS' },
+	{ id: 'education', label: 'WHERE I STUDIED', z: -1120 },
+	{ id: 'terminal', label: 'TRY THE TERMINAL', z: -1200, navLabel: 'TERMINAL' },
+	{ id: 'contact', label: "LET'S MAKE SOMETHING", z: -1300, navLabel: 'CONTACT' },
 	// The loop tunnel. No nav entry — it is a transition, not a destination.
 	{ id: 'outro', label: 'RETURN', z: -1660 },
 ];
 
-export const CONTACT_Z = -1280;
+export const CONTACT_Z = -1300;
 export const OUTRO_Z = -1660;
 
 /**
@@ -126,14 +126,26 @@ export const FOG_STOPS: Array<{ z: number; color: string }> = [
 	{ z: -140, color: PALETTE.softCyan },
 	{ z: -300, color: PALETTE.softPink },
 	{ z: -560, color: PALETTE.warmYellow },
-	{ z: -820, color: PALETTE.mint },
-	{ z: -960, color: PALETTE.warmYellow },
-	{ z: -1160, color: '#00ff88' },
-	{ z: -1280, color: PALETTE.violet },
+	{ z: -840, color: PALETTE.mint },
+	{ z: -1040, color: PALETTE.warmYellow },
+	{ z: -1200, color: '#00ff88' },
+	{ z: -1300, color: PALETTE.violet },
 	{ z: -1660, color: PALETTE.softCyan },
 	// Must match the z = 0 stop exactly, or the wrap shows a colour shift.
 	{ z: -1764, color: PALETTE.violet },
 ];
+
+/**
+ * Skills are spread along the corridor rather than clustered in a ring: the
+ * visitor scrolls *through* the stack, meeting one logo at a time with its
+ * proficiency, which is legible in a way six simultaneous boxes were not.
+ */
+export const SKILL_START_Z = -870;
+export const SKILL_SPACING = 24;
+
+export function skillZ(index: number): number {
+	return SKILL_START_Z - index * SKILL_SPACING;
+}
 
 export function sectionZ(id: SectionId): number {
 	return SECTIONS.find((s) => s.id === id)?.z ?? 0;
@@ -312,6 +324,15 @@ export type Skill = {
 	/** True for the real brand marks (solid shapes); false for stroked glyphs. */
 	solidLogo?: boolean;
 	/**
+	 * Optional SVG files under /assets/logos/. Used in preference to `logo`
+	 * when present, and silently ignored when the file is missing — which is
+	 * how OpenAI and Claude get their real marks without shipping an
+	 * approximation of someone else's brand in the meantime.
+	 */
+	logoFiles?: string[];
+	/** Shown when no mark can be drawn at all. */
+	fallbackLabel?: string;
+	/**
 	 * 24x24 SVG path for the brand mark, rasterised onto the slab in the 3D
 	 * scene. The first four are the real logos, carried over from v1; the last
 	 * two are disciplines rather than products, so they get authored glyphs
@@ -377,6 +398,8 @@ export const SKILLS: Skill[] = [
 	{
 		num: '06',
 		name: 'AI TOOLS',
+		logoFiles: ['/assets/logos/openai.svg', '/assets/logos/claude.svg'],
+		fallbackLabel: 'AI',
 		logo: 'M9 5h6a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3z M12 2v3 M9.5 11h1.2 M13.3 11h1.2 M10 14.5h4 M3.5 10v4 M20.5 10v4',
 		blurb: 'I use AI to speed up workflow. You probably do too.',
 		level: 92,

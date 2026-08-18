@@ -17,6 +17,7 @@ import {
 	EXPERIENCE,
 	PALETTE,
 	SKILLS,
+	skillZ,
 	type Skill,
 	TUNNEL_END_Z,
 	TUNNEL_GATES,
@@ -26,6 +27,7 @@ import { EdgeOutline } from './World';
 import { scrollState } from './scrollStore';
 import { useTier } from './useTier';
 import { pathX, pathY } from './path';
+import { extrudeSvgDocument, extrudeSvgPath } from './svgLogo';
 import { playGate } from './audio';
 
 /* ------------------------------------------------------------------ */
@@ -198,54 +200,33 @@ export function ExperienceTimeline({ z = -140 }: { z?: number }) {
 /* ------------------------------------------------------------------ */
 
 /**
- * Renders a skill's brand mark to a canvas for use as a texture.
+ * The proficiency read-out that stands beside each mark.
  *
- * Path2D takes the same 24x24 `d` string the DOM icons use, so the mark in the
- * 3D scene is the real logo rather than a redrawn approximation. Drawn once
- * per skill and cached — this is a texture, not a per-frame paint.
+ * Canvas rather than 3D text: a number needs to be crisp and legible at a
+ * glance, and extruded glyphs at this size turn to mush.
  */
-function makeLogoTexture(skill: Skill): THREE.CanvasTexture {
-	const SIZE = 512;
+function makeStatTexture(skill: Skill): THREE.CanvasTexture {
+	const W = 512;
+	const H = 256;
 	const canvas = document.createElement('canvas');
-	canvas.width = SIZE;
-	canvas.height = SIZE;
+	canvas.width = W;
+	canvas.height = H;
 	const ctx = canvas.getContext('2d')!;
 
-	// Card: the same white slab with a hard black border as the 2D design.
+	ctx.fillStyle = '#0a0a0a';
+	ctx.fillRect(0, 0, W, H);
+	ctx.strokeStyle = skill.accent;
+	ctx.lineWidth = 10;
+	ctx.strokeRect(5, 5, W - 10, H - 10);
+
 	ctx.fillStyle = '#ffffff';
-	ctx.fillRect(0, 0, SIZE, SIZE);
-	ctx.strokeStyle = '#0a0a0a';
-	ctx.lineWidth = 26;
-	ctx.strokeRect(13, 13, SIZE - 26, SIZE - 26);
-
-	// Accent band across the bottom, so each slab still reads by colour at
-	// distance once the mark itself is too small to make out.
-	ctx.fillStyle = skill.accent;
-	ctx.fillRect(26, SIZE - 122, SIZE - 52, 96);
-
-	// The mark, centred in the upper area. 24x24 viewBox scaled to 280px.
-	const scale = 280 / 24;
-	ctx.save();
-	ctx.translate((SIZE - 280) / 2, 96);
-	ctx.scale(scale, scale);
-	ctx.fillStyle = '#0a0a0a';
-	ctx.strokeStyle = '#0a0a0a';
-	ctx.lineWidth = 1.6;
-	ctx.lineJoin = 'round';
-	ctx.lineCap = 'round';
-	const mark = new Path2D(skill.logo);
-	// The four brand marks are solid shapes; the two authored glyphs are
-	// strokes, and filling those would turn them into blobs.
-	if (skill.solidLogo) ctx.fill(mark);
-	else ctx.stroke(mark);
-	ctx.restore();
-
-	// Proficiency, over the accent band.
-	ctx.fillStyle = '#0a0a0a';
-	ctx.font = 'bold 62px "JetBrains Mono", monospace';
+	ctx.font = 'bold 58px "JetBrains Mono", monospace';
 	ctx.textAlign = 'center';
-	ctx.textBaseline = 'middle';
-	ctx.fillText(`${skill.level}%`, SIZE / 2, SIZE - 74);
+	ctx.fillText(skill.name, W / 2, 92);
+
+	ctx.fillStyle = skill.accent;
+	ctx.font = 'bold 104px "JetBrains Mono", monospace';
+	ctx.fillText(`${skill.level}%`, W / 2, 196);
 
 	const tex = new THREE.CanvasTexture(canvas);
 	tex.colorSpace = THREE.SRGBColorSpace;
@@ -253,81 +234,129 @@ function makeLogoTexture(skill: Skill): THREE.CanvasTexture {
 	return tex;
 }
 
-export function SkillLattice({ z = -820 }: { z?: number }) {
+/** Extruded mark for one skill, loading an SVG file when one is configured. */
+function useLogoGeometry(skill: Skill) {
+	const [fileGeos, setFileGeos] = useState<THREE.BufferGeometry[] | null>(null);
+
+	useEffect(() => {
+		if (!skill.logoFiles?.length) return;
+		let cancelled = false;
+
+		Promise.all(
+			skill.logoFiles.map(async (url) => {
+				const res = await fetch(url);
+				if (!res.ok) throw new Error('missing');
+				const text = await res.text();
+				return extrudeSvgDocument(text, 5, 1.1);
+			})
+		)
+			.then((geos) => {
+				if (cancelled) geos.forEach((g) => g.dispose());
+				else setFileGeos(geos);
+			})
+			// Files absent is the expected state until the real marks are
+			// dropped in; the inline path or label covers it.
+			.catch(() => {});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [skill.logoFiles]);
+
+	const inline = useMemo(
+		() => (skill.logo ? extrudeSvgPath(skill.logo, 6, 1.2) : null),
+		[skill.logo]
+	);
+
+	return { fileGeos, inline };
+}
+
+/**
+ * One skill: its mark in real 3D, with the proficiency panel beside it.
+ *
+ * Replaces the ring of plain coloured boxes. Six unlabelled blocks all visible
+ * at once told the visitor nothing about the stack, which is the entire point
+ * of the section.
+ */
+function SkillMark({ skill, index, scale }: { skill: Skill; index: number; scale: number }) {
+	const z = skillZ(index);
 	const groupRef = useRef<THREE.Group>(null);
-	const { spread, slabScale } = useTier();
+	const { fileGeos, inline } = useLogoGeometry(skill);
+
+	const statTex = useMemo(() => makeStatTexture(skill), [skill]);
+	useEffect(() => () => statTex.dispose(), [statTex]);
+
+	const logoMat = useMemo(
+		() =>
+			new THREE.MeshStandardMaterial({
+				color: new THREE.Color(skill.accent),
+				metalness: 0.1,
+				roughness: 0.45,
+			}),
+		[skill.accent]
+	);
+	const statMat = useMemo(
+		() => new THREE.MeshBasicMaterial({ map: statTex, transparent: true }),
+		[statTex]
+	);
 
 	useFrame(({ camera }) => {
-		if (!groupRef.current || scrollState.reducedMotion) return;
-		// The ring counter-rotates slowly as the camera passes through it, so
-		// the visitor perceives real parallax depth between the slabs.
-		groupRef.current.rotation.y = (camera.position.z - z) * 0.004;
+		const g = groupRef.current;
+		if (!g) return;
+		if (scrollState.reducedMotion) return;
+
+		// Turn with approach: the mark faces away early, swings to face the
+		// visitor as they arrive, and follows them past. This is the "logo
+		// changes as you scroll" — each one performs as its turn comes up.
+		const d = THREE.MathUtils.clamp((camera.position.z - z) / 60, -1, 1);
+		g.rotation.y = d * 0.9;
+		g.position.y = pathY(z) + Math.sin(performance.now() * 0.001 + index) * 0.35;
 	});
 
-	return (
-		<group ref={groupRef} position={[pathX(z), pathY(z), z]}>
-			{SKILLS.map((skill, i) => {
-				const angle = (i / SKILLS.length) * Math.PI * 2;
-				const radius = 19 * spread;
-				return (
-					<SkillSlab
-						key={skill.num}
-						skill={skill}
-						x={Math.cos(angle) * radius}
-						zPos={Math.sin(angle) * radius}
-						rotation={-angle + Math.PI / 2}
-						scale={slabScale}
-					/>
-				);
-			})}
+	const geos = fileGeos ?? (inline ? [inline] : []);
+
+    return (
+		<group ref={groupRef} position={[pathX(z), pathY(z), z]} scale={scale}>
+			{geos.map((geo, i) => (
+				<mesh
+					key={i}
+					geometry={geo}
+					material={logoMat}
+					position={[geos.length > 1 ? (i - (geos.length - 1) / 2) * 7 : 0, 3.4, 0]}
+				/>
+			))}
+
+			{geos.length === 0 && skill.fallbackLabel && (
+				<mesh position={[0, 3.4, 0]}>
+					<boxGeometry args={[5, 5, 1]} />
+					<meshStandardMaterial color={skill.accent} metalness={0.1} roughness={0.5} />
+				</mesh>
+			)}
+
+			<mesh position={[0, -3.6, 0]} material={statMat}>
+				<planeGeometry args={[11, 5.5]} />
+			</mesh>
 		</group>
 	);
 }
 
-/**
- * One skill, as a slab carrying its logo.
- *
- * Replaces the plain coloured boxes that stood here before: six unlabelled
- * blocks said nothing about the stack, which is the whole point of the
- * section.
- */
-function SkillSlab({
-	skill,
-	x,
-	zPos,
-	rotation,
-	scale,
-}: {
-	skill: Skill;
-	x: number;
-	zPos: number;
-	rotation: number;
-	scale: number;
-}) {
-	const texture = useMemo(() => makeLogoTexture(skill), [skill]);
-	useEffect(() => () => texture.dispose(), [texture]);
-
-	const size = 9 * scale;
-	const depth = 0.9 * scale;
-
-	const geo = useMemo(() => new THREE.BoxGeometry(size, size, depth), [size, depth]);
-	const edgeMat = useMemo(
-		() => new THREE.MeshBasicMaterial({ color: new THREE.Color(skill.accent) }),
-		[skill.accent]
-	);
-	const faceMat = useMemo(() => new THREE.MeshBasicMaterial({ map: texture }), [texture]);
-
+export function SkillLattice() {
+	const { slabScale } = useTier();
 	return (
-		<group position={[x, 0, zPos]} rotation-y={rotation}>
-			<mesh geometry={geo} material={edgeMat} />
-			{/* Logo on both faces, so the ring reads from either side. */}
-			<mesh position={[0, 0, depth / 2 + 0.02]} material={faceMat}>
-				<planeGeometry args={[size * 0.94, size * 0.94]} />
-			</mesh>
-			<mesh position={[0, 0, -depth / 2 - 0.02]} rotation-y={Math.PI} material={faceMat}>
-				<planeGeometry args={[size * 0.94, size * 0.94]} />
-			</mesh>
-			<EdgeOutline geometry={geo} color={PALETTE.black} />
+		<group>
+			{/* Lights for the extruded marks; unlit materials ignore them. */}
+			<ambientLight intensity={1.4} />
+			<pointLight position={[10, 14, 20]} intensity={520} distance={90} decay={2} />
+			<pointLight
+				position={[-12, -6, 16]}
+				intensity={260}
+				distance={80}
+				decay={2}
+				color={PALETTE.softCyan}
+			/>
+			{SKILLS.map((skill, i) => (
+				<SkillMark key={skill.num} skill={skill} index={i} scale={slabScale} />
+			))}
 		</group>
 	);
 }
@@ -354,6 +383,9 @@ function SkillSlab({
  * inspection: at 0 the star sits edge-on and the plaque points away.
  */
 const AWARD_FACE_YAW = -Math.PI / 2;
+
+/** Depth the trophy stands at; the approach animation is measured against it. */
+const AWARD_Z = -1040;
 
 function AwardModel() {
 	const { scene } = useGLTF(AWARD.model);
@@ -408,7 +440,7 @@ function AwardModel() {
 		box.getSize(size);
 		box.getCenter(centre);
 
-		const targetHeight = 9;
+		const targetHeight = 13;
 		const scale = size.y > 0 ? targetHeight / size.y : 1;
 
 		return {
@@ -417,16 +449,20 @@ function AwardModel() {
 		};
 	}, [model]);
 
-	useFrame(() => {
+	useFrame(({ camera }) => {
 		if (!ref.current || scrollState.reducedMotion) return;
-		// The model's front faces +X, so it needs a quarter turn to face the
-		// camera. It used to spin continuously, which meant the visitor was
-		// looking at the back of the trophy — and the engraved plaque — for
-		// half of every revolution. It now presents its face and only sways.
 		const t = performance.now() * 0.0009;
-		ref.current.rotation.y = AWARD_FACE_YAW + Math.sin(t) * 0.32;
-		// A slow bob, so it reads as presented rather than parked.
-		ref.current.position.y = fitted.offset.y + Math.sin(t * 1.35) * 0.35;
+
+		// Scroll drives the presentation: the trophy turns toward the visitor
+		// as they approach, holds its engraved face while they are with it,
+		// and follows them past. Its own sway only ever tops that up, so the
+		// plaque never rotates away — which was the earlier fault.
+		const approach = THREE.MathUtils.clamp((camera.position.z - AWARD_Z) / 90, -1, 1);
+		ref.current.rotation.y = AWARD_FACE_YAW + approach * 0.75 + Math.sin(t) * 0.16;
+
+		// Rises out of the plinth as it is reached.
+		const arrive = 1 - Math.min(1, Math.abs(approach));
+		ref.current.position.y = fitted.offset.y + arrive * 1.6 + Math.sin(t * 1.35) * 0.3;
 	});
 
 	return (
@@ -436,9 +472,13 @@ function AwardModel() {
 	);
 }
 
-export function AwardPlinth({ z = -960 }: { z?: number }) {
+export function AwardPlinth({ z = -1040 }: { z?: number }) {
 	const [near, setNear] = useState(false);
-	const haloRef = useRef<THREE.Mesh>(null);
+	const { mobile, spread } = useTier();
+	// The copy card occupies the left half on desktop, so the trophy stands to
+	// the right of it rather than behind it. It used to be dead centre, which
+	// put the card straight over the model.
+	const offsetX = mobile ? 0 : 15 * spread;
 
 	const plinthGeo = useMemo(() => new THREE.BoxGeometry(8, 12, 8), []);
 	const plinthMat = useMemo(
@@ -449,38 +489,16 @@ export function AwardPlinth({ z = -960 }: { z?: number }) {
 		[]
 	);
 
-	// A flat disc behind the trophy. The model is the one lit, detailed object
-	// in a flat-shaded world, and without something behind it, it reads as
-	// floating debris rather than an exhibit.
-	const haloMat = useMemo(
-		() =>
-			new THREE.MeshBasicMaterial({
-				color: new THREE.Color(PALETTE.warmYellow),
-				transparent: true,
-				opacity: 0.09,
-				side: THREE.DoubleSide,
-			}),
-		[]
-	);
-
-	useFrame(({ camera }, delta) => {
+	useFrame(({ camera }) => {
 		const dist = Math.abs(camera.position.z - z);
 		if (dist < 220 && !near) setNear(true);
 		else if (dist > 300 && near) setNear(false);
-
-		if (haloRef.current && !scrollState.reducedMotion) {
-			haloRef.current.rotation.z += delta * 0.08;
-		}
 	});
 
 	return (
-		<group position={[pathX(z), -3 + pathY(z), z]}>
+		<group position={[pathX(z) + offsetX, -2 + pathY(z), z]}>
 			<mesh geometry={plinthGeo} material={plinthMat} position={[0, -6, 0]} />
 			<EdgeOutline geometry={plinthGeo} color={PALETTE.warmYellow} />
-
-			<mesh ref={haloRef} position={[0, 5, -5]} material={haloMat}>
-				<circleGeometry args={[9, 64]} />
-			</mesh>
 
 			{/*
 			  Lights exist solely for the GLB; unlit materials ignore them.
@@ -520,7 +538,7 @@ export function AwardPlinth({ z = -960 }: { z?: number }) {
 /* Education — two markers flanking the path                           */
 /* ------------------------------------------------------------------ */
 
-export function EducationMarkers({ z = -1060 }: { z?: number }) {
+export function EducationMarkers({ z = -1120 }: { z?: number }) {
 	const { spread } = useTier();
 	const geo = useMemo(() => new THREE.BoxGeometry(7, 7, 7), []);
 	return (
@@ -544,7 +562,7 @@ export function EducationMarkers({ z = -1060 }: { z?: number }) {
 /* Terminal — a physical object with a scanline screen                 */
 /* ------------------------------------------------------------------ */
 
-export function TerminalObject({ z = -1160 }: { z?: number }) {
+export function TerminalObject({ z = -1200 }: { z?: number }) {
 	const screenMat = useMemo(() => {
 		return new THREE.ShaderMaterial({
 			transparent: true,

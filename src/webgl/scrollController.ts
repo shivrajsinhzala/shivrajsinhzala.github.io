@@ -22,6 +22,7 @@ import {
 	PROJECTS,
 	SECTIONS,
 	projectTransform,
+	skillZ,
 	type SectionId,
 } from '../data/journey';
 import { scrollState, setActiveSection } from './scrollStore';
@@ -89,6 +90,25 @@ function buildAnchors() {
 					// as being approached rather than already passed.
 					z: projectTransform(i).position[2] - 8,
 					id: 'projects',
+				});
+			});
+			continue;
+		}
+
+		if (section.id === 'skills') {
+			// Same shape as the corridor: one anchor per skill so the camera
+			// arrives at each 3D mark exactly as its card centres.
+			const heading = el.querySelector('[data-skills-heading]');
+			if (heading) {
+				list.push({ y: centredScrollY(heading, vh, maxScroll), z: section.z, id: 'skills' });
+			}
+			el.querySelectorAll<HTMLElement>('[data-skill-index]').forEach((step) => {
+				const i = Number(step.dataset.skillIndex);
+				if (Number.isNaN(i)) return;
+				list.push({
+					y: centredScrollY(step, vh, maxScroll),
+					z: skillZ(i) - 8,
+					id: 'skills',
 				});
 			});
 			continue;

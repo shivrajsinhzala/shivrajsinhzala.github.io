@@ -339,32 +339,51 @@ const navSections = SECTIONS.filter((s) => s.navLabel);
 		</section>
 
 		{/* -------------------------------------------------------- SKILLS */}
-		<section id="skills" class="journey-panel journey-panel--tall" data-panel aria-labelledby="skills-title">
-			<div class="journey-inner">
-				<div class="reveal"><span class="j-label">SECTION 03</span></div>
-				<h2 id="skills-title" class="j-heading j-heading--onvoid reveal mt-4">MY<br />STACK</h2>
-				<p class="reveal font-mono text-xs md:text-sm text-white/70 mt-4 max-w-md">
-					WordPress first. Then everything else. I know what I'm good at.
-				</p>
-				<div class="reveal mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{
-						SKILLS.map((skill) => (
-							<div class="j-card" style={`box-shadow: 8px 8px 0 0 ${skill.accent}`}>
-								<div class="flex justify-between items-start mb-3">
-									<span class="font-mono text-xs brutal-border px-2 py-1" style={`background-color:${skill.accent}`}>
+		{/*
+		  A scroll sequence rather than a grid: each skill gets its own step so
+		  the camera meets one 3D mark at a time. Six cards on screen at once
+		  meant the 3D behind them was six unreadable blocks.
+		*/}
+		<section id="skills" class="journey-panel journey-panel--sequence" aria-labelledby="skills-title">
+			<div class="journey-inner w-full">
+				<div class="pt-24 pb-10" data-panel data-skills-heading>
+					<div class="reveal"><span class="j-label">SECTION 03</span></div>
+					<h2 id="skills-title" class="j-heading j-heading--onvoid reveal mt-4">MY<br />STACK</h2>
+					<p class="reveal font-mono text-xs md:text-sm text-white/70 mt-4 max-w-md">
+						WordPress first. Then everything else. I know what I'm good at.
+					</p>
+				</div>
+
+				{
+					SKILLS.map((skill, i) => (
+						<div
+							class="skill-step"
+							data-panel
+							data-skill-index={i}
+							data-side={i % 2 === 0 ? 'left' : 'right'}
+						>
+							<div class="j-card skill-card" style={`box-shadow: 8px 8px 0 0 ${skill.accent}`}>
+								<div class="flex items-center gap-3 mb-3">
+									<span
+										class="font-mono text-xs brutal-border px-2 py-1"
+										style={`background-color:${skill.accent}`}
+									>
 										{skill.num}
 									</span>
+									<h3 class="text-2xl md:text-3xl font-bold">{skill.name}</h3>
 								</div>
-								<h3 class="text-2xl font-bold mb-2">{skill.name}</h3>
-								<p class="font-mono text-xs mb-4 text-gray-700">{skill.blurb}</p>
+								<p class="font-mono text-xs md:text-sm mb-4 text-gray-700">{skill.blurb}</p>
 								<div class="w-full bg-brutal-gray brutal-border h-3 overflow-hidden">
-									<div class="h-full" style={`width:${skill.level}%;background-color:${skill.accent}`} />
+									<div
+										class="h-full"
+										style={`width:${skill.level}%;background-color:${skill.accent}`}
+									/>
 								</div>
-								<div class="font-mono text-[10px] mt-2">{skill.note}</div>
+								<div class="font-mono text-[10px] md:text-xs mt-2">{skill.note}</div>
 							</div>
-						))
-					}
-				</div>
+						</div>
+					))
+				}
 			</div>
 		</section>
 

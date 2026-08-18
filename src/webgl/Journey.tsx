@@ -292,13 +292,13 @@ function Scene() {
 			<Monoliths />
 
 			{/* Into the skills lattice. */}
-			<GateRun from={-800} to={-846} count={3} width={30} height={24} colorOffset={2} />
+			<GateRun from={-820} to={-862} count={3} width={30} height={24} colorOffset={2} />
 
 			{/* Into the terminal. */}
-			<GateRun from={-1120} to={-1196} count={4} width={28} height={22} colorOffset={4} />
+			<GateRun from={-1150} to={-1246} count={4} width={28} height={22} colorOffset={4} />
 
 			{/* Final approach to contact. */}
-			<GateRun from={-1236} to={-1308} count={3} width={32} height={25} taper={0.2} colorOffset={0} />
+			<GateRun from={-1256} to={-1332} count={3} width={32} height={25} taper={0.2} colorOffset={0} />
 			<SkillLattice />
 			<AwardPlinth />
 			<EducationMarkers />

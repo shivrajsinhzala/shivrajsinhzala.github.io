@@ -767,3 +767,53 @@ html:not(.journey-ready) .journey-intro {
 [data-loop-clone] {
 	user-select: none;
 }
+
+/* ------------------------------------------------------------------ */
+/* Skills sequence                                                      */
+/* ------------------------------------------------------------------ */
+
+/* Like the projects corridor: the section's height comes from its steps. */
+.journey-panel--sequence {
+	align-items: flex-start;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.skill-step {
+	min-height: 62vh;
+	min-height: 62svh;
+	display: flex;
+	align-items: center;
+}
+
+/* Card opposite its mark, so it never covers the logo it describes. */
+.skill-step[data-side='left'] {
+	justify-content: flex-end;
+}
+
+.skill-step[data-side='right'] {
+	justify-content: flex-start;
+}
+
+.skill-card {
+	max-width: 24rem;
+	--v: clamp(0, calc(var(--panel-visible, 0) * 1.7), 1);
+	opacity: var(--v);
+	transform: translateY(calc((1 - var(--v)) * 1.5rem));
+}
+
+@media (max-width: 767px) {
+	.skill-step,
+	.skill-step[data-side='left'],
+	.skill-step[data-side='right'] {
+		justify-content: center;
+		min-height: 58vh;
+		min-height: 58svh;
+		padding-inline: 1rem;
+	}
+
+	.skill-card {
+		max-width: 100%;
+		width: 100%;
+	}
+}
