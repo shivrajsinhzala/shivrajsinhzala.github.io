@@ -1,0 +1,6 @@
+# Authorised digital sellers — IAB ads.txt.
+#
+# This must live on the root domain: buyers resolve ads.txt against the root, not the subdomain
+# serving the page, so the copy on gsrtc.shivrajsinh.in is not authoritative on its own. Without
+# this file AdSense reports the account as "earnings at risk" and some buyers will not bid.
+google.com, pub-7164999486301748, DIRECT, f08c47fec0942fa0

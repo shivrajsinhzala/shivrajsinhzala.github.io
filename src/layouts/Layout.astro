@@ -27,6 +27,10 @@ const canonicalURL = pageUrl(Astro.url.pathname);
 		<meta name="robots" content={robots} />
 		<meta name="theme-color" content="#FFE900" />
 		<meta name="author" content="Shivrajsinh Zala" />
+		{/* AdSense verifies ownership at the root domain, and that approval then covers every
+		    subdomain — gsrtc., tracker. and beta. — so it has to live here rather than on the
+		    site that actually carries the ads. Pairs with public/ads.txt. */}
+		<meta name="google-adsense-account" content="ca-pub-7164999486301748" />
 		<link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
 		<link rel="manifest" href="/manifest.json" />
