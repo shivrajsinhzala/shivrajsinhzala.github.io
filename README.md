@@ -4,7 +4,24 @@ This is the repository for the personal developer portfolio, blog, and online re
 
 ---
 
-## 🚀 Key Features
+## 🌟 Featured Project: ST Tracker (GSRTC Live Bus Tracker)
+
+**ST Tracker** is an independent, high-performance transit tracking application and programmatic SEO network built for Gujarat ST (GSRTC) daily commuters.
+
+* **Live App (PWA)**: [tracker.shivrajsinh.in](https://tracker.shivrajsinh.in)
+* **SEO & Guides Portal**: [gsrtc.shivrajsinh.in](https://gsrtc.shivrajsinh.in)
+* **Open Source Repository**: [github.com/shivrajsinhzala/gsrtc-live-tracker](https://github.com/shivrajsinhzala/gsrtc-live-tracker)
+
+### Highlights & Engineering
+* **Real-Time GPS Telematics**: Live map tracking by vehicle registration number (e.g. `GJ-18-ZT-1028`), speed gauge, continuous motion trail, and next-stop ETA derivation.
+* **19,000+ Stations & 8,500+ Buses**: Instant timetable searches across all Gujarat transit stops with live departure countdowns, delay indicators, and crowd capacity reporting.
+* **Zero Dependencies / Vanilla PWA**: Lightweight, instant-load frontend built with ES Modules, vendored Leaflet maps, and Service Workers (offline-ready, installable on Android/iOS).
+* **High-Contrast Dark/Light Design**: Clean commuter interface with full bilingual support in English and Gujarati (ગુજરાતી).
+* **Generative Engine Optimization (GEO)**: Implements structured JSON-LD schemas (`WebApplication`, `FAQPage`, `BreadcrumbList`) and standardized `/llms.txt` for ChatGPT, Gemini, and Perplexity discoverability.
+
+---
+
+## 🚀 Portfolio Key Features
 
 * **Brutalist Design System**: Built with strict high-contrast borders, solid shadows (`brutal-shadow`), curated neon/pastel accents (pink, cyan, yellow, purple), and graph-paper backdrop coordinates.
 * **Online Resume (`/resume`)**: A professional overview page presenting work history, MCA/BCA education, and skill level charts.
@@ -62,4 +79,3 @@ All commands are run from the project root directory:
 | `npm run dev` | Starts local development server at `http://localhost:4321` |
 | `npm run build` | Builds optimized static production bundle in `/dist/` |
 | `npm run preview` | Previews the compiled `/dist/` output locally |
-
