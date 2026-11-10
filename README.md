@@ -4,7 +4,21 @@ This is the repository for the personal developer portfolio, blog, and online re
 
 ---
 
-## 🌟 Featured Project: ST Tracker (GSRTC Live Bus Tracker)
+## 🌟 Featured Projects: Transit Engineering Platforms
+
+### 1. Stopwatch — Global Open Transit Timetables
+High-performance phone-friendly bus, tram, train and ferry timetables across 120+ transit agencies in 6 countries (US, UK, Canada, Australia, Ireland, New Zealand), built from open GTFS data.
+* **Live Deployment**: [transit.shivrajsinh.in](https://transit.shivrajsinh.in)
+* **Open Source Repository**: [github.com/shivrajsinhzala/transit-timetables](https://github.com/shivrajsinhzala/transit-timetables)
+* **Core Stack**: Astro static generation, Edge Workers, programmatic sitemaps, offline departure boards.
+
+### 2. Headway — Next-Departure & Frequency Explorer
+Fast, lightweight public transit schedule lookup and timetable viewer built from open GTFS data with whole-day schedule views, scheduled headway intervals, and rush-hour frequency analysis.
+* **Live Deployment**: [headway.shivrajsinh.in](https://headway.shivrajsinh.in)
+* **Open Source Repository**: [github.com/shivrajsinhzala/headway](https://github.com/shivrajsinhzala/headway)
+* **Core Stack**: Static Astro timetable rendering, sub-100ms load times, privacy-first nearby stop calculation.
+
+### 3. ST Tracker (GSRTC Live Bus Tracker)
 
 **ST Tracker** is an independent, high-performance transit tracking application and programmatic SEO network built for Gujarat ST (GSRTC) daily commuters.
 
