@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Open Transit Engineering &amp; Architecture</title>
+    <link>https://shivrajsinh.in/docs/open-transit-architecture.html</link>
+    <description>Technical articles, benchmarks, and architecture guides for high-performance GTFS transit engines.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Nov 2026 09:00:00 GMT</lastBuildDate>
+    <atom:link href="https://shivrajsinh.in/syndication.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Engineering Sub-100ms Public Transit Timetables with Static Astro &amp; Open GTFS Data</title>
+      <link>https://transit.shivrajsinh.in</link>
+      <guid>https://transit.shivrajsinh.in#astro-gtfs-guide</guid>
+      <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
+      <description>Architectural breakdown of compiling relational GTFS feeds into static edge assets, powering Stopwatch (https://transit.shivrajsinh.in) and Headway (https://headway.shivrajsinh.in) with sub-100ms TTFB.</description>
+    </item>
+
+    <item>
+      <title>How We Index 200,000+ Transit Routes and Stops Without Blowing Google's Crawl Budget</title>
+      <link>https://headway.shivrajsinh.in</link>
+      <guid>https://headway.shivrajsinh.in#indexing-rfc</guid>
+      <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
+      <description>Systems engineering approach for programmatic transit SEO, sitemap partitioning, IndexNow batching, and canonicalization across Headway (https://headway.shivrajsinh.in) and Stopwatch (https://transit.shivrajsinh.in).</description>
+    </item>
+
+    <item>
+      <title>Real-Time Bus Tracking Architecture: GTFS-RT Protobuf Ingestion at Scale</title>
+      <link>https://transit.shivrajsinh.in</link>
+      <guid>https://transit.shivrajsinh.in#gtfs-rt-streaming</guid>
+      <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
+      <description>Low-latency streaming of vehicle GPS coordinates and arrival delays via Protocol Buffers and Server-Sent Events, deployed across Stopwatch (https://transit.shivrajsinh.in) and Headway (https://headway.shivrajsinh.in).</description>
+    </item>
+  </channel>
+</rss>

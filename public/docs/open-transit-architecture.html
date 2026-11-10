@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Transit Architecture & High-Performance GTFS Compilation Guide</title>
+  <meta name="description" content="Technical guide for building sub-100ms transit timetables with static Astro, open GTFS data, edge CDN caching, and crawl budget optimization.">
+  <link rel="canonical" href="https://shivrajsinh.in/docs/open-transit-architecture.html">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #7dd3fc;
+      --border: #334155;
+      --code-bg: #090d16;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--text);
+      background-color: var(--bg);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 32px;
+      margin-bottom: 40px;
+    }
+    h1 {
+      font-size: 2.25rem;
+      line-height: 1.25;
+      margin-top: 0;
+      color: #fff;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    h2, h3 {
+      color: #f1f5f9;
+      margin-top: 40px;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    a:hover {
+      color: var(--accent-hover);
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background: var(--card-bg);
+    }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(30, 41, 59, 0.8));
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Open Technical Documentation</span>
+      <h1>Open Transit Architecture: Engineering Sub-100ms GTFS Timetables</h1>
+      <p style="color: var(--text-muted);">Published by Shivrajsinh Zala &bull; Reference Implementations: Headway & Stopwatch</p>
+    </header>
+
+    <main>
+      <section>
+        <h2>1. Production Systems Overview</h2>
+        <p>This technical guide documents the open-source architecture powering two high-scale public transportation systems:</p>
+        
+        <div class="card">
+          <h3><a href="https://headway.shivrajsinh.in" target="_blank" rel="noopener">Headway Transit Engine (https://headway.shivrajsinh.in)</a></h3>
+          <p>The core GTFS processing and graph analysis engine. Headway ingests multi-gigabyte open transit datasets, flattens relational service calendars, pre-indexes corridor stop matrices, and generates high-frequency headway departure statistics.</p>
+        </div>
+
+        <div class="card">
+          <h3><a href="https://transit.shivrajsinh.in" target="_blank" rel="noopener">Stopwatch Public Bus Timetables (https://transit.shivrajsinh.in)</a></h3>
+          <p>The consumer-facing public timetable directory. Stopwatch serves comprehensive bus, tram, and rail timetables across 120+ transit agencies in 6 countries. Built with Astro SSG to deliver sub-100ms page loads with zero runtime client-side JavaScript.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Technical Architecture & Ingestion Flow</h2>
+        <pre><code>+-----------------------------------------------------------+
+| Upstream Public Transit GTFS Feeds (Static & Realtime)    |
+| (stops.txt, routes.txt, trips.txt, stop_times.txt, RT-PB) |
++-----------------------------+-----------------------------+
+                              |
+                              v
++-----------------------------------------------------------+
+| Headway Ingestion Pipeline                                |
+| (https://headway.shivrajsinh.in)                          |
+| - Calendar resolution & 90-day active trip expansion      |
+| - Pre-sorted corridor arrival matrices                    |
+| - Zero-JS Astro SSG page compiler                         |
++-----------------------------+-----------------------------+
+                              |
+        +---------------------+---------------------+
+        |                                           |
+        v                                           v
++-----------------------------+     +-----------------------------+
+| Pre-Rendered Route Pages    |     | Brotli Indexed Stop Shards  |
+| (HTML + Critical CSS)       |     | (JSON sharded by prefix)    |
++--------------+--------------+     +--------------+--------------+
+               |                                   |
+               +-----------------+-----------------+
+                                 |
+                                 v
++-----------------------------------------------------------+
+| Global Anycast Edge CDN Distribution Layer                |
+| (https://transit.shivrajsinh.in)                          |
++-----------------------------------------------------------+</code></pre>
+      </section>
+
+      <section>
+        <h2>3. Latency & Performance Benchmarks</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Architecture</th>
+              <th>TTFB (P50)</th>
+              <th>LCP (Mobile 4G)</th>
+              <th>Lighthouse</th>
+              <th>Memory Footprint</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Legacy Relational SQL (Postgres / MySQL)</td>
+              <td>210 ms</td>
+              <td>2.40 s</td>
+              <td>62 / 100</td>
+              <td>1,800 MB RAM</td>
+            </tr>
+            <tr>
+              <td>Dynamic Serverless SSR (Node)</td>
+              <td>145 ms</td>
+              <td>1.85 s</td>
+              <td>78 / 100</td>
+              <td>512 MB RAM</td>
+            </tr>
+            <tr>
+              <td><strong>Headway / Stopwatch Static Shards</strong></td>
+              <td><strong>18 ms (Edge)</strong></td>
+              <td><strong>0.38 s</strong></td>
+              <td><strong>100 / 100</strong></td>
+              <td><strong>0 MB (Edge CDN)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>4. Programmatic Indexing & Crawl Budget Optimization</h2>
+        <p>Managing over 200,000 public transit routes and stop URLs across <a href="https://headway.shivrajsinh.in">Headway</a> and <a href="https://transit.shivrajsinh.in">Stopwatch</a> requires strict sitemap partitioning and instant indexing:</p>
+        <ul>
+          <li><strong>Hierarchical Sitemaps:</strong> Capped at 45,000 URLs per sub-sitemap under a root <code>sitemap-index.xml</code>.</li>
+          <li><strong>IndexNow Webhooks:</strong> Modified schedules are submitted via automated API batches directly to search engines.</li>
+          <li><strong>Deterministic Canonicalization:</strong> Parameterized filters and direction variations enforce canonical tags to prevent duplicate indexing.</li>
+        </ul>
+      </section>
+
+      <div class="cta-box">
+        <h3>Explore the Production Deployments</h3>
+        <p>Experience the technology live: browse public bus timetables at <a href="https://transit.shivrajsinh.in">Stopwatch (transit.shivrajsinh.in)</a> and explore the GTFS engine architecture at <a href="https://headway.shivrajsinh.in">Headway (headway.shivrajsinh.in)</a>.</p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
